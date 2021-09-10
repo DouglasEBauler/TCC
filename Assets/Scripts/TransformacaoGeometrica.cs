@@ -30,14 +30,7 @@ public class TransformacaoGeometrica : MonoBehaviour
     {
         switch (gameObject.name)
         {
-            case Consts.Transladar:
-                break;
-            case Consts.Rotacionar:
-                break;
-            case Consts.Escalar:
-                verify = true;
-               // transform.localScale.x += escalaX;
-                break;
+            case Consts.ESCALAR: verify = true; break;
         }
     }
 }

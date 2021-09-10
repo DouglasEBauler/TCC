@@ -31,7 +31,7 @@ public class DropPeca : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonUp(0) 
+        if (Input.GetMouseButtonUp(0)
             && objDrop != null
             && controller != null)
         {
@@ -91,41 +91,34 @@ public class DropPeca : MonoBehaviour
                         }
                     }
 
-                    if (!child.name.Equals(objGrafico.transform.name))
-                        continue;
+                    if (!child.name.Equals(objGrafico.transform.name)) continue;
 
                     foreach (Transform _child in objGrafico.transform)
                     {
-                        if (_child.name.Equals(slotOrigem))
+                        if (!_child.name.Equals(slotOrigem)) continue;
+
+                        GameObject GO_Slot = GameObject.Find(_child.name);
+                        GameObject GO_Peca;
+
+                        foreach (var pair in Global.listaEncaixes)
                         {
-                            podeReposicionar = true;
-                            continue;
+                            if (_child.name.Equals(pair.Value))
+                            {
+                                GO_Peca = GameObject.Find(pair.Key);
+                                GO_Peca.transform.position = new Vector3(GO_Peca.transform.position.x, GO_Peca.transform.position.y + 3f, GO_Peca.transform.position.z);
+                                break;
+                            }
                         }
 
-                        if (podeReposicionar)
+                        if (!GO_Slot.name.Contains("Base") && !GO_Slot.name.Contains("IluminacaoSlot"))
                         {
-                            GameObject GO_Slot = GameObject.Find(_child.name);
-                            GameObject GO_Peca;
-
-                            foreach (var pair in Global.listaEncaixes)
-                            {
-                                if (_child.name.Equals(pair.Value))
-                                {
-                                    GO_Peca = GameObject.Find(pair.Key);
-                                    GO_Peca.transform.position = new Vector3(GO_Peca.transform.position.x, GO_Peca.transform.position.y + 3f, GO_Peca.transform.position.z);
-                                    break;
-                                }
-                            }
-
-                            if (!GO_Slot.name.Contains("Base")
-                                && !GO_Slot.name.Contains("IluminacaoSlot"))
-                                GO_Slot.transform.position = new Vector3(GO_Slot.transform.position.x, GO_Slot.transform.position.y + 3f, GO_Slot.transform.position.z);
+                            GO_Slot.transform.position = new Vector3(GO_Slot.transform.position.x, GO_Slot.transform.position.y + 3f, GO_Slot.transform.position.z);
                         }
                     }
 
                 }
 
-                RenderController.ResizeBases(GameObject.Find(slotOrigem), Consts.Transladar, false);
+                RenderController.ResizeBases(GameObject.Find(slotOrigem), Consts.TRANSLADAR, false);
 
                 ExcluiHierarquiaOuAlteraPropriedade(Slots.TransformacoesSlot);
 
@@ -178,7 +171,6 @@ public class DropPeca : MonoBehaviour
                         {
                             PropIluminacaoPadrao luz = new PropIluminacaoPadrao();
                             luz.AtivaIluminacao(luz.GetTipoLuzPorExtenso(Global.propriedadePecas[objDrop.name].TipoLuz) + objDrop.name, false);
-                            Global.propriedadePecas[objDrop.name].JaInstanciou = false;
                         }
                     }
 
@@ -437,7 +429,7 @@ public class DropPeca : MonoBehaviour
                     GoAmb = GoAmb.parent.GetChild(1);
             }
 
-            if (GoAmb.name.Contains(Consts.Transladar))
+            if (GoAmb.name.Contains(Consts.TRANSLADAR))
             {
                 if (!Global.propriedadePecas.ContainsKey(GOname))
                     GoAmb.localPosition = Vector3.zero;
@@ -445,7 +437,7 @@ public class DropPeca : MonoBehaviour
                 GoAmb.localRotation = Quaternion.Euler(0, 0, 0);
                 GoAmb.localScale = new Vector3(1, 1, 1);
             }
-            else if (GoAmb.name.Contains(Consts.Rotacionar))
+            else if (GoAmb.name.Contains(Consts.ROTACIONAR))
             {
                 if (!Global.propriedadePecas.ContainsKey(GOname))
                     GoAmb.localRotation = Quaternion.Euler(0, 0, 0);
@@ -453,7 +445,7 @@ public class DropPeca : MonoBehaviour
                 GoAmb.localPosition = Vector3.zero;
                 GoAmb.localScale = new Vector3(1, 1, 1);
             }
-            else if (GoAmb.name.Contains(Consts.Escalar))
+            else if (GoAmb.name.Contains(Consts.ESCALAR))
             {
                 if (!Global.propriedadePecas.ContainsKey(GOname))
                     GoAmb.localScale = new Vector3(1, 1, 1);
@@ -470,18 +462,17 @@ public class DropPeca : MonoBehaviour
     {
         PropIluminacaoPadrao luz = new PropIluminacaoPadrao();
 
-        if (key.Contains(Consts.Iluminacao))
+        if (key.Contains(Consts.ILUMINACAO))
         {
             Global.propriedadeIluminacao.Remove(key);
 
             if (key.Length > "Iluminacao".Length)
-                Destroy(GameObject.Find("LightObjects" + key));
-            else
             {
-                if (Global.propriedadePecas.ContainsKey(key))
-                    luz.AtivaIluminacao(luz.GetTipoLuzPorExtenso(Global.propriedadePecas[key].TipoLuz) + key, false);
-
-                Global.propriedadePecas[Global.gameObjectName].JaInstanciou = false;
+                Destroy(GameObject.Find("LightObjects" + key));
+            }
+            else if (Global.propriedadePecas.ContainsKey(key))
+            {
+                luz.AtivaIluminacao(luz.GetTipoLuzPorExtenso(Global.propriedadePecas[key].TipoLuz) + key, false);
             }
         }
     }

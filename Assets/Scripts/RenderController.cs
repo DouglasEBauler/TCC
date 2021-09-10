@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RenderController : MonoBehaviour 
 {
@@ -20,7 +17,7 @@ public class RenderController : MonoBehaviour
         if (!incrementa)
             mudaSinal = -1;
 
-        if (Consts.ObjetoGrafico.Equals(tipoPeca))
+        if (Consts.OBJETOGRAFICO.Equals(tipoPeca))
         {
             otherBase = GameObject.Find("BaseRenderLateralGO" + ((!tutorial) ? DropPeca.countObjetosGraficos.ToString() : "Tutorial"));
             otherBase.transform.GetChild(0).gameObject.SetActive(true); //Base lateral cinza
