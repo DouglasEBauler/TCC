@@ -1,0 +1,3 @@
+- Descompactar o fonte
+- Abrir o fonte na versão 2018.6f1 do Unity
+
