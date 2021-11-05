@@ -103,3 +103,5 @@ Não conversamos, desmarquei.
 ## 2021-11-04
 
 Não aparceu no horário marcado. Remarcamos para as 22:00.  
+Fez vários ajustes. Mudou componentes que eram só para usar no EditorUnity.  
+E mexeu um pouco no artigo.  
