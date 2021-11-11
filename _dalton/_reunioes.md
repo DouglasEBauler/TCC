@@ -95,3 +95,13 @@ Usou um Asset pronto para Spline.
 E ajustes de raforar as peças da fábrica. Mudou as peças da fábrica para painies.  
 Mexeu um pouco no artigo.  
 Vai fazer a peça de Iteração.  
+
+## 2021-10-27
+
+Não conversamos, desmarquei.  
+
+## 2021-11-04
+
+Não aparceu no horário marcado. Remarcamos para as 22:00.  
+Fez vários ajustes. Mudou componentes que eram só para usar no EditorUnity.  
+E mexeu um pouco no artigo.  
