@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using UnityEngine;
 
 public class Util_VisEdu : MonoBehaviour
@@ -48,30 +47,28 @@ public class Util_VisEdu : MonoBehaviour
         }
     }
 
-    public static void CriaFormasVazias()
-    {
-        GameObject cuboVisObjectMain = GameObject.Find("CuboVisObjectMain");
-        CuboVisObjectMain = Instantiate(cuboVisObjectMain, cuboVisObjectMain.transform.position, cuboVisObjectMain.transform.rotation, cuboVisObjectMain.transform.parent);
-
-        GameObject posicaoAmb = GameObject.Find("PosicaoAmb");
-        PosicaoAmb = Instantiate(posicaoAmb, posicaoAmb.transform.position, posicaoAmb.transform.rotation, posicaoAmb.transform.parent);
-
-        Global.cuboVis = CuboVisObjectMain;
-        Global.posAmb = PosicaoAmb;
-    }
-
-    public static string GetPecaByName(string nome)
+    public static string GetPecaByName(string nome, bool isTransf = false)
     {
         Transform parentTransf = GameObject.Find(Global.listaEncaixes[nome]).transform.parent;
 
-        foreach (Transform child in parentTransf)
+        if (!isTransf)
         {
-            if (child.name.Contains("FormasSlot"))
+            foreach (Transform child in parentTransf)
             {
-                foreach (var encaixe in Global.listaEncaixes)
+                if (child.name.Contains(Consts.FORMA_SLOT))
                 {
-                    if (encaixe.Value.Equals(child.name)) return encaixe.Key;
+                    foreach (var encaixe in Global.listaEncaixes)
+                    {
+                        if (encaixe.Value.Equals(child.name)) return encaixe.Key;
+                    }
                 }
+            }
+        }
+        else
+        {
+            foreach (var encaixe in Global.listaEncaixes)
+            {
+                if (encaixe.Value.Equals(parentTransf.name)) return encaixe.Key;
             }
         }
 
@@ -102,7 +99,21 @@ public class Util_VisEdu : MonoBehaviour
     {
         string formaSlot = Global.listaEncaixes[GetPecaByName(gameObjName)];
 
-        return formaSlot.Substring(formaSlot.IndexOf("Slot") + 4, 1);
+        return formaSlot.Substring(formaSlot.IndexOf("Slot") + 4);
+    }
+
+    public static string GetNumSlot(string slotName, bool isTransfSlot = false)
+    {
+        string slot = slotName;
+
+        slot = slot.Substring(slot.IndexOf("Slot") + 4);
+
+        if (!isTransfSlot && slot.Contains("_"))
+        {
+            slot = slot.Remove(slot.IndexOf("_"));
+        }
+
+        return slot;
     }
 
     public static string GetNumeroSlotObjetoGrafico(GameObject gameObj)

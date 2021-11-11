@@ -144,7 +144,7 @@ public class PropCuboScript : MonoBehaviour
 
     void ConfigCuboAmb()
     {
-        PropriedadePeca propObjGraf = Global.propriedadePecas["ObjetoGraficoP" + Util_VisEdu.GetSlot(prPeca.Nome)];
+        PropriedadePeca propObjGraf = Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetSlot(prPeca.Nome)];
         MeshRenderer meshRendererCubo = GameObject.Find(prPeca.NomeCuboAmbiente).GetComponent<MeshRenderer>();
         meshRendererCubo.enabled = prPeca.Ativo && propObjGraf.Ativo;
     }

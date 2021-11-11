@@ -296,7 +296,7 @@ public class Tutorial : MonoBehaviour
                                     cuboAmbiente.transform.localScale = new Vector3(2, 1, 1);
                                     cuboAmbiente.transform.localRotation = Quaternion.Euler(cuboAmbiente.transform.localRotation.x, 45, cuboAmbiente.transform.localRotation.z);
 
-                                    ++DropPeca.countTransformacoes;
+                                    ++Global.countTransformacoes;
                                     PassoExecutando = Passo.SextoPasso;
                                     PassoTutorial = Passo.SextoPasso;
 
@@ -372,7 +372,7 @@ public class Tutorial : MonoBehaviour
         {
             switch (PassoTutorial)
             {
-                case Passo.PrimeiroPasso: objGraficoP.GetComponent<ObjetoGraficoScript>().AddObjGrafico(true); break;
+                case Passo.PrimeiroPasso: objGraficoP.GetComponent<ObjetoGraficoScript>().AddObjGrafico(); break;
                 case Passo.SegundoPasso: cubo.GetComponent<CuboScript>().AddCubo(); break;
                 case Passo.QuartoPasso: cameraP.GetComponent<CameraPScript>().AddCamera(); break;
                 case Passo.QuintoPasso: rotacionar.GetComponent<Controller>().AddTransformacoesSlot(true); break;

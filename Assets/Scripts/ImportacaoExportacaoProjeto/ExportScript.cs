@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
+using SimpleFileBrowser;
 
 public class ExportScript : MonoBehaviour
 {
@@ -9,32 +10,44 @@ public class ExportScript : MonoBehaviour
 
     void OnMouseDown()
     {
-        string path = EditorUtility.SaveFilePanel("Selecione o local a ser salvo o projeto", "", "ProjectVisEdu", "json");
-
-        if (path.Length != 0)
+        Util_VisEdu.EnableColliderFabricaPecas(false, false);
+        Util_VisEdu.EnableGOAmbienteGrafico(false);
+        Util_VisEdu.EnableGOVisualizador(false);
+        try
         {
-            var projectJson = GenerateProject();
-
-            using (var streamWriter = new StreamWriter(path))
-            {
-                streamWriter.Write(projectJson);
-            }
+            FileBrowser.AllFilesFilterText = "*.json";
+            FileBrowser.ShowLoadDialog(
+                onSuccess: (path) => { GenerateProject(); },
+                onCancel: null,
+                pickMode: FileBrowser.PickMode.Files,
+                allowMultiSelection: false,
+                initialPath: null,
+                initialFilename: Consts.INITIAL_FILE_PROJECT,
+                title: Consts.TITLE_SELECT_EXPORT_DIRECTORY,
+                loadButtonText: Consts.BTN_SELECT_PROJECT
+            );
+        }
+        finally
+        {
+            Util_VisEdu.EnableColliderFabricaPecas(true);
+            Util_VisEdu.EnableGOAmbienteGrafico(true);
+            Util_VisEdu.EnableGOVisualizador(true);
         }
     }
 
-    string GenerateProject()
+    void GenerateProject()
     {
         var project = new ProjectVisEduClass();
 
         foreach (Transform child in render.transform)
         {
-            if (child.name.Contains("CameraSlot"))
+            if (child.name.Contains(Consts.SLOT_CAM))
             {
                 project.Camera.Propriedades = CreatePropCamera(project);
             }
-            else if (child.name.Contains("ObjGraficoSlot"))
+            else if (child.name.Contains(Consts.SLOT_OBJ_GRAFICO))
             {
-                ObjetoGraficoProject objGrafPeca = CreateObjGraf(project, child.name);
+                ObjetoGraficoProject objGrafPeca = CreateObjGraf(project, child);
 
                 if (objGrafPeca != null)
                 {
@@ -43,66 +56,184 @@ public class ExportScript : MonoBehaviour
             }
         }
 
-        return JsonUtility.ToJson(project, true);
+        using (var streamWriter = new StreamWriter(FileBrowser.Result[0].ToString()))
+        {
+            streamWriter.Write(JsonUtility.ToJson(project, true));
+        }
     }
 
-    ObjetoGraficoProject CreateObjGraf(ProjectVisEduClass project, string obgGrafSlot)
+    ObjetoGraficoProject CreateObjGraf(ProjectVisEduClass project, Transform obgGrafSlot)
     {
-        GameObject objGrafico = GameObject.Find(obgGrafSlot);
+        Transform objSlot = null;
 
-        string key = GetPeca(obgGrafSlot);
-        if (!string.Empty.Equals(key))
+        foreach (Transform child in obgGrafSlot.transform)
         {
-            ObjetoGraficoProject objGrafPeca = new ObjetoGraficoProject();
-            objGrafPeca.Propriedades = Global.propriedadePecas[key];
-
-            foreach (Transform child in objGrafico.transform)
+            if (child.name.Contains(Consts.OBJ_GRAFICO_SLOT))
             {
-                if (child.name.Contains("FormasSlot") || child.name.Contains("TransformacoesSlot") || child.name.Contains("IluminacaoSlot"))
-                {
-                    key = GetPeca(child.name);
-                    if (!string.Empty.Equals(key))
-                    {
-                        var prop = Global.propriedadePecas[key];
-
-                        if (prop != null)
-                        {
-                            if (prop.Nome.Contains("Cubo"))
-                            {
-                                objGrafPeca.Forma = CreateFormCubo(prop.Nome, (CuboPropriedadePeca)prop);
-                            }
-                            else if (prop.Nome.Contains("Poligono"))
-                            {
-                                objGrafPeca.Forma = CreateFormPoligono(prop.Nome, (PoligonoPropriedadePeca)prop);
-                            }
-                            else if (prop.Nome.Contains("Spline"))
-                            {
-                                objGrafPeca.Forma = CreateFormSpline(prop.Nome, (SplinePropriedadePeca)prop);
-                            }
-                            else if (prop.Nome.Contains("Iluminacao"))
-                            {
-                                objGrafPeca.Iluminacao = CreateIluminacao(prop);
-                            }
-                            else if (prop.Nome.Contains("Rotacionar") || prop.Nome.Contains("Escalar") || prop.Nome.Contains("Transladar"))
-                            {
-                                TransformacaoProject transfObj = CreateTransfProject(prop.Nome, prop);
-
-                                if (transfObj != null)
-                                {
-                                    objGrafPeca.Transformacoes.Add(transfObj);
-                                }
-                            }
-                        }
-                    }
-                }
+                objSlot = child;
+                break;
             }
-            return objGrafPeca;
+        }
+
+        if (objSlot != null)
+        {
+            string key = GetPeca(objSlot.name);
+            if (!string.Empty.Equals(key) && Global.propriedadePecas.ContainsKey(key))
+            {
+                ObjetoGraficoProject objGrafPeca = new ObjetoGraficoProject();
+                objGrafPeca.Propriedades = Global.propriedadePecas[key];
+
+                objGrafPeca.Cubo = CreateCuboProject(objSlot);
+                objGrafPeca.Poligono = CreatePoligonoProject(objSlot);
+                objGrafPeca.Spline = CreateSplineProject(objSlot);
+
+                return objGrafPeca;
+            }
         }
 
         return null;
     }
 
-    FormaProject CreateFormCubo(string formName, CuboPropriedadePeca propPeca)
+    List<TransformacaoProject> CreateTransformacoes(Transform obgGrafSlot)
+    {
+        string numSlot = Util_VisEdu.GetNumSlot(obgGrafSlot.name);
+        List<TransformacaoProject> listTransf = new List<TransformacaoProject>();
+
+        foreach (Transform child in render.transform)
+        {
+            if (child.name.Contains(Consts.SLOT_TRANSF + numSlot))
+            {
+                Transform transfSlot = null;
+
+                foreach (Transform _child in child)
+                {
+                    if (_child.name.Contains(Consts.TRANSF_SLOT))
+                    {
+                        transfSlot = _child;
+                        break;
+                    }
+                }
+
+                if (transfSlot != null)
+                {
+                    string numTransfSlot = Util_VisEdu.GetNumSlot(transfSlot.name, true);
+
+                    Transform transformacao = transfSlot.transform.Find(Consts.ESCALAR + numTransfSlot);
+                    if (transformacao != null && Global.propriedadePecas.ContainsKey(transformacao.name))
+                    {
+                        listTransf.Add(CreateTransfProject(transformacao, Global.propriedadePecas[transformacao.name] as PropriedadeTransformacao));
+                    }
+                    else
+                    {
+                        transformacao = transfSlot.transform.Find(Consts.ROTACIONAR + numTransfSlot);
+                        if (transformacao != null && Global.propriedadePecas.ContainsKey(transformacao.name))
+                        {
+                            listTransf.Add(CreateTransfProject(transformacao, Global.propriedadePecas[transformacao.name] as PropriedadeTransformacao));
+                        }
+                        else
+                        {
+                            transformacao = transfSlot.transform.Find(Consts.TRANSLADAR + numTransfSlot);
+                            if (transformacao != null && Global.propriedadePecas.ContainsKey(transformacao.name))
+                            {
+                                listTransf.Add(CreateTransfProject(transformacao, Global.propriedadePecas[transformacao.name] as PropriedadeTransformacao));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return listTransf.Count > 0 ? listTransf : null;
+    }
+
+    CuboProject CreateCuboProject(Transform obgGrafSlot)
+    {
+        string numSlot = Util_VisEdu.GetNumSlot(obgGrafSlot.name);
+
+        GameObject slotObjFormaExport = GameObject.Find(Consts.SLOT_FORMA + numSlot);
+        if (slotObjFormaExport != null)
+        {
+            Transform formaSlot = slotObjFormaExport.transform.Find(Consts.FORMA_SLOT + numSlot);
+
+            if (formaSlot != null)
+            {
+                Transform forma = formaSlot.transform.Find(Consts.CUBO + numSlot);
+                if (forma != null && Global.propriedadePecas.ContainsKey(forma.name))
+                {
+                    CuboProject formaProj = CreateFormCubo(Global.propriedadePecas[forma.name] as CuboPropriedadePeca);
+
+                    if (formaProj != null)
+                    {
+                        formaProj.Transformacoes = CreateTransformacoes(obgGrafSlot);
+                        formaProj.Iluminacao = CreateIluminacao(obgGrafSlot);
+                        return formaProj;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    PoligonoProject CreatePoligonoProject(Transform obgGrafSlot)
+    {
+        string numSlot = Util_VisEdu.GetNumSlot(obgGrafSlot.name);
+
+        GameObject slotObjFormaExport = GameObject.Find(Consts.SLOT_FORMA + numSlot);
+        if (slotObjFormaExport != null)
+        {
+            Transform formaSlot = slotObjFormaExport.transform.Find(Consts.FORMA_SLOT + numSlot);
+
+            if (formaSlot != null)
+            {
+                Transform forma = formaSlot.transform.Find(Consts.POLIGONO + numSlot);
+                if (forma != null && Global.propriedadePecas.ContainsKey(forma.name))
+                {
+                    PoligonoProject formaProj = CreateFormPoligono(forma.name, Global.propriedadePecas[forma.name] as PoligonoPropriedadePeca);
+
+                    if (formaProj != null)
+                    {
+                        formaProj.Transformacoes = CreateTransformacoes(obgGrafSlot);
+                        formaProj.Iluminacao = CreateIluminacao(obgGrafSlot);
+                        return formaProj;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    SplineProject CreateSplineProject(Transform obgGrafSlot)
+    {
+        string numSlot = Util_VisEdu.GetNumSlot(obgGrafSlot.name);
+
+        GameObject slotObjFormaExport = GameObject.Find(Consts.SLOT_FORMA + numSlot);
+        if (slotObjFormaExport != null)
+        {
+            Transform formaSlot = slotObjFormaExport.transform.Find(Consts.FORMA_SLOT + numSlot);
+
+            if (formaSlot != null)
+            {
+                Transform forma = formaSlot.transform.Find(Consts.SPLINE + numSlot);
+                if (forma != null && Global.propriedadePecas.ContainsKey(forma.name))
+                {
+                    SplineProject formaProj = CreateFormSpline(forma.name, Global.propriedadePecas[forma.name] as SplinePropriedadePeca);
+
+                    if (formaProj != null)
+                    {
+                        formaProj.Transformacoes = CreateTransformacoes(obgGrafSlot);
+                        formaProj.Iluminacao = CreateIluminacao(obgGrafSlot);
+                        return formaProj;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    CuboProject CreateFormCubo(CuboPropriedadePeca propPeca)
     {
         return new CuboProject()
         {
@@ -111,117 +242,90 @@ public class ExportScript : MonoBehaviour
                 Nome = propPeca.Nome,
                 Tam = new TamanhoProject()
                 {
-                    X = EncryptPropPeca(propPeca, Property.TamX),
-                    Y = EncryptPropPeca(propPeca, Property.TamY),
-                    Z = EncryptPropPeca(propPeca, Property.TamZ)
+                    X = EncryptCuboPropPeca(propPeca, Property.TamX),
+                    Y = EncryptCuboPropPeca(propPeca, Property.TamY),
+                    Z = EncryptCuboPropPeca(propPeca, Property.TamZ)
                 },
                 Pos = new PosicaoProject()
                 {
-                    X = EncryptPropPeca(propPeca, Property.PosX),
-                    Y = EncryptPropPeca(propPeca, Property.PosY),
-                    Z = EncryptPropPeca(propPeca, Property.PosZ)
+                    X = EncryptCuboPropPeca(propPeca, Property.PosX),
+                    Y = EncryptCuboPropPeca(propPeca, Property.PosY),
+                    Z = EncryptCuboPropPeca(propPeca, Property.PosZ)
                 },
                 NomeCuboAmbiente = propPeca.NomeCuboAmbiente,
                 NomeCuboVis = propPeca.NomeCuboVis,
                 Cor = propPeca.Cor,
                 Textura = propPeca.Textura,
-                TipoLuz = propPeca.TipoLuz,
-                Intensidade = propPeca.Intensidade.ToString(),
-                ValorIluminacao = new ValorIluminacaoProject()
-                {
-                    X = EncryptPropPeca(propPeca, Property.PosX),
-                    Y = EncryptPropPeca(propPeca, Property.PosY),
-                    Z = EncryptPropPeca(propPeca, Property.PosZ)
-                },
-                Distancia = EncryptPropPeca(propPeca, Property.Distancy),
-                Angulo = EncryptPropPeca(propPeca, Property.Angle),
-                Expoente = EncryptPropPeca(propPeca, Property.Expoent),
-                UltimoIndexLuz = propPeca.UltimoIndexLuz,
                 Ativo = propPeca.Ativo
             }
         };
     }
 
-    FormaProject CreateFormPoligono(string formName, PoligonoPropriedadePeca propPeca)
+    PoligonoProject CreateFormPoligono(string formName, PoligonoPropriedadePeca propPeca)
     {
         return new PoligonoProject()
         {
             Propriedades = new PoligonoPropriedadePecaProject()
             {
-                Nome = propPeca.Nome,
-                Tam = new TamanhoProject()
-                {
-                    X = EncryptPropPeca(propPeca, Property.TamX),
-                    Y = EncryptPropPeca(propPeca, Property.TamY),
-                    Z = EncryptPropPeca(propPeca, Property.TamZ)
-                },
                 Pos = new PosicaoProject()
                 {
-                    X = EncryptPropPeca(propPeca, Property.PosX),
-                    Y = EncryptPropPeca(propPeca, Property.PosY),
-                    Z = EncryptPropPeca(propPeca, Property.PosZ)
+                    X = EncryptPoligonoPropPeca(propPeca, Property.PosX),
+                    Y = EncryptPoligonoPropPeca(propPeca, Property.PosY),
+                    Z = EncryptPoligonoPropPeca(propPeca, Property.PosZ)
                 },
+                Pontos = EncryptPoligonoPropPeca(propPeca, Property.Pontos),
+                Primitiva = propPeca.Primitiva,
                 PoligonoAmbiente = propPeca.PoligonoAmbiente,
-                Cor = propPeca.Cor,
-                Textura = propPeca.Textura,
-                TipoLuz = propPeca.TipoLuz,
-                Intensidade = propPeca.Intensidade.ToString(),
-                ValorIluminacao = new ValorIluminacaoProject()
-                {
-                    X = EncryptPropPeca(propPeca, Property.PosX),
-                    Y = EncryptPropPeca(propPeca, Property.PosY),
-                    Z = EncryptPropPeca(propPeca, Property.PosZ)
-                },
-                Distancia = EncryptPropPeca(propPeca, Property.Distancy),
-                Angulo = EncryptPropPeca(propPeca, Property.Angle),
-                Expoente = EncryptPropPeca(propPeca, Property.Expoent),
-                UltimoIndexLuz = propPeca.UltimoIndexLuz,
-                Ativo = propPeca.Ativo
-            }
-        };
-    }
-    FormaProject CreateFormSpline(string formName, PropriedadePeca propPeca)
-    {
-        return new SplineProject()
-        {
-            Propriedades = new SplinePropriedadePecaProject()
-            {
-                Nome = propPeca.Nome,
-                Tam = new TamanhoProject()
-                {
-                    X = EncryptPropPeca(propPeca, Property.TamX),
-                    Y = EncryptPropPeca(propPeca, Property.TamY),
-                    Z = EncryptPropPeca(propPeca, Property.TamZ)
-                },
-                Pos = new PosicaoProject()
-                {
-                    X = EncryptPropPeca(propPeca, Property.PosX),
-                    Y = EncryptPropPeca(propPeca, Property.PosY),
-                    Z = EncryptPropPeca(propPeca, Property.PosZ)
-                },
-                Cor = propPeca.Cor,
-                Textura = propPeca.Textura,
-                TipoLuz = propPeca.TipoLuz,
-                Intensidade = propPeca.Intensidade.ToString(),
-                ValorIluminacao = new ValorIluminacaoProject()
-                {
-                    X = EncryptPropPeca(propPeca, Property.PosX),
-                    Y = EncryptPropPeca(propPeca, Property.PosY),
-                    Z = EncryptPropPeca(propPeca, Property.PosZ)
-                },
-                Distancia = EncryptPropPeca(propPeca, Property.Distancy),
-                Angulo = EncryptPropPeca(propPeca, Property.Angle),
-                Expoente = EncryptPropPeca(propPeca, Property.Expoent),
-                UltimoIndexLuz = propPeca.UltimoIndexLuz,
                 Ativo = propPeca.Ativo
             }
         };
     }
 
-    IluminacaoProject CreateIluminacao(PropriedadePeca propPeca)
+    SplineProject CreateFormSpline(string formName, SplinePropriedadePeca propPeca)
+    {
+        return new SplineProject()
+        {
+            Propriedades = new SplinePropriedadePecaProject()
+            {
+                P1 = new PosicaoProject()
+                {
+                    X = EncryptSplinePropPeca(propPeca, Property.P1PosX),
+                    Y = EncryptSplinePropPeca(propPeca, Property.P1PosY),
+                    Z = EncryptSplinePropPeca(propPeca, Property.P1PosZ),
+                },
+                P2 = new PosicaoProject()
+                {
+                    X = EncryptSplinePropPeca(propPeca, Property.P2PosX),
+                    Y = EncryptSplinePropPeca(propPeca, Property.P2PosY),
+                    Z = EncryptSplinePropPeca(propPeca, Property.P2PosZ),
+                },
+                P3 = new PosicaoProject()
+                {
+                    X = EncryptSplinePropPeca(propPeca, Property.P3PosX),
+                    Y = EncryptSplinePropPeca(propPeca, Property.P3PosY),
+                    Z = EncryptSplinePropPeca(propPeca, Property.P3PosZ),
+                },
+                P4 = new PosicaoProject()
+                {
+                    X = EncryptSplinePropPeca(propPeca, Property.P4PosX),
+                    Y = EncryptSplinePropPeca(propPeca, Property.P4PosY),
+                    Z = EncryptSplinePropPeca(propPeca, Property.P4PosZ),
+                },
+                P5 = new PosicaoProject()
+                {
+                    X = EncryptSplinePropPeca(propPeca, Property.P5PosX),
+                    Y = EncryptSplinePropPeca(propPeca, Property.P5PosY),
+                    Z = EncryptSplinePropPeca(propPeca, Property.P5PosZ),
+                },
+                SplineAmbiente = propPeca.SplineAmbiente
+            }
+        };
+    }
+
+    IluminacaoProject CreateIluminacao(Transform obgGrafSlot)
     {
         IluminacaoProject IluminacaoProj = new IluminacaoProject();
-        IluminacaoProj.Propriedades = CreatePropPeca(propPeca);
+        //IluminacaoProj.Propriedades = CreatePropPeca(propPeca);
 
         return IluminacaoProj;
     }
@@ -241,56 +345,109 @@ public class ExportScript : MonoBehaviour
         };
     }
 
-    PropriedadePecaProject CreatePropPeca(PropriedadePeca propPeca)
+    TransformacaoProject CreateTransfProject(Transform transformacao, PropriedadeTransformacao propPeca)
     {
-        return new PropriedadePecaProject()
+        TransformacaoProject transfProj = null;
+
+        if (transformacao.name.Contains(Consts.ESCALAR)) transfProj = new TransformacaoProject(TypeTransform.Escalar);
+        else if (transformacao.name.Contains(Consts.ROTACIONAR)) transfProj = new TransformacaoProject(TypeTransform.Rotacionar);
+        else if (transformacao.name.Contains(Consts.TRANSLADAR)) transfProj = new TransformacaoProject(TypeTransform.Transladar);
+
+        if (transfProj != null)
         {
-            Nome = propPeca.Nome,
-            Tam = new TamanhoProject()
-            {
-                X = EncryptPropPeca(propPeca, Property.TamX),
-                Y = EncryptPropPeca(propPeca, Property.TamY),
-                Z = EncryptPropPeca(propPeca, Property.TamZ)
-            },
-            Pos = new PosicaoProject()
-            {
-                X = EncryptPropPeca(propPeca, Property.PosX),
-                Y = EncryptPropPeca(propPeca, Property.PosY),
-                Z = EncryptPropPeca(propPeca, Property.PosZ)
-            },
-            Ativo = propPeca.Ativo,
-            Cor = propPeca.Cor,
-            Textura = propPeca.Textura,
-            TipoLuz = propPeca.TipoLuz,
-            Intensidade = propPeca.Intensidade.ToString(),
-            ValorIluminacao = new ValorIluminacaoProject()
-            {
-                X = EncryptPropPeca(propPeca, Property.PosX),
-                Y = EncryptPropPeca(propPeca, Property.PosY),
-                Z = EncryptPropPeca(propPeca, Property.PosZ)
-            },
-            Distancia = EncryptPropPeca(propPeca, Property.Distancy),
-            Angulo = EncryptPropPeca(propPeca, Property.Angle),
-            Expoente = EncryptPropPeca(propPeca, Property.Expoent),
-            UltimoIndexLuz = propPeca.UltimoIndexLuz
-        };
-    }
+            transfProj.Propriedades = CreateTransformacaoPropPeca(propPeca);
 
-    TransformacaoProject CreateTransfProject(string transfName, PropriedadePeca propPeca)
-    {
-        TransformacaoProject transf = null;
+            GameObject iteracao = GameObject.Find(Consts.ITERACAO + Util_VisEdu.GetNumSlot(transformacao.transform.parent.name, true));
 
-        if (transfName.Contains("Escalar")) transf = new EscalarProject();
-        else if (transfName.Contains("Rotacionar")) transf = new RotacionarProject();
-        else if (transfName.Contains("Transladar")) transf = new TransladarProject();
+            if (iteracao != null)
+            {
+                transfProj.Iteracao = CreateIteracaoProject(transfProj, Global.propriedadePecas[iteracao.name] as IteracaoPropriedadePeca);
+            }
 
-        if (transf != null)
-        {
-            transf.Propriedades = CreatePropPeca(propPeca);
-            return transf;
+            return transfProj;
         }
 
         return null;
+    }
+
+    IteracaoProject CreateIteracaoProject(TransformacaoProject transformacaoProj, IteracaoPropriedadePeca propPeca)
+    {
+        return new IteracaoProject()
+        {
+            NomeTransformacao = transformacaoProj.Propriedades.Nome,
+            Propriedades = CreateIteracaoPropPeca(propPeca)
+        };
+    }
+
+    IteracaoPropriedadePecaProject CreateIteracaoPropPeca(IteracaoPropriedadePeca propPeca)
+    {
+        return new IteracaoPropriedadePecaProject()
+        {
+            Intervalo = new PosicaoProject()
+            {
+                X = EncryptIteracaoPropPeca(propPeca, Property.IntervaloX),
+                Y = EncryptIteracaoPropPeca(propPeca, Property.IntervaloY),
+                Z = EncryptIteracaoPropPeca(propPeca, Property.IntervaloZ)
+            },
+            Min = new PosicaoProject()
+            {
+                X = EncryptIteracaoPropPeca(propPeca, Property.MinX),
+                Y = EncryptIteracaoPropPeca(propPeca, Property.MinY),
+                Z = EncryptIteracaoPropPeca(propPeca, Property.MinZ)
+            },
+            Max = new PosicaoProject()
+            {
+                X = EncryptIteracaoPropPeca(propPeca, Property.MaxX),
+                Y = EncryptIteracaoPropPeca(propPeca, Property.MaxY),
+                Z = EncryptIteracaoPropPeca(propPeca, Property.MaxZ)
+            }
+        };
+    }
+
+    string EncryptIteracaoPropPeca(IteracaoPropriedadePeca propPeca, Property propType)
+    {
+        switch (propType)
+        {
+            case Property.IntervaloX: return (propPeca.ListPropLocks.ContainsKey("IntervaloX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["IntervaloX"]) : propPeca.Intervalo.X.ToString();
+            case Property.IntervaloY: return (propPeca.ListPropLocks.ContainsKey("IntervaloY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["IntervaloY"]) : propPeca.Intervalo.Y.ToString();
+            case Property.IntervaloZ: return (propPeca.ListPropLocks.ContainsKey("IntervaloZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["IntervaloZ"]) : propPeca.Intervalo.Z.ToString();
+
+            case Property.MinX: return (propPeca.ListPropLocks.ContainsKey("MinX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MinX"]) : propPeca.Intervalo.X.ToString();
+            case Property.MinY: return (propPeca.ListPropLocks.ContainsKey("MinY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MinY"]) : propPeca.Intervalo.Y.ToString();
+            case Property.MinZ: return (propPeca.ListPropLocks.ContainsKey("MinZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MinZ"]) : propPeca.Intervalo.Z.ToString();
+
+            case Property.MaxX: return (propPeca.ListPropLocks.ContainsKey("MaxX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MaxX"]) : propPeca.Intervalo.X.ToString();
+            case Property.MaxY: return (propPeca.ListPropLocks.ContainsKey("MaxY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MaxY"]) : propPeca.Intervalo.Y.ToString();
+            case Property.MaxZ: return (propPeca.ListPropLocks.ContainsKey("MaxZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MaxZ"]) : propPeca.Intervalo.Z.ToString();
+            default: return string.Empty;
+        }
+    }
+
+    TransformacaoPropriedadePecaProject CreateTransformacaoPropPeca(PropriedadeTransformacao propPeca)
+    {
+        return new TransformacaoPropriedadePecaProject()
+        {
+            Nome = propPeca.Nome,
+            Pos = new PosicaoProject()
+            {
+                X = EncryptTransformacaoPropPeca(propPeca, Property.PosX),
+                Y = EncryptTransformacaoPropPeca(propPeca, Property.PosY),
+                Z = EncryptTransformacaoPropPeca(propPeca, Property.PosZ)
+            },
+            NomePeca = propPeca.NomePeca,
+            Ativo = propPeca.Ativo
+        };
+    }
+
+    string EncryptTransformacaoPropPeca(PropriedadeTransformacao propPeca, Property propType)
+    {
+        switch (propType)
+        {
+            case Property.PosX: return (propPeca.ListPropLocks.ContainsKey("PosX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosX"]) : propPeca.Pos.X.ToString();
+            case Property.PosY: return (propPeca.ListPropLocks.ContainsKey("PosY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosY"]) : propPeca.Pos.Y.ToString();
+            case Property.PosZ: return (propPeca.ListPropLocks.ContainsKey("PosZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosZ"]) : propPeca.Pos.Z.ToString();
+            default: return string.Empty;
+        }
     }
 
     string EncryptPropCam(Property prop)
@@ -307,7 +464,7 @@ public class ExportScript : MonoBehaviour
         }
     }
 
-    string EncryptPropPeca(PropriedadePeca peca, Property propType)
+    string EncryptCuboPropPeca(CuboPropriedadePeca peca, Property propType)
     {
         switch (propType)
         {
@@ -317,9 +474,45 @@ public class ExportScript : MonoBehaviour
             case Property.TamX: return (peca.ListPropLocks.ContainsKey("TamX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["TamX"]) : peca.Tam.X.ToString();
             case Property.TamY: return (peca.ListPropLocks.ContainsKey("TamY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["TamY"]) : peca.Tam.Y.ToString();
             case Property.TamZ: return (peca.ListPropLocks.ContainsKey("TamZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["TamZ"]) : peca.Tam.Z.ToString();
-            case Property.Distancy: return (peca.ListPropLocks.ContainsKey("Distancy")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["Distancy"]) : peca.Distancia.ToString();
-            case Property.Angle: return (peca.ListPropLocks.ContainsKey("Angle")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["Angle"]) : peca.Angulo.ToString();
-            case Property.Expoent: return (peca.ListPropLocks.ContainsKey("Expoent")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["Expoent"]) : peca.Expoente.ToString();
+            default: return string.Empty;
+        }
+    }
+    string EncryptPoligonoPropPeca(PoligonoPropriedadePeca peca, Property propType)
+    {
+        switch (propType)
+        {
+            case Property.Pontos: return (peca.ListPropLocks.ContainsKey("Pontos")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["Pontos"]) : peca.Pontos.ToString();
+            case Property.PosX: return (peca.ListPropLocks.ContainsKey("PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["PosX"]) : peca.Pos.X.ToString();
+            case Property.PosY: return (peca.ListPropLocks.ContainsKey("PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["PosY"]) : peca.Pos.Y.ToString();
+            case Property.PosZ: return (peca.ListPropLocks.ContainsKey("PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["PosZ"]) : peca.Pos.Z.ToString();
+            default: return string.Empty;
+        }
+    }
+
+    string EncryptSplinePropPeca(SplinePropriedadePeca peca, Property propType)
+    {
+        switch (propType)
+        {
+            case Property.P1PosX: return (peca.ListPropLocks.ContainsKey("P1PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P1PosX"]) : peca.P1.X.ToString();
+            case Property.P1PosY: return (peca.ListPropLocks.ContainsKey("P1PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P1PosY"]) : peca.P1.Y.ToString();
+            case Property.P1PosZ: return (peca.ListPropLocks.ContainsKey("P1PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P1PosZ"]) : peca.P1.Z.ToString();
+
+            case Property.P2PosX: return (peca.ListPropLocks.ContainsKey("P2PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P2PosX"]) : peca.P2.X.ToString();
+            case Property.P2PosY: return (peca.ListPropLocks.ContainsKey("P2PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P2PosY"]) : peca.P2.Y.ToString();
+            case Property.P2PosZ: return (peca.ListPropLocks.ContainsKey("P2PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P2PosZ"]) : peca.P2.Z.ToString();
+
+            case Property.P3PosX: return (peca.ListPropLocks.ContainsKey("P3PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P3PosX"]) : peca.P3.X.ToString();
+            case Property.P3PosY: return (peca.ListPropLocks.ContainsKey("P3PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P3PosY"]) : peca.P3.Y.ToString();
+            case Property.P3PosZ: return (peca.ListPropLocks.ContainsKey("P3PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P3PosZ"]) : peca.P3.Z.ToString();
+
+            case Property.P4PosX: return (peca.ListPropLocks.ContainsKey("P4PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P4PosX"]) : peca.P4.X.ToString();
+            case Property.P4PosY: return (peca.ListPropLocks.ContainsKey("P4PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P4PosY"]) : peca.P4.Y.ToString();
+            case Property.P4PosZ: return (peca.ListPropLocks.ContainsKey("P4PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P4PosZ"]) : peca.P4.Z.ToString();
+
+            case Property.P5PosX: return (peca.ListPropLocks.ContainsKey("P5PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P5PosX"]) : peca.P5.X.ToString();
+            case Property.P5PosY: return (peca.ListPropLocks.ContainsKey("P5PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P5PosY"]) : peca.P5.Y.ToString();
+            case Property.P5PosZ: return (peca.ListPropLocks.ContainsKey("P5PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P5PosZ"]) : peca.P5.Z.ToString();
+
             default: return string.Empty;
         }
     }

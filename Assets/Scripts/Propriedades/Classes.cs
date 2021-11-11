@@ -28,12 +28,9 @@ public class ValorIluminacao : Valores
 public class PropriedadePeca
 {
     public string Nome;
-    public Tamanho Tam;
-    public Posicao Pos;
-    public bool Ativo;
     public Color Cor;
-    public Texture Textura;
     public Dictionary<string, string> ListPropLocks;
+    public bool Ativo;
 
     //Iluminação
     public int TipoLuz;
@@ -46,8 +43,6 @@ public class PropriedadePeca
 
     public PropriedadePeca()
     {
-        Tam = new Tamanho();
-        Pos = new Posicao();
         ListPropLocks = new Dictionary<string, string>();
     }
 }
@@ -55,7 +50,13 @@ public class PropriedadePeca
 [Serializable]
 public class PropriedadeTransformacao : PropriedadePeca
 {
-    public PropriedadePeca PropPeca;
+    public Posicao Pos;
+    public string NomePeca;
+
+    public PropriedadeTransformacao()
+    {
+        Pos = new Posicao();
+    }
 }
 
 [Serializable]
@@ -63,19 +64,32 @@ public class CuboPropriedadePeca : PropriedadePeca
 {
     public string NomeCuboAmbiente;
     public string NomeCuboVis;
+    public Posicao Pos;
+    public Tamanho Tam;
+    public Texture Textura;
 
-    public CuboPropriedadePeca() : base() {}
+    public CuboPropriedadePeca() : base() 
+    {
+        NomeCuboAmbiente = string.Empty;
+        NomeCuboVis = string.Empty;
+        Pos = new Posicao();
+        Tam = new Tamanho();
+    }
 }
 
 [Serializable]
 public class PoligonoPropriedadePeca : PropriedadePeca
 {
+    public string PoligonoAmbiente;
+    public Posicao Pos;
     public int Pontos;
     public TipoPrimitiva Primitiva;
-    public string PoligonoAmbiente;
 
     public PoligonoPropriedadePeca() : base() 
     {
+        this.PoligonoAmbiente = string.Empty;
+        this.Pos = new Posicao();
+        this.Pontos = 3;
         this.Primitiva = TipoPrimitiva.Cheio;
     }
 }
@@ -96,12 +110,29 @@ public class SplinePropriedadePeca : PropriedadePeca
         P2 = new Posicao();
         P3 = new Posicao();
         P4 = new Posicao();
+        SplineAmbiente = string.Empty;
     }
 }
 
-public class PropriedadeCamera
+[Serializable]
+public class IteracaoPropriedadePeca : PropriedadePeca
 {
-    public string Nome;
+    public Posicao Intervalo;
+    public Posicao Min;
+    public Posicao Max;
+    public string NomeTransformacao;
+
+    public IteracaoPropriedadePeca() : base()
+    {
+        Intervalo = new Posicao();
+        Min = new Posicao();
+        Max = new Posicao();
+    }
+}
+
+[Serializable]
+public class PropriedadeCamera : PropriedadePeca
+{
     public float PosX;
     public float PosY;
     public float PosZ;
@@ -118,6 +149,7 @@ public class PropriedadeCamera
     }
 }
 
+[Serializable]
 public struct PropriedadeCameraInicial
 {
     public float PosX;

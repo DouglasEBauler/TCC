@@ -14,7 +14,7 @@ public class SelecionaTextura : MonoBehaviour
 
         //Inclui a textura no objeto
         if (Global.propriedadePecas.ContainsKey(Global.gameObjectName))
-            Global.propriedadePecas[Global.gameObjectName].Textura = texturaObjeto;
+            (Global.propriedadePecas[Global.gameObjectName] as CuboPropriedadePeca).Textura = texturaObjeto;
 
         //Texturiza os cubos
         CuboPropriedadePeca cuboProp = Global.propriedadePecas[Global.gameObjectName] as CuboPropriedadePeca;

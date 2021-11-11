@@ -52,9 +52,9 @@ public class PropEscalarScript : MonoBehaviour
             {
                 toggle.isOn = prPeca.Ativo;
 
-                tamX.text = prPeca.Tam.X.ToString();
-                tamY.text = prPeca.Tam.Y.ToString();
-                tamZ.text = prPeca.Tam.Z.ToString();
+                tamX.text = prPeca.Pos.X.ToString();
+                tamY.text = prPeca.Pos.Y.ToString();
+                tamZ.text = prPeca.Pos.Z.ToString();
             }
         }
         finally
@@ -68,9 +68,9 @@ public class PropEscalarScript : MonoBehaviour
     {
         if (podeAtualizar && Global.propriedadePecas.ContainsKey(prPeca.Nome))
         {
-            prPeca.Tam.X = Util_VisEdu.ConvertField(tamX.text);
-            prPeca.Tam.Y = Util_VisEdu.ConvertField(tamY.text);
-            prPeca.Tam.Z = Util_VisEdu.ConvertField(tamZ.text);
+            prPeca.Pos.X = Util_VisEdu.ConvertField(tamX.text);
+            prPeca.Pos.Y = Util_VisEdu.ConvertField(tamY.text);
+            prPeca.Pos.Z = Util_VisEdu.ConvertField(tamZ.text);
             prPeca.Ativo = toggle.isOn;
 
             if (prPeca.Ativo)
@@ -78,13 +78,13 @@ public class PropEscalarScript : MonoBehaviour
                 GameObject goTransformacaoAmb = GameObject.Find(prPeca.Nome + "Amb");
                 if (goTransformacaoAmb != null)
                 {
-                    goTransformacaoAmb.transform.localScale = new Vector3(prPeca.Tam.X+SCALE_X, prPeca.Tam.Y + SCALE_Y, prPeca.Tam.Z + SCALE_Z);
+                    goTransformacaoAmb.transform.localScale = new Vector3(prPeca.Pos.X+SCALE_X, prPeca.Pos.Y + SCALE_Y, prPeca.Pos.Z + SCALE_Z);
                 }
 
                 GameObject goTransformacaoVis = GameObject.Find(prPeca.Nome + "Vis");
                 if (goTransformacaoVis != null)
                 {
-                    goTransformacaoVis.transform.localScale = new Vector3(prPeca.Tam.X + SCALE_X, prPeca.Tam.Y + SCALE_Y, prPeca.Tam.Z + SCALE_Z);
+                    goTransformacaoVis.transform.localScale = new Vector3(prPeca.Pos.X + SCALE_X, prPeca.Pos.Y + SCALE_Y, prPeca.Pos.Z + SCALE_Z);
                 }
             }
 

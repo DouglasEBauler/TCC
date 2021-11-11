@@ -57,71 +57,96 @@ public class CameraPecaProject
 public class ObjetoGraficoProject
 {
     public PropriedadePeca Propriedades;
-    public FormaProject Forma;
-    public List<TransformacaoProject> Transformacoes;
-    public IluminacaoProject Iluminacao;
+    public CuboProject Cubo;
+    public PoligonoProject Poligono;
+    public SplineProject Spline;
 
     public ObjetoGraficoProject()
     {
         this.Propriedades = new PropriedadePeca();
-        this.Forma = new FormaProject();
-        this.Transformacoes = new List<TransformacaoProject>();
-        this.Iluminacao = new IluminacaoProject();
     }
 }
 
 [Serializable]
-public class FormaProject
+public class CuboProject
 {
-    public PropriedadePecaProject Propriedades;
-}
+    public CuboPropriedadePecaProject Propriedades;
+    public List<TransformacaoProject> Transformacoes;
+    public IluminacaoProject Iluminacao;
 
-[Serializable]
-public class CuboProject : FormaProject
-{
     public CuboProject()
     {
-        base.Propriedades = new CuboPropriedadePecaProject();
+        this.Propriedades = new CuboPropriedadePecaProject();
     }
 }
 
 [Serializable]
-public class PoligonoProject : FormaProject
+public class PoligonoProject
 {
+    public PoligonoPropriedadePecaProject Propriedades;
+    public List<TransformacaoProject> Transformacoes;
+    public IluminacaoProject Iluminacao;
+
     public PoligonoProject() 
     {
-        base.Propriedades = new PoligonoPropriedadePecaProject();
+        this.Propriedades = new PoligonoPropriedadePecaProject();
     }
 }
 
 [Serializable]
-public class SplineProject : FormaProject
+public class SplineProject
 {
+    public SplinePropriedadePecaProject Propriedades;
+    public List<TransformacaoProject> Transformacoes;
+    public IluminacaoProject Iluminacao;
+
     public SplineProject()
     {
-        base.Propriedades = new SplinePropriedadePecaProject();
+        this.Propriedades = new SplinePropriedadePecaProject();
     }
 }
 
 [Serializable]
 public class TransformacaoProject
 {
-    public PropriedadePecaProject Propriedades;
+    public TransformacaoPropriedadePecaProject Propriedades;
+    public TypeTransform TipoTransformacao;
+    public IteracaoProject Iteracao;
     
-    public TransformacaoProject()
+    public TransformacaoProject(TypeTransform tipoTransformacao)
     {
-        this.Propriedades = new PropriedadePecaProject();
+        this.Propriedades = new TransformacaoPropriedadePecaProject();
+        this.TipoTransformacao = tipoTransformacao;
+        this.Iteracao = new IteracaoProject();
     }
 }
 
 [Serializable]
-public class EscalarProject : TransformacaoProject { }
+public class IteracaoProject
+{
+    public IteracaoPropriedadePecaProject Propriedades;
+    public string NomeTransformacao;
+
+    public IteracaoProject() : base()
+    {
+        Propriedades = new IteracaoPropriedadePecaProject();
+    }
+}
 
 [Serializable]
-public class RotacionarProject : TransformacaoProject { }
+public class IteracaoPropriedadePecaProject : PropriedadePecaProject
+{
+    public PosicaoProject Intervalo;
+    public PosicaoProject Min;
+    public PosicaoProject Max;
 
-[Serializable]
-public class TransladarProject : TransformacaoProject { }
+    public IteracaoPropriedadePecaProject()
+    {
+        this.Intervalo = new PosicaoProject();
+        this.Min = new PosicaoProject();
+        this.Max = new PosicaoProject();
+    }
+}
 
 [Serializable]
 public class IluminacaoProject
@@ -138,11 +163,8 @@ public class IluminacaoProject
 public class PropriedadePecaProject
 {
     public string Nome;
-    public TamanhoProject Tam;
-    public PosicaoProject Pos;
     public Color Cor;
     public bool Ativo;
-    public Texture Textura;
     [NonSerialized]
     public Dictionary<string, float> listaValores;
 
@@ -154,11 +176,17 @@ public class PropriedadePecaProject
     public string Angulo;
     public string Expoente;
     public int UltimoIndexLuz;
+}
 
-    public PropriedadePecaProject()
+[Serializable]
+public class TransformacaoPropriedadePecaProject : PropriedadePecaProject
+{
+    public PosicaoProject Pos;
+    public string NomePeca;
+
+    public TransformacaoPropriedadePecaProject() : base()
     {
-        Tam = new TamanhoProject();
-        Pos = new PosicaoProject();
+        this.Pos = new PosicaoProject();
     }
 }
 
@@ -167,18 +195,54 @@ public class CuboPropriedadePecaProject : PropriedadePecaProject
 {
     public string NomeCuboAmbiente;
     public string NomeCuboVis;
+    public PosicaoProject Pos;
+    public TamanhoProject Tam;
+    public Texture Textura;
+
+    public CuboPropriedadePecaProject() : base() 
+    {
+        this.NomeCuboAmbiente = string.Empty;
+        this.NomeCuboVis = string.Empty;
+        this.Pos = new PosicaoProject();
+        this.Tam = new TamanhoProject();
+    }
 }
 
 [Serializable]
 public class PoligonoPropriedadePecaProject : PropriedadePecaProject
 {
     public string PoligonoAmbiente;
+    public PosicaoProject Pos;
+    public string Pontos;
+    public TipoPrimitiva Primitiva;
+
+    public PoligonoPropriedadePecaProject() : base()
+    {
+        this.PoligonoAmbiente = string.Empty;
+        this.Pos = new PosicaoProject();
+        this.Pontos = string.Empty;
+        this.Primitiva = TipoPrimitiva.Cheio;
+    }
 }
 
 [Serializable]
 public class SplinePropriedadePecaProject : PropriedadePecaProject
 {
+    public PosicaoProject P1;
+    public PosicaoProject P2;
+    public PosicaoProject P3;
+    public PosicaoProject P4;
+    public PosicaoProject P5;
+    public string SplineAmbiente;
 
+    public SplinePropriedadePecaProject() : base()
+    {
+        P1 = new PosicaoProject();
+        P2 = new PosicaoProject();
+        P3 = new PosicaoProject();
+        P4 = new PosicaoProject();
+        SplineAmbiente = string.Empty;
+    }
 }
 
 [Serializable]

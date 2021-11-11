@@ -20,13 +20,13 @@ public class PropPoligonoScript : MonoBehaviour
     [SerializeField]
     FlexibleColorPicker corSelecionada;
     [SerializeField]
-    Toggle toggleQtdPontos;
+    Toggle lockQtdPontos;
     [SerializeField]
-    Toggle toggleLockPosX;
+    Toggle lockPosX;
     [SerializeField]
-    Toggle toggleLockPosY;
+    Toggle lockPosY;
     [SerializeField]
-    Toggle toggleLockPosZ;
+    Toggle lockPosZ;
     [SerializeField]
     Toggle ativo;
 
@@ -119,10 +119,10 @@ public class PropPoligonoScript : MonoBehaviour
 
     public void UpdateLockFields()
     {
-        if (!toggleQtdPontos.isOn)
+        if (!lockQtdPontos.isOn)
         {
             propPeca.ListPropLocks.Remove("Pontos");
-            toggleQtdPontos.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            lockQtdPontos.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
         }
         else
         {
@@ -135,13 +135,13 @@ public class PropPoligonoScript : MonoBehaviour
                 propPeca.ListPropLocks.Add("Pontos", Util_VisEdu.ConvertField(posX.text).ToString());
             }
 
-            toggleQtdPontos.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+            lockQtdPontos.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
 
-        if (!toggleLockPosX.isOn)
+        if (!lockPosX.isOn)
         {
             propPeca.ListPropLocks.Remove("PosX");
-            toggleLockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            lockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
         }
         else
         {
@@ -154,13 +154,13 @@ public class PropPoligonoScript : MonoBehaviour
                 propPeca.ListPropLocks.Add("PosX", Util_VisEdu.ConvertField(posX.text).ToString());
             }
 
-            toggleLockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+            lockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
 
-        if (!toggleLockPosY.isOn)
+        if (!lockPosY.isOn)
         {
             propPeca.ListPropLocks.Remove("PosY");
-            toggleLockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            lockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
         }
         else
         {
@@ -173,13 +173,13 @@ public class PropPoligonoScript : MonoBehaviour
                 propPeca.ListPropLocks.Add("PosY", Util_VisEdu.ConvertField(posY.text).ToString());
             }
 
-            toggleLockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+            lockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
 
-        if (!toggleLockPosZ.isOn)
+        if (!lockPosZ.isOn)
         {
             propPeca.ListPropLocks.Remove("PosZ");
-            toggleLockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            lockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
         }
         else
         {
@@ -192,7 +192,7 @@ public class PropPoligonoScript : MonoBehaviour
                 propPeca.ListPropLocks.Add("PosZ", Util_VisEdu.ConvertField(posZ.text).ToString());
             }
 
-            toggleLockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+            lockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 }

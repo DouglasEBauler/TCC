@@ -162,16 +162,16 @@ public class Controller : MonoBehaviour
 
     public void AddTransformacoesSlot(bool tutorial = false)
     {
-        posicaoColliderDestino = GameObject.Find((tutorialScript.EstaExecutandoTutorial) ? "TransformacoesSlot" : "TransformacoesSlot" + (++DropPeca.countTransformacoes));
+        posicaoColliderDestino = GameObject.Find((tutorialScript.EstaExecutandoTutorial) ? "TransformacoesSlot" : "TransformacoesSlot" + (++Global.countTransformacoes));
         GameObject cloneTrans = Instantiate(posicaoColliderDestino, posicaoColliderDestino.transform.position, posicaoColliderDestino.transform.rotation, posicaoColliderDestino.transform.parent);
-        cloneTrans.name = "TransformacoesSlot" + ((!tutorial) ? (DropPeca.countObjetosGraficos + "_" + (++DropPeca.countTransformacoes)) : "Tutorial");
+        cloneTrans.name = "TransformacoesSlot" + ((!tutorial) ? (Global.countObjetosGraficos + "_" + (++Global.countTransformacoes)) : "Tutorial");
         cloneTrans.transform.position = new Vector3(posicaoColliderDestino.transform.position.x, posicaoColliderDestino.transform.position.y - 3f, posicaoColliderDestino.transform.position.z);
 
         AddTransformacoeSequenciaSlots(cloneTrans.name, tutorial);
 
-        RenderController.ResizeBases(posicaoColliderDestino, Consts.TRANSLADAR, true, tutorial); // o Segundo parâmetro pode ser qualquer tranformação 
+        //RenderController.ResizeBases(posicaoColliderDestino, Consts.TRANSLADAR, true, tutorial); // o Segundo parâmetro pode ser qualquer tranformação 
 
-        concatNumber = DropPeca.countObjetosGraficos.ToString();
+        concatNumber = Global.countObjetosGraficos.ToString();
 
         if (!tutorialScript.EstaExecutandoTutorial)
         {
@@ -196,30 +196,25 @@ public class Controller : MonoBehaviour
 
     public void AddObjGrafico(bool tutorial = false)
     {
-        if (DropPeca.countObjetosGraficos.Equals(0))
-        {
-            Util_VisEdu.CriaFormasVazias();
-        }
+        CreateGameObjectTree(Global.countObjetosGraficos, tutorial);
 
-        CreateGameObjectTree(DropPeca.countObjetosGraficos, tutorial);
-
-        GameObject objGrafSlot = GameObject.Find("ObjGraficoSlot" + (DropPeca.countObjetosGraficos.Equals(0) ? string.Empty : DropPeca.countObjetosGraficos.ToString()));
+        GameObject objGrafSlot = GameObject.Find("ObjGraficoSlot" + (Global.countObjetosGraficos.Equals(0) ? string.Empty : Global.countObjetosGraficos.ToString()));
         GameObject cloneObjGrafico = Instantiate(objGrafSlot, objGrafSlot.transform.position, objGrafSlot.transform.rotation, objGrafSlot.transform.parent);
-        cloneObjGrafico.name = "ObjGraficoSlot" + ((!tutorial) ? (++DropPeca.countObjetosGraficos).ToString() : "Tutorial");
+        cloneObjGrafico.name = "ObjGraficoSlot" + ((!tutorial) ? (++Global.countObjetosGraficos).ToString() : "Tutorial");
         cloneObjGrafico.transform.position = new Vector3(objGrafSlot.transform.position.x, objGrafSlot.transform.position.y - 11f, objGrafSlot.transform.position.z);
 
         posicaoColliderDestino = objGrafSlot;
 
         SetActiveAndRenameGameObject(objGrafSlot, tutorial);
 
-        RenderController.ResizeBases(objGrafSlot, Consts.OBJETOGRAFICO, true, tutorial);
+        //RenderController.ResizeBases(objGrafSlot, Consts.OBJETOGRAFICO, true, tutorial);
     }
 
     public void AddCuboTransform()
     {
         if (!tutorialScript.EstaExecutandoTutorial)
         {
-            posicaoColliderDestino = GameObject.Find("FormasSlot" + (++DropPeca.countFormas));
+            //posicaoColliderDestino = GameObject.Find("FormasSlot" + (++DropPeca.countFormas));
 
             if (Global.cameraAtiva && new PropIluminacaoPadrao().existeIluminacao())
                 GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
@@ -241,14 +236,14 @@ public class Controller : MonoBehaviour
             GameObject cuboAmb = GameObject.Find("CuboAmbiente" + GetNumeroSlotObjetoGrafico());
             if (cuboAmb != null)
             {
-                cuboAmb.name += DropPeca.countFormas;
+                //cuboAmb.name += DropPeca.countFormas;
             }
             MeshRenderer mr = cuboAmb.GetComponent<MeshRenderer>();
 
             GameObject cuboVis = GameObject.Find("CuboVis" + GetNumeroSlotObjetoGrafico());
             if (cuboVis != null)
             {
-                cuboVis.name += DropPeca.countFormas;
+                //cuboVis.name += DropPeca.countFormas;
             }
 
             bool statusCubo = false;
@@ -269,7 +264,7 @@ public class Controller : MonoBehaviour
 
     public void AddIluminacao(bool tutorial = false)
     {
-        posicaoColliderDestino = GameObject.Find("IluminacaoSlot" + ((!tutorial) ? DropPeca.countObjetosGraficos.ToString() : "Tutorial"));
+        posicaoColliderDestino = GameObject.Find("IluminacaoSlot" + ((!tutorial) ? Global.countObjetosGraficos.ToString() : "Tutorial"));
 
         //Verifica se há câmera e aplica luz aos objetos com Layer "Formas"
         if (Global.cameraAtiva)
@@ -386,7 +381,7 @@ public class Controller : MonoBehaviour
 
         valorInc = sinal.Equals("+") ? 3f : -3f;
 
-        GameObject goObj = GameObject.Find("ObjGraficoSlot" + ((!tutorial) ? DropPeca.countObjetosGraficos.ToString() : "Tutorial"));
+        GameObject goObj = GameObject.Find("ObjGraficoSlot" + ((!tutorial) ? Global.countObjetosGraficos.ToString() : "Tutorial"));
 
         foreach (Transform child in goObj.transform)
         {
@@ -399,7 +394,7 @@ public class Controller : MonoBehaviour
             }
         }
 
-        GameObject obj_iluminacao = GameObject.Find("IluminacaoSlot" + ((!tutorial) ? DropPeca.countObjetosGraficos.ToString() : "Tutorial"));
+        GameObject obj_iluminacao = GameObject.Find("IluminacaoSlot" + ((!tutorial) ? Global.countObjetosGraficos.ToString() : "Tutorial"));
         Vector3 pos = obj_iluminacao.transform.position;
         pos.y += valorInc;
         obj_iluminacao.transform.position = pos;
@@ -515,11 +510,11 @@ public class Controller : MonoBehaviour
 
             if (child.name.Contains("Slot"))
             {
-                child.name = child.name.Substring(0, child.name.IndexOf("Slot") + 4) + ((!tutorial) ? DropPeca.countObjetosGraficos.ToString() : "Tutorial");
+                child.name = child.name.Substring(0, child.name.IndexOf("Slot") + 4) + ((!tutorial) ? Global.countObjetosGraficos.ToString() : "Tutorial");
             }
             else
             {
-                child.name = child.name.Substring(0, child.name.IndexOf("GO") + 2) + ((!tutorial) ? DropPeca.countObjetosGraficos.ToString() : "Tutorial");
+                child.name = child.name.Substring(0, child.name.IndexOf("GO") + 2) + ((!tutorial) ? Global.countObjetosGraficos.ToString() : "Tutorial");
 
                 foreach (Transform _child in child.transform)
                 {
@@ -528,7 +523,7 @@ public class Controller : MonoBehaviour
                         int value = 0;
                         int.TryParse(_child.name.Substring(_child.name.Length - 1, 1), out value);
 
-                        _child.name = (value > 0) ? _child.name.Substring(0, _child.name.Length - 1) + DropPeca.countObjetosGraficos.ToString() : _child.name + DropPeca.countObjetosGraficos.ToString();
+                        _child.name = (value > 0) ? _child.name.Substring(0, _child.name.Length - 1) + Global.countObjetosGraficos.ToString() : _child.name + Global.countObjetosGraficos.ToString();
                     }
                     else
                     {
@@ -768,7 +763,6 @@ public class Controller : MonoBehaviour
         objName = GetNomeObjeto(gameObject.name);
 
         cloneFab = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
-        cloneFab.name = objName + DropPeca.countFormas.ToString();
         cloneFab.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
     }
 
@@ -806,7 +800,7 @@ public class Controller : MonoBehaviour
 
         foreach (Transform child in goRender.transform)
         {
-            if (child.name.Equals("ObjGraficoSlot" + ((!tutorial) ? DropPeca.countObjetosGraficos.ToString() : "Tutorial")))
+            if (child.name.Equals("ObjGraficoSlot" + ((!tutorial) ? Global.countObjetosGraficos.ToString() : "Tutorial")))
             {
                 Vector3 pos = child.position;
                 pos.y -= 3;
@@ -923,10 +917,10 @@ public class Controller : MonoBehaviour
                         if (enc.Value.Equals(Global.listaEncaixes[Util_VisEdu.GetPecaByName(gameObject.name)])
                             && (Global.propriedadePecas.ContainsKey(enc.Key)))
                         {
-                            tamanho = Global.propriedadePecas[enc.Key].Tam;
-                            posicao = Global.propriedadePecas[enc.Key].Pos;
-                            tam = new Vector3(tamanho.X, tamanho.Y, tamanho.Z);
-                            pos = new Vector3(posicao.X * -1, posicao.Y, posicao.Z);
+                            //tamanho = Global.propriedadePecas[enc.Key].Tam;
+                            //posicao = Global.propriedadePecas[enc.Key].Pos;
+                            //tam = new Vector3(tamanho.X, tamanho.Y, tamanho.Z);
+                            //pos = new Vector3(posicao.X * -1, posicao.Y, posicao.Z);
                             break;
                         }
                     }

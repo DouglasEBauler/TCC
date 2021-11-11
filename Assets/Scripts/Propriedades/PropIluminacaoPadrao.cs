@@ -37,13 +37,14 @@ public class PropIluminacaoPadrao : MonoBehaviour
 
             inputSelected = GetFieldSelected(gameObject.name);
 
-            if (inputSelected == InputSelected.InputPosX)
-                Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.X = float.Parse(validaVazio(inputValue), CultureInfo.InvariantCulture.NumberFormat);
-            else if (inputSelected == InputSelected.InputPosY)
-                Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.Y = float.Parse(validaVazio(inputValue), CultureInfo.InvariantCulture.NumberFormat);
-            else if (inputSelected == InputSelected.InputPosZ)
-                Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.Z = float.Parse(validaVazio(inputValue), CultureInfo.InvariantCulture.NumberFormat);
-            else if (inputSelected == InputSelected.ToggleAtivo)
+            //if (inputSelected == InputSelected.InputPosX)
+                //Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.X = float.Parse(validaVazio(inputValue), CultureInfo.InvariantCulture.NumberFormat);
+            //else if (inputSelected == InputSelected.InputPosY)
+                //Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.Y = float.Parse(validaVazio(inputValue), CultureInfo.InvariantCulture.NumberFormat);
+            //else if (inputSelected == InputSelected.InputPosZ)
+                //Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.Z = float.Parse(validaVazio(inputValue), CultureInfo.InvariantCulture.NumberFormat);
+            //else 
+            if (inputSelected == InputSelected.ToggleAtivo)
                 Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Ativo = gameObject.GetComponent<Toggle>().isOn;
             else if (inputSelected == InputSelected.InputIntensidade)
                 Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Intensidade = float.Parse(validaVazio(inputValue), CultureInfo.InvariantCulture.NumberFormat);
@@ -232,7 +233,7 @@ public class PropIluminacaoPadrao : MonoBehaviour
             // Propriedades comuns entre todas iluminações, exceto iluminação "Ambiente".
             if (Global.propriedadePecas[Global.gameObjectName].TipoLuz != 0)
             {
-                lightObject.transform.localPosition = new Vector3(-Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.X, Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.Y, Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.Z);
+                //lightObject.transform.localPosition = new Vector3(-Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.X, Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.Y, Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Pos.Z);
                 lightObject.GetComponent<Light>().color = Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Cor;
                 lightObject.GetComponent<Light>().intensity = Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Intensidade;
                 AtivaIluminacao(GetTipoLuzPorExtenso(Global.propriedadePecas[Global.gameObjectName].TipoLuz) + Global.gameObjectName, Global.propriedadeIluminacao[Global.gameObjectName][Global.propriedadePecas[Global.gameObjectName].TipoLuz].Ativo);
@@ -315,9 +316,9 @@ public class PropIluminacaoPadrao : MonoBehaviour
         {
             case (int)TipoIluminacao.Ambiente:
                 propIluminacao.transform.GetChild(1).GetChild(0).GetComponent<TMP_Dropdown>().value = 0;
-                propIluminacao.transform.GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Ambiente].Pos.X.ToString();
-                propIluminacao.transform.GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Ambiente].Pos.Y.ToString();
-                propIluminacao.transform.GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Ambiente].Pos.Z.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Ambiente].Pos.X.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Ambiente].Pos.Y.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Ambiente].Pos.Z.ToString();
                 GameObject.Find("CorSelecionadaAmbiente").GetComponent<MeshRenderer>().materials[0].color = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Ambiente].Cor;
                 propIluminacao.transform.GetChild(2).GetChild(0).GetChild(0).GetChild(4).GetComponent<Toggle>().isOn = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Ambiente].Ativo;
 
@@ -325,9 +326,9 @@ public class PropIluminacaoPadrao : MonoBehaviour
                 break;
             case (int)TipoIluminacao.Directional:
                 propIluminacao.transform.GetChild(1).GetChild(0).GetComponent<TMP_Dropdown>().value = 1;
-                propIluminacao.transform.GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.X.ToString();
-                propIluminacao.transform.GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.Y.ToString();
-                propIluminacao.transform.GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.Z.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.X.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.Y.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.Z.ToString();
                 GameObject.Find("CorSelecionadaDirectional").GetComponent<MeshRenderer>().materials[0].color = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Cor;
                 propIluminacao.transform.GetChild(2).GetChild(1).GetChild(0).GetChild(4).GetComponent<Toggle>().isOn = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Ativo;
                 propIluminacao.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Intensidade.ToString();
@@ -337,7 +338,7 @@ public class PropIluminacaoPadrao : MonoBehaviour
 
                 // Alterações do Objeto e Iluminação "Directional".
                 lightObject = GameObject.Find("Directional" + Global.gameObjectName);
-                lightObject.transform.localPosition = new Vector3(-Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.X, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.Y, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.Z);
+                //lightObject.transform.localPosition = new Vector3(-Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.X, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.Y, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Pos.Z);
                 lightObject.GetComponent<Light>().color = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Cor;
                 lightObject.GetComponent<Light>().intensity = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Intensidade;
                 AtivaIluminacao(lightObject.name, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Directional].Ativo);
@@ -347,9 +348,9 @@ public class PropIluminacaoPadrao : MonoBehaviour
                 break;
             case (int)TipoIluminacao.Point:
                 propIluminacao.transform.GetChild(1).GetChild(0).GetComponent<TMP_Dropdown>().value = 2;
-                propIluminacao.transform.GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.X.ToString();
-                propIluminacao.transform.GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.Y.ToString();
-                propIluminacao.transform.GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.Z.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.X.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.Y.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.Z.ToString();
                 GameObject.Find("CorSelecionadaPoint").GetComponent<MeshRenderer>().materials[0].color = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Cor;
                 propIluminacao.transform.GetChild(2).GetChild(2).GetChild(0).GetChild(4).GetComponent<Toggle>().isOn = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Ativo;
                 propIluminacao.transform.GetChild(2).GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Intensidade.ToString();
@@ -357,7 +358,7 @@ public class PropIluminacaoPadrao : MonoBehaviour
 
                 // Alterações do Objeto e Iluminação "Point".
                 lightObject = GameObject.Find("Point" + Global.gameObjectName);
-                lightObject.transform.localPosition = new Vector3(-Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.X, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.Y, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.Z);
+                //lightObject.transform.localPosition = new Vector3(-Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.X, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.Y, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Pos.Z);
                 lightObject.GetComponent<Light>().color = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Cor;
                 lightObject.GetComponent<Light>().intensity = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Intensidade;
                 lightObject.GetComponent<Light>().range = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Point].Distancia;
@@ -367,9 +368,9 @@ public class PropIluminacaoPadrao : MonoBehaviour
                 break;
             case (int)TipoIluminacao.Spot:
                 propIluminacao.transform.GetChild(1).GetChild(0).GetComponent<TMP_Dropdown>().value = 3;
-                propIluminacao.transform.GetChild(2).GetChild(3).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.X.ToString();
-                propIluminacao.transform.GetChild(2).GetChild(3).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.Y.ToString();
-                propIluminacao.transform.GetChild(2).GetChild(3).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.Z.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(3).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.X.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(3).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.Y.ToString();
+                //propIluminacao.transform.GetChild(2).GetChild(3).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.Z.ToString();
                 GameObject.Find("CorSelecionadaSpot").GetComponent<MeshRenderer>().materials[0].color = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Cor;
                 propIluminacao.transform.GetChild(2).GetChild(3).GetChild(0).GetChild(4).GetComponent<Toggle>().isOn = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Ativo;
                 propIluminacao.transform.GetChild(2).GetChild(3).GetChild(1).GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Intensidade.ToString();
@@ -382,7 +383,7 @@ public class PropIluminacaoPadrao : MonoBehaviour
 
                 // Alterações do Objeto e Iluminação "Spot".
                 lightObject = GameObject.Find("Spot" + Global.gameObjectName);
-                lightObject.transform.localPosition = new Vector3(-Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.X, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.Y, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.Z);
+                //lightObject.transform.localPosition = new Vector3(-Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.X, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.Y, Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Pos.Z);
                 lightObject.GetComponent<Light>().color = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Cor;
                 lightObject.GetComponent<Light>().intensity = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Intensidade;
                 lightObject.GetComponent<Light>().range = Global.propriedadeIluminacao[Global.gameObjectName][(int)TipoIluminacao.Spot].Distancia;
@@ -420,7 +421,7 @@ public class PropIluminacaoPadrao : MonoBehaviour
             {
                 pecas[i] = new PropriedadePeca()
                 {
-                    Pos = new Posicao() { X = 100, Y = 300, Z = 0 },
+                    //Pos = new Posicao() { X = 100, Y = 300, Z = 0 },
                     ValorIluminacao = new ValorIluminacao() { X = 0, Y = 0, Z = 0 },
                     Cor = Color.white,
                     Ativo = true,

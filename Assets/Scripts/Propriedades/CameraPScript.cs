@@ -6,8 +6,6 @@ public class CameraPScript : MonoBehaviour
     [SerializeField]
     Camera cam;
     [SerializeField]
-    GameObject slot;
-    [SerializeField]
     GameObject propriedades;
     [SerializeField]
     GameObject menuControl;
@@ -20,8 +18,10 @@ public class CameraPScript : MonoBehaviour
     [SerializeField]
     GameObject panelAjuda;
 
+    [HideInInspector]
+    public GameObject slot;
+
     Vector3 screenPoint, offset, scanPos, startPos;
-    GameObject cloneFab;
     Tutorial tutorialScript;
 
     void Start()
@@ -37,8 +37,7 @@ public class CameraPScript : MonoBehaviour
 
     void OnMouseDown()
     {
-        screenPoint = cam.WorldToScreenPoint(scanPos);
-        offset = scanPos - cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+        offset = scanPos - cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 100f));
 
         CopiaPeca();
         ConfiguraPropriedadePeca();
@@ -46,7 +45,7 @@ public class CameraPScript : MonoBehaviour
 
     void OnMouseDrag()
     {
-        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 100f);
         Vector3 curPosition = cam.ScreenToWorldPoint(curScreenPoint) + offset;
         transform.position = curPosition;
     }
@@ -61,7 +60,7 @@ public class CameraPScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains("CameraSlot"))
+        if (other.gameObject.name.Contains(Consts.CAMERA_SLOT))
         {
             slot = other.gameObject;
         }   
@@ -69,7 +68,7 @@ public class CameraPScript : MonoBehaviour
 
     bool PodeGerarCopiaPeca()
     {
-        return screenPoint.y > cam.pixelRect.height / 2;
+        return cam.WorldToScreenPoint(scanPos).y > cam.pixelRect.height / 2;
     }
 
     void AjustaPeca()
@@ -78,18 +77,22 @@ public class CameraPScript : MonoBehaviour
         {
             bool podeDestruir = PodeGerarCopiaPeca();
 
-            if (podeDestruir)
+            if (podeDestruir && !Global.listaEncaixes.ContainsKey(gameObject.name))
             {
                 transform.position = startPos;
                 Destroy(gameObject);
                 screenPoint = cam.WorldToScreenPoint(scanPos);
+            }
+            else
+            {
+                EncaixaPecaAoSlot();
             }
         }
     }
 
     bool CheckPanelIsActive()
     {
-        return panelArquivo.activeSelf || panelPropPeca.activeSelf || panelAjuda.activeSelf;
+        return panelArquivo.activeSelf || panelAjuda.activeSelf;
     }
 
     public void EncaixaPecaAoSlot()
@@ -102,7 +105,7 @@ public class CameraPScript : MonoBehaviour
         }
     }
 
-    public void AddCamera()
+    public void AddCamera(PropriedadeCamera proCam = null)
     {
         EncaixaPecaAoSlot();
 
@@ -116,7 +119,12 @@ public class CameraPScript : MonoBehaviour
         // Verifica se existem cubos e iluminações mas a câmera ainda não foi colocada.
         Global.propCameraGlobal.ExisteCamera = true;
 
-        CreatePropPeca(null);
+        CreatePropPeca(proCam);
+    }
+
+    public void ConfiguraPropriedadePeca()
+    {
+        ConfiguraPropriedadePeca(null);
     }
 
     public void ConfiguraPropriedadePeca(PropriedadeCamera camProp = null)
@@ -141,19 +149,19 @@ public class CameraPScript : MonoBehaviour
         }
     }
 
-    public void CreatePropPeca(PropriedadePeca propPeca = null)
+    public void CreatePropPeca(PropriedadeCamera propPeca = null)
     {
         if (!Global.propriedadePecas.ContainsKey(gameObject.name))
         {
-            PropriedadePeca prPeca;
+            PropriedadeCamera prPeca;
 
-            if (propPeca == null)
+            if (propPeca != null)
             {
-                prPeca = new PropriedadePeca();
+                prPeca = propPeca;
             }
             else
             {
-                prPeca = propPeca;
+                prPeca = new PropriedadeCamera();
             }
             prPeca.Nome = gameObject.name;
 
@@ -173,6 +181,7 @@ public class CameraPScript : MonoBehaviour
             && !Global.listaEncaixes.ContainsKey(gameObject.name))
         {
             slot.name += "1";
+            slot.transform.parent.name += "1";
             gameObject.name += "1";
 
             if (!Global.listaEncaixes.ContainsKey(gameObject.name))
@@ -198,7 +207,7 @@ public class CameraPScript : MonoBehaviour
     {
         if (PodeGerarCopiaPeca())
         {
-            cloneFab = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
+            GameObject cloneFab = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
             cloneFab.name = gameObject.name;
             cloneFab.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
         }
