@@ -20,7 +20,7 @@ public class MenuScript : MonoBehaviour
 
         foreach (Transform child in goFabricaPecas.transform)
         {
-            child.gameObject.SetActive(!Consts.FABRICAPECAS.Equals(child.name) && Consts.AJUDA.Equals(child.name));
+            child.gameObject.SetActive(Consts.AJUDA.Equals(child.name));
         }
 
         EnableButtons(Consts.BTN_AJUDA);
@@ -32,8 +32,6 @@ public class MenuScript : MonoBehaviour
 
         foreach (Transform child in goFabricaPecas.transform)
         {
-            if (Consts.FABRICAPECAS.Equals(child.name)) continue;
-
             child.gameObject.SetActive(Consts.ARQUIVO.Equals(child.name));
         }
 

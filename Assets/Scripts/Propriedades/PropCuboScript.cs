@@ -28,6 +28,8 @@ public class PropCuboScript : MonoBehaviour
     [SerializeField]
     GameObject texturaSelecionada;
     [SerializeField]
+    GameObject baseTexturas;
+    [SerializeField]
     Toggle ativo;
     [SerializeField]
     Toggle lockPosX;
@@ -81,6 +83,10 @@ public class PropCuboScript : MonoBehaviour
                 posZ.text = prPeca.Pos.Z.ToString();
                 corSelecionado.color = prPeca.Cor;
                 texturaSelecionada.GetComponent<MeshRenderer>().materials[0].mainTexture = prPeca.Textura;
+                foreach (Transform child in baseTexturas.transform)
+                {
+                    child.gameObject.GetComponent<SelecionaTextura>().NomePecaCubo = this.prPeca.NomePeca;
+                }
                 ativo.isOn = prPeca.Ativo;
 
                 pecaAmbiente = GameObject.Find(prPeca.NomeCuboAmb);
