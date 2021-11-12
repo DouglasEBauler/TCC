@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{4D5A211E-C343-8F24-7123-4990BACB7502}</ProjectGuid>
+    <ProjectGuid>{7A882426-787D-DCA5-5B08-6331B10C6A19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -63,23 +63,20 @@
     <Compile Include="Assets\Scripts\Propriedades\PropIteracao.cs" />
     <Compile Include="Assets\Scripts\Pecas\PoligonoScript.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\SplineExtrusion.cs" />
-    <Compile Include="Assets\Scripts\ImportacaoExportacaoProjeto\ProjectVisEduClass.cs" />
+    <Compile Include="Assets\Scripts\Arquivos\ProjectVisEduClass.cs" />
     <Compile Include="Assets\Scripts\Propriedades\SelecionaTextura.cs" />
     <Compile Include="Assets\Scripts\Cameras\MovePecaObj.cs" />
     <Compile Include="Assets\Scripts\Propriedades\TexturaSelecionada.cs" />
     <Compile Include="Assets\Scripts\Cameras\CameraObjectScript.cs" />
-    <Compile Include="Assets\Scripts\ImportacaoExportacaoProjeto\ImportScript.cs" />
-    <Compile Include="Assets\Scripts\Cameras\CameraVisualizado.cs" />
+    <Compile Include="Assets\Scripts\Arquivos\ImportScript.cs" />
     <Compile Include="Assets\Scripts\Cameras\MoveAmbienteGrafico.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropTipoLuz.cs" />
     <Compile Include="Assets\Scripts\Utils\Triangulator.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropIluminacaoPadrao.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropObjetoGraficoScript.cs" />
     <Compile Include="Assets\Scripts\Utils\Global.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\RopeBuilder.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropTransladarScript.cs" />
     <Compile Include="Assets\Scripts\Pecas\ObjetoGraficoScript.cs" />
-    <Compile Include="Assets\Scripts\ImportacaoExportacaoProjeto\ExportScript.cs" />
+    <Compile Include="Assets\Scripts\Arquivos\ExportScript.cs" />
     <Compile Include="Assets\Scripts\Propriedades\MenuCor.cs" />
     <Compile Include="Assets\Scripts\Cameras\MovePecaCamera.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleSower.cs" />
@@ -94,14 +91,12 @@
     <Compile Include="Assets\Scripts\Pecas\SplineScript.cs" />
     <Compile Include="Assets\Scripts\Cameras\CameraScript.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Utils\CameraUtility.cs" />
-    <Compile Include="Assets\Scripts\Cameras\VisaoCamera.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropCuboScript.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Bezier\SplineNode.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Bezier\Spline.cs" />
     <Compile Include="Assets\Scripts\Utils\Util_VisEdu.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropCameraScript.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\MeshBender.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\Controller.cs" />
     <Compile Include="Assets\FlexibleColorPicker\Scripts\FCP_SpriteMeshEditor.cs" />
     <Compile Include="Assets\Scripts\Pecas\CuboScript.cs" />
     <Compile Include="Assets\Scripts\Pecas\TransformacaoScript.cs" />
@@ -110,7 +105,6 @@
     <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleFollowSpline.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleTentacle.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropRenderer.cs" />
-    <Compile Include="Assets\Scripts\Cameras\CamVisualizador.cs" />
     <Compile Include="Assets\Scripts\Cameras\VisualizadorGrafScript.cs" />
     <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
     <Compile Include="Assets\Scripts\Guias\MenuScript.cs" />
@@ -866,7 +860,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="SimpleFileBrowser.Runtime.csproj">
-      <Project>{B6586766-F85C-4F3A-A512-43B0A105DC64}</Project>
+      <Project>{C22D3179-B0E0-3647-C0AB-20D32367E805}</Project>
       <Name>SimpleFileBrowser.Runtime</Name>
     </ProjectReference>
   </ItemGroup>

@@ -10,11 +10,17 @@ public class Tutorial : MonoBehaviour
 
     const float SPEED_DESLOC = 8f;
 
+    [HideInInspector]
     public Passo PassoTutorial = Passo.FistTime;
+    [HideInInspector]
     public Passo PassoExecutando = Passo.PrimeiroPasso;
+    [HideInInspector]
     public bool EstaExecutandoTutorial;
+    [HideInInspector]
     public string Nivel;
+    [HideInInspector]
     public int AnswerMsg;
+    [HideInInspector]
     public bool AbriuMessageBox;
 
     [SerializeField]
@@ -375,8 +381,8 @@ public class Tutorial : MonoBehaviour
                 case Passo.PrimeiroPasso: objGraficoP.GetComponent<ObjetoGraficoScript>().AddObjGrafico(); break;
                 case Passo.SegundoPasso: cubo.GetComponent<CuboScript>().AddCubo(); break;
                 case Passo.QuartoPasso: cameraP.GetComponent<CameraPScript>().AddCamera(); break;
-                case Passo.QuintoPasso: rotacionar.GetComponent<Controller>().AddTransformacoesSlot(true); break;
-                case Passo.SextoPasso: iluminacao.GetComponent<Controller>().AddIluminacao(true); break;
+                case Passo.QuintoPasso: rotacionar.GetComponent<TransformacaoScript>().AddTransformacao(); break;
+                case Passo.SextoPasso: iluminacao.GetComponent<TransformacaoScript>().AddTransformacao(); break;
             }
         }
     }

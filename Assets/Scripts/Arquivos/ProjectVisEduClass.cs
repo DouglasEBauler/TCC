@@ -151,11 +151,11 @@ public class IteracaoPropriedadePecaProject : PropriedadePecaProject
 [Serializable]
 public class IluminacaoProject
 {
-    public PropriedadePecaProject Propriedades;
+    public PropriedadeIluminacaoPecaProject Propriedades;
     
     public IluminacaoProject()
     {
-        this.Propriedades = new PropriedadePecaProject();
+        this.Propriedades = new PropriedadeIluminacaoPecaProject();
     }
 }
 
@@ -167,15 +167,6 @@ public class PropriedadePecaProject
     public bool Ativo;
     [NonSerialized]
     public Dictionary<string, float> listaValores;
-
-    //Iluminação
-    public int TipoLuz;
-    public string Intensidade;
-    public ValorIluminacaoProject ValorIluminacao;
-    public string Distancia;
-    public string Angulo;
-    public string Expoente;
-    public int UltimoIndexLuz;
 }
 
 [Serializable]
@@ -183,6 +174,8 @@ public class TransformacaoPropriedadePecaProject : PropriedadePecaProject
 {
     public PosicaoProject Pos;
     public string NomePeca;
+    public string NomePecaAmb;
+    public string NomePecaVis;
 
     public TransformacaoPropriedadePecaProject() : base()
     {
@@ -211,14 +204,16 @@ public class CuboPropriedadePecaProject : PropriedadePecaProject
 [Serializable]
 public class PoligonoPropriedadePecaProject : PropriedadePecaProject
 {
-    public string PoligonoAmbiente;
+    public string PoligonoAmb;
+    public string PoligonoVis;
     public PosicaoProject Pos;
     public string Pontos;
     public TipoPrimitiva Primitiva;
 
     public PoligonoPropriedadePecaProject() : base()
     {
-        this.PoligonoAmbiente = string.Empty;
+        this.PoligonoAmb = string.Empty;
+        this.PoligonoVis = string.Empty;
         this.Pos = new PosicaoProject();
         this.Pontos = string.Empty;
         this.Primitiva = TipoPrimitiva.Cheio;
@@ -233,7 +228,8 @@ public class SplinePropriedadePecaProject : PropriedadePecaProject
     public PosicaoProject P3;
     public PosicaoProject P4;
     public PosicaoProject P5;
-    public string SplineAmbiente;
+    public string SplineAmb;
+    public string SplineVis;
 
     public SplinePropriedadePecaProject() : base()
     {
@@ -241,7 +237,29 @@ public class SplinePropriedadePecaProject : PropriedadePecaProject
         P2 = new PosicaoProject();
         P3 = new PosicaoProject();
         P4 = new PosicaoProject();
-        SplineAmbiente = string.Empty;
+        SplineAmb = string.Empty;
+        SplineVis = string.Empty;
+    }
+}
+
+[Serializable]
+public class PropriedadeIluminacaoPecaProject : PropriedadePecaProject
+{
+    public PosicaoProject Pos;
+    public string NomePecaAmbiente;
+    public string NomePecaVis;
+    public TipoIluminacao TipoLuz;
+    public ValorIluminacaoProject ValorIluminacao;
+    public string Intensidade;
+    public string Distancia;
+    public string Angulo;
+    public string Expoente;
+    public string UltimoIndexLuz;
+
+    public PropriedadeIluminacaoPecaProject() : base()
+    {
+        Pos = new PosicaoProject();
+        ValorIluminacao = new ValorIluminacaoProject();
     }
 }
 

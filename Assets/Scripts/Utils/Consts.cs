@@ -4,6 +4,7 @@ public static class Consts
     public const float SPEED_DESLOC = 24f;
 
     public const string AMB = "Amb";
+    public const string AMBIENTE = "Ambiente";
     public const string VIS = "Vis";
     
     public const string ROTACIONAR = "Rotacionar";
@@ -30,9 +31,9 @@ public static class Consts
     public const string CUBO_AMB_OBJ = "CuboAmbObject";
     public const string POLIGONO_AMB_OBJ = "PoligonoAmbObject";
     public const string SPLINE_AMB_OBJ = "SplineAmbObject";
-    public const string CUBO_AMB = "CuboAmbiente";
-    public const string POLIGONO_AMB = "PoligonoAmbiente";
-    public const string SPLINE_AMB = "SplineAmbiente";
+    public const string CUBO_AMB = "CuboAmb";
+    public const string POLIGONO_AMB = "PoligonoAmb";
+    public const string SPLINE_AMB = "SplineAmb";
 
     public const string CUBO_VIS_OBJ = "CuboVisObject";
     public const string POLIGONO_VIS_OBJ = "PoligonoVisObject";
@@ -66,6 +67,8 @@ public static class Consts
     public const string SLOT_ITERACAO = "SlotIteracao";
     public const string SLOT_ILUMINACAO = "SlotIluminacao";
 
+    public const string LIGHT_OBJECTS_ILUMINACAO = "LightObjectsIluminacao";
+
     public const string TUTORIAL = "Tutorial";
 
     public const string PATH_IMG_UNLOCK = "Textures/UnLock";
@@ -86,10 +89,10 @@ public enum Property
     PosX, PosY, PosZ, 
     TamX, TamY, TamZ, 
     ToggleActive, 
-    Intensity, 
-    Distancy, 
-    Angle, 
-    Expoent, 
+    Intensidade, 
+    Distancia, 
+    Angulo, 
+    Expoente, 
     FOV, 
     Pontos, 
     P1PosX, P1PosY, P1PosZ,
@@ -100,6 +103,7 @@ public enum Property
     IntervaloX, IntervaloY, IntervaloZ,
     MinX, MinY, MinZ,
     MaxX, MaxY, MaxZ,
+    ValorX, ValorY, ValorZ,
     Empty
 };
 
@@ -108,3 +112,5 @@ public enum TipoIluminacao { Ambiente, Directional, Point, Spot };
 public enum TipoPrimitiva { Vertices, Aberto, Fechado, Cheio };
 
 public enum TypeTransform { Escalar, Rotacionar, Transladar }
+
+public enum InputSelectedIluminacao { ValorX, ValorY, ValorZ, None }

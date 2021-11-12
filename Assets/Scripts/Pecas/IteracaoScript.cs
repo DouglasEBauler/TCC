@@ -1,12 +1,22 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class IteracaoScript : MonoBehaviour
 {
+    const float TIMER = 580f;
+
     [SerializeField]
     Camera cam;
     [SerializeField]
     GameObject propriedade;
+    [SerializeField]
+    PropRotacionarScript propriedadeRotacionar;
+    [SerializeField]
+    PropTransladarScript propriedadeTransladar;
+    [SerializeField]
+    PropEscalarScript propriedadeEscalar;
     [SerializeField]
     GameObject menuControl;
     [SerializeField]
@@ -16,23 +26,255 @@ public class IteracaoScript : MonoBehaviour
     [SerializeField]
     GameObject panelAjuda;
     [SerializeField]
-    GameObject tutorial;
-    [SerializeField]
     Tutorial tutorialScript;
 
     [HideInInspector]
     public GameObject slot;
 
     Vector3 offset, scanPos, startPos;
+    float timer;
+    IteracaoPropriedadePeca propIteracao;
 
     void Start()
     {
         scanPos = startPos = gameObject.transform.position;
+        timer = TIMER;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         scanPos = gameObject.transform.position;
+
+        Iteracoes();
+    }
+
+    void Iteracoes()
+    {
+        if (EstaEncaixado() && Global.propriedadePecas.ContainsKey(gameObject.name))
+        {
+            string numSlot = Util_VisEdu.GetNumSlot(slot.name, true);
+
+            if (Global.propriedadePecas.ContainsKey(Consts.ROTACIONAR + numSlot))
+            {
+                StartCoroutine(IteracaoRotacionar());
+            }
+            else if (Global.propriedadePecas.ContainsKey(Consts.TRANSLADAR + numSlot))
+            {
+                StartCoroutine(IteracaoTransladar());
+            }
+            else if (Global.propriedadePecas.ContainsKey(Consts.ESCALAR + numSlot))
+            {
+                StartCoroutine(IteracaoEscalar());
+            }
+        }
+    }
+
+    IEnumerator IteracaoRotacionar()
+    {
+        if (this.propIteracao != null && this.propIteracao.Ativo)
+        {
+            TransformacaoPropriedadePeca transformacao = Global.propriedadePecas[this.propIteracao.NomeTransformacao] as TransformacaoPropriedadePeca;
+            if (transformacao != null)
+            {
+                while (timer > 0)
+                {
+                    timer--;
+                    yield return new WaitForSeconds(1f);
+                }
+
+                if (this.propIteracao.AtivoX && (this.propIteracao.Intervalo.X + transformacao.Pos.X) < this.propIteracao.Max.X)
+                {
+                    if ((this.propIteracao.Intervalo.X + transformacao.Pos.X) > this.propIteracao.Max.X)
+                    {
+                        transformacao.Pos.X = this.propIteracao.Max.X;
+                    }
+                    else
+                    {
+                        transformacao.Pos.X += this.propIteracao.Intervalo.X;
+                    }
+                }
+                else
+                {
+                    transformacao.Pos.X = this.propIteracao.Min.X;
+                }
+
+                if (this.propIteracao.AtivoY && (this.propIteracao.Intervalo.X + transformacao.Pos.Y) < this.propIteracao.Max.Y)
+                {
+                    if ((this.propIteracao.Intervalo.Y + transformacao.Pos.Y) > this.propIteracao.Max.Y)
+                    {
+                        transformacao.Pos.Y = this.propIteracao.Max.Y;
+                    }
+                    else
+                    {
+                        transformacao.Pos.Y += this.propIteracao.Intervalo.Y;
+                    }
+                }
+                else
+                {
+                    transformacao.Pos.Y = this.propIteracao.Min.Y;
+                }
+
+                if (this.propIteracao.AtivoZ && (this.propIteracao.Intervalo.X + transformacao.Pos.Z) < this.propIteracao.Max.Z)
+                {
+                    if ((this.propIteracao.Intervalo.Z + transformacao.Pos.Z) > this.propIteracao.Max.Z)
+                    {
+                        transformacao.Pos.Z = this.propIteracao.Min.Z;
+                    }
+                    else
+                    {
+                        transformacao.Pos.Z += this.propIteracao.Intervalo.Z;
+                    }
+                }
+                else
+                {
+                    transformacao.Pos.Z = this.propIteracao.Min.Z;
+                }
+
+                Global.propriedadePecas[transformacao.NomePeca] = transformacao;
+                propriedadeRotacionar.Inicializa(transformacao);
+                propriedadeRotacionar.UpdateProp(true);
+                timer = TIMER;
+
+                //yield return new WaitForSeconds(1f);
+            }
+        }
+    }
+
+    IEnumerator IteracaoTransladar()
+    {
+        if (this.propIteracao != null && this.propIteracao.Ativo)
+        {
+            TransformacaoPropriedadePeca transformacao = Global.propriedadePecas[this.propIteracao.NomeTransformacao] as TransformacaoPropriedadePeca;
+            if (transformacao != null)
+            {
+                while (timer > 0)
+                {
+                    timer--;
+                    yield return new WaitForSeconds(1f);
+                }
+
+                if (this.propIteracao.AtivoX && (this.propIteracao.Intervalo.X + transformacao.Pos.X) < this.propIteracao.Max.X)
+                {
+                    if ((this.propIteracao.Intervalo.X + transformacao.Pos.X) > this.propIteracao.Max.X)
+                    {
+                        transformacao.Pos.X = this.propIteracao.Max.X;
+                    }
+                    else
+                    {
+                        transformacao.Pos.X += this.propIteracao.Intervalo.X;
+                    }
+                }
+                else
+                {
+                    transformacao.Pos.X = this.propIteracao.Min.X;
+                }
+
+                if (this.propIteracao.AtivoY && (this.propIteracao.Intervalo.X + transformacao.Pos.Y) < this.propIteracao.Max.Y)
+                {
+                    if ((this.propIteracao.Intervalo.Y + transformacao.Pos.Y) > this.propIteracao.Max.Y)
+                    {
+                        transformacao.Pos.Y = this.propIteracao.Max.Y;
+                    }
+                    else
+                    {
+                        transformacao.Pos.Y += this.propIteracao.Intervalo.Y;
+                    }
+                }
+                else
+                {
+                    transformacao.Pos.Y = this.propIteracao.Min.Y;
+                }
+
+                if (this.propIteracao.AtivoZ && (this.propIteracao.Intervalo.X + transformacao.Pos.Z) < this.propIteracao.Max.Z)
+                {
+                    if ((this.propIteracao.Intervalo.Z + transformacao.Pos.Z) > this.propIteracao.Max.Z)
+                    {
+                        transformacao.Pos.Z = this.propIteracao.Min.Z;
+                    }
+                    else
+                    {
+                        transformacao.Pos.Z += this.propIteracao.Intervalo.Z;
+                    }
+                }
+                else
+                {
+                    transformacao.Pos.Z = this.propIteracao.Min.Z;
+                }
+
+                Global.propriedadePecas[transformacao.NomePeca] = transformacao;
+                propriedadeTransladar.Inicializa(transformacao);
+                propriedadeTransladar.UpdateProp(true);
+                timer = TIMER;
+            }
+        }
+    }
+    IEnumerator IteracaoEscalar()
+    {
+        if (this.propIteracao != null && this.propIteracao.Ativo)
+        {
+            TransformacaoPropriedadePeca transformacao = Global.propriedadePecas[this.propIteracao.NomeTransformacao] as TransformacaoPropriedadePeca;
+            if (transformacao != null)
+            {
+                while (timer > 0)
+                {
+                    timer--;
+                    yield return new WaitForSeconds(1f);
+                }
+
+                if (this.propIteracao.AtivoX && (this.propIteracao.Intervalo.X + transformacao.Pos.X) < this.propIteracao.Max.X)
+                {
+                    if ((this.propIteracao.Intervalo.X + transformacao.Pos.X) > this.propIteracao.Max.X)
+                    {
+                        transformacao.Pos.X = this.propIteracao.Max.X;
+                    }
+                    else
+                    {
+                        transformacao.Pos.X += this.propIteracao.Intervalo.X;
+                    }
+                }
+                else
+                {
+                    transformacao.Pos.X = this.propIteracao.Min.X + 1;
+                }
+
+                if (this.propIteracao.AtivoY && (this.propIteracao.Intervalo.X + transformacao.Pos.Y) < this.propIteracao.Max.Y)
+                {
+                    if ((this.propIteracao.Intervalo.Y + transformacao.Pos.Y) > this.propIteracao.Max.Y)
+                    {
+                        transformacao.Pos.Y = this.propIteracao.Max.Y;
+                    }
+                    else
+                    {
+                        transformacao.Pos.Y += this.propIteracao.Intervalo.Y;
+                    }
+                }
+                else
+                {
+                    transformacao.Pos.Y = this.propIteracao.Min.Y + 1;
+                }
+
+                if (this.propIteracao.AtivoZ && (this.propIteracao.Intervalo.X + transformacao.Pos.Z) < this.propIteracao.Max.Z)
+                {
+                    if ((this.propIteracao.Intervalo.Z + transformacao.Pos.Z) > this.propIteracao.Max.Z)
+                    {
+                        transformacao.Pos.Z = this.propIteracao.Min.Z;
+                    }
+                    else
+                    {
+                        transformacao.Pos.Z += this.propIteracao.Intervalo.Z;
+                    }
+                }
+                else
+                {
+                    transformacao.Pos.Z = this.propIteracao.Min.Z + 1;
+                }
+
+                Global.propriedadePecas[transformacao.NomePeca] = transformacao;
+                propriedadeEscalar.Inicializa(transformacao);
+                propriedadeEscalar.UpdateProp(true);
+                timer = TIMER;
+            }
+        }
     }
 
     void OnMouseDown()
@@ -63,7 +305,7 @@ public class IteracaoScript : MonoBehaviour
         if (other.gameObject.name.Contains(Consts.ITERACAO_SLOT))
         {
             slot = other.gameObject;
-        }   
+        }
     }
 
     bool PodeGerarCopia()
@@ -79,34 +321,64 @@ public class IteracaoScript : MonoBehaviour
 
             if (podeDestruir && !EstaEncaixado())
             {
-                transform.position = startPos;
-                Destroy(gameObject);
+                StartCoroutine(RemovePeca());
+            }
+            else if (EstaEncaixado())
+            {
+                Encaixa();
             }
             else
             {
-                EncaixaPecaAoSlot();
+                StartCoroutine(RemovePeca());
             }
         }
     }
+
+    public IEnumerator RemovePeca()
+    {
+        while ((transform.position.y != startPos.y && transform.position.x != startPos.x))
+        {
+            transform.position =
+                Vector3.Lerp(transform.position, startPos, Time.deltaTime * Consts.SPEED_DESLOC / Vector3.Distance(transform.position, startPos));
+
+            yield return null;
+        }
+
+        Destroy(gameObject);
+    }
+
 
     bool CheckPanelIsActive()
     {
         return panelArquivo.activeSelf || panelAjuda.activeSelf;
     }
 
-    public void EncaixaPecaAoSlot()
+    public void Encaixa()
+    {
+        StartCoroutine(EncaixaPecaAoSlot());
+    }
+
+
+    IEnumerator EncaixaPecaAoSlot()
     {
         if (!tutorialScript.EstaExecutandoTutorial)
         {
+            while ((transform.position.y != slot.transform.position.y && transform.position.x != slot.transform.position.x))
+            {
+                transform.position =
+                    Vector3.Lerp(transform.position, slot.transform.position, Time.deltaTime * Consts.SPEED_DESLOC / Vector3.Distance(transform.position, slot.transform.position));
+
+                yield return null;
+            }
+
             transform.parent = slot.transform;
-            transform.position = new Vector3(slot.transform.position.x, slot.transform.position.y, slot.transform.position.z);
             gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
     }
 
     public void AddIteracao(IteracaoPropriedadePeca propPeca = null)
     {
-        EncaixaPecaAoSlot();
+        Encaixa();
         CreatePropPeca(propPeca);
     }
 
@@ -114,14 +386,10 @@ public class IteracaoScript : MonoBehaviour
     {
         if (EstaEncaixado())
         {
-            Global.gameObjectName = gameObject.name;
-            Global.lastPressedButton?.SetActive(false);
-            Global.lastPressedButton = propriedade.gameObject;
-
             CreatePropPeca(propPeca);
 
-            propriedade.GetComponent<PropIteracao>().Inicializa();
-            menuControl.GetComponent<MenuScript>().EnablePanelProp(Global.lastPressedButton.name);
+            propriedade.GetComponent<PropIteracao>().Inicializa(this.propIteracao);
+            menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedade.name);
         }
     }
 
@@ -129,36 +397,52 @@ public class IteracaoScript : MonoBehaviour
     {
         if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
         {
-            PropriedadePeca prPeca;
-
             if (propPeca == null)
             {
-                string forma = Util_VisEdu.GetPecaByName(gameObject.name, true);
+                TransformacaoPropriedadePeca transformacao = GetTransformacao();
 
-                prPeca = new IteracaoPropriedadePeca()
+                this.propIteracao = new IteracaoPropriedadePeca()
                 {
-                    NomeTransformacao = forma
+                    NomeTransformacao = transformacao.NomePeca
                 };
             }
             else
             {
-                prPeca = propPeca;
+                this.propIteracao = propPeca;
             }
-            prPeca.Nome = gameObject.name;
+            this.propIteracao.NomePeca = gameObject.name;
 
-            Global.propriedadePecas.Add(prPeca.Nome, prPeca);
+            Global.propriedadePecas.Add(this.propIteracao.NomePeca, this.propIteracao);
         }
+    }
+
+    TransformacaoPropriedadePeca GetTransformacao()
+    {
+        string numSlot = Util_VisEdu.GetNumSlot(slot.name, true);
+
+        if (Global.propriedadePecas.ContainsKey(Consts.ROTACIONAR + numSlot))
+        {
+            return Global.propriedadePecas[Consts.ROTACIONAR + numSlot] as TransformacaoPropriedadePeca;
+        }
+
+        if (Global.propriedadePecas.ContainsKey(Consts.TRANSLADAR + numSlot))
+        {
+            return Global.propriedadePecas[Consts.TRANSLADAR + numSlot] as TransformacaoPropriedadePeca;
+        }
+
+        if (Global.propriedadePecas.ContainsKey(Consts.ESCALAR + numSlot))
+        {
+            return Global.propriedadePecas[Consts.ESCALAR + numSlot] as TransformacaoPropriedadePeca;
+        }
+
+        return null;
     }
 
     public bool PodeEncaixar()
     {
-        const float VALOR_APROXIMADO = 2;
-
-        float pecaY = transform.position.y;
-
-        if ((slot != null) 
-            && (slot.transform.position.y + VALOR_APROXIMADO > pecaY) 
-            && (slot.transform.position.y - VALOR_APROXIMADO < pecaY)
+        if ((slot != null)
+            && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
+            && (GetTransformacao() != null)
             && !EstaEncaixado())
         {
             string numSlot = Util_VisEdu.GetNumSlot(slot.name, true);

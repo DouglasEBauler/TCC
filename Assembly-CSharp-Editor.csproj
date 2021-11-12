@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{E2E2BACF-63F0-AF5D-5A4E-B7F5BD22C0F1}</ProjectGuid>
+    <ProjectGuid>{56765BDE-3ADD-F42D-EF65-BFD621230837}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -813,11 +813,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{4D5A211E-C343-8F24-7123-4990BACB7502}</Project>
+      <Project>{7A882426-787D-DCA5-5B08-6331B10C6A19}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
     <ProjectReference Include="SimpleFileBrowser.Runtime.csproj">
-      <Project>{B6586766-F85C-4F3A-A512-43B0A105DC64}</Project>
+      <Project>{C22D3179-B0E0-3647-C0AB-20D32367E805}</Project>
       <Name>SimpleFileBrowser.Runtime</Name>
     </ProjectReference>
   </ItemGroup>

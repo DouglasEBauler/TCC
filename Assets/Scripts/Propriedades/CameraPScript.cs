@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,8 +22,9 @@ public class CameraPScript : MonoBehaviour
     [HideInInspector]
     public GameObject slot;
 
-    Vector3 screenPoint, offset, scanPos, startPos;
+    Vector3 offset, scanPos, startPos;
     Tutorial tutorialScript;
+    PropriedadeCamera propCamera;
 
     void Start()
     {
@@ -60,7 +62,7 @@ public class CameraPScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains(Consts.CAMERA_SLOT))
+        if (other.gameObject.name.Contains(Consts.CAMERA_SLOT) && !EstaEncaixado())
         {
             slot = other.gameObject;
         }   
@@ -79,13 +81,15 @@ public class CameraPScript : MonoBehaviour
 
             if (podeDestruir && !Global.listaEncaixes.ContainsKey(gameObject.name))
             {
-                transform.position = startPos;
-                Destroy(gameObject);
-                screenPoint = cam.WorldToScreenPoint(scanPos);
+                StartCoroutine(RemovePeca());
+            }
+            else if (EstaEncaixado())
+            {
+                Encaixa();
             }
             else
             {
-                EncaixaPecaAoSlot();
+                StartCoroutine(RemovePeca());
             }
         }
     }
@@ -95,26 +99,50 @@ public class CameraPScript : MonoBehaviour
         return panelArquivo.activeSelf || panelAjuda.activeSelf;
     }
 
-    public void EncaixaPecaAoSlot()
+    public IEnumerator RemovePeca()
+    {
+        while ((transform.position.y != startPos.y && transform.position.x != startPos.x))
+        {
+            transform.position =
+                Vector3.Lerp(transform.position, startPos, Time.deltaTime * Consts.SPEED_DESLOC / Vector3.Distance(transform.position, startPos));
+
+            yield return null;
+        }
+
+        Destroy(gameObject);
+    }
+
+    public void Encaixa()
+    {
+        StartCoroutine(EncaixaPecaAoSlot());
+    }
+
+    IEnumerator EncaixaPecaAoSlot()
     {
         if (!tutorialScript.EstaExecutandoTutorial)
         {
+            while ((transform.position.y != slot.transform.position.y && transform.position.x != slot.transform.position.x))
+            {
+                transform.position =
+                    Vector3.Lerp(transform.position, slot.transform.position, Time.deltaTime * Consts.SPEED_DESLOC / Vector3.Distance(transform.position, slot.transform.position));
+
+                yield return null;
+            }
+
             transform.parent = slot.transform;
-            transform.position = new Vector3(slot.transform.position.x, slot.transform.position.y, slot.transform.position.z);
             gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
     }
 
+
     public void AddCamera(PropriedadeCamera proCam = null)
     {
-        EncaixaPecaAoSlot();
-
-        PropIluminacaoPadrao lightProperty = new PropIluminacaoPadrao();
+        Encaixa();
 
         propriedades.GetComponent<PropCameraScript>().DemosntraCamera(true);
 
-        if (lightProperty.existeIluminacao())
-            GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
+        //if (lightProperty.existeIluminacao())
+        //    GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
 
         // Verifica se existem cubos e iluminações mas a câmera ainda não foi colocada.
         Global.propCameraGlobal.ExisteCamera = true;
@@ -129,12 +157,8 @@ public class CameraPScript : MonoBehaviour
 
     public void ConfiguraPropriedadePeca(PropriedadeCamera camProp = null)
     {
-        if (Global.listaEncaixes.ContainsKey(gameObject.name))
+        if (EstaEncaixado())
         {
-            Global.gameObjectName = gameObject.name;
-            Global.lastPressedButton?.SetActive(false);
-            Global.lastPressedButton = propriedades.gameObject;
-
             CreatePropPeca();
 
             if (camProp != null)
@@ -145,46 +169,45 @@ public class CameraPScript : MonoBehaviour
             propriedades.GetComponent<PropCameraScript>().UpdateProp();
             propriedades.GetComponent<PropCameraScript>().DemosntraCamera(true);
 
-            menuControl.GetComponent<MenuScript>().EnablePanelProp(Global.lastPressedButton.name);
+            menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedades.name);
         }
     }
 
     public void CreatePropPeca(PropriedadeCamera propPeca = null)
     {
-        if (!Global.propriedadePecas.ContainsKey(gameObject.name))
+        if (!EstaEncaixado())
         {
-            PropriedadeCamera prPeca;
-
             if (propPeca != null)
             {
-                prPeca = propPeca;
+                this.propCamera = propPeca;
             }
             else
             {
-                prPeca = new PropriedadeCamera();
+                this.propCamera = new PropriedadeCamera();
             }
-            prPeca.Nome = gameObject.name;
+            this.propCamera.NomePeca = gameObject.name;
 
-            Global.propriedadePecas.Add(gameObject.name, prPeca);
+            Global.propriedadePecas.Add(gameObject.name, this.propCamera);
         }
+    }
+
+    bool EstaEncaixado()
+    {
+        return Global.listaEncaixes.ContainsKey(gameObject.name);
     }
 
     public bool PodeEncaixar()
     {
-        const float VALOR_APROXIMADO = 2;
-
-        float pecaY = transform.position.y;
-
         if ((slot != null) 
-            && (slot.transform.position.y + VALOR_APROXIMADO > pecaY) 
-            && (slot.transform.position.y - VALOR_APROXIMADO < pecaY)
-            && !Global.listaEncaixes.ContainsKey(gameObject.name))
+            && (Vector3.Distance(transform.position, slot.transform.position) < 4) 
+            && !EstaEncaixado())
         {
             slot.name += "1";
             slot.transform.parent.name += "1";
             gameObject.name += "1";
+            Destroy(slot.GetComponent<Rigidbody>());
 
-            if (!Global.listaEncaixes.ContainsKey(gameObject.name))
+            if (!EstaEncaixado())
             {
                 Global.listaEncaixes.Add(gameObject.name, slot.name);
             }
@@ -205,7 +228,7 @@ public class CameraPScript : MonoBehaviour
 
     public void CopiaPeca()
     {
-        if (PodeGerarCopiaPeca())
+        if (PodeGerarCopiaPeca() && !EstaEncaixado())
         {
             GameObject cloneFab = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
             cloneFab.name = gameObject.name;

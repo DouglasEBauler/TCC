@@ -28,6 +28,7 @@ public class ObjetoGraficoScript : MonoBehaviour
     GameObject cloneObjGraficoFab;
     Tutorial tutorialScript;
     GameObject slotObjGrafNext;
+    PropriedadePeca propObjGrafico;
 
     void Start()
     {
@@ -86,9 +87,13 @@ public class ObjetoGraficoScript : MonoBehaviour
             {
                 StartCoroutine(RemovePeca());
             }
-            else
+            else if (EstaEncaixado())
             {
                 Encaixa();
+            }
+            else
+            {
+                StartCoroutine(RemovePeca());
             }
         }
     }
@@ -249,14 +254,10 @@ public class ObjetoGraficoScript : MonoBehaviour
     {
         if (EstaEncaixado())
         {
-            Global.gameObjectName = gameObject.name;
-            Global.lastPressedButton?.SetActive(false);
-            Global.lastPressedButton = propriedades.gameObject;
-
             CreatePropPeca(propPeca);
 
-            propriedades.GetComponent<PropObjetoGraficoScript>().Inicializa();
-            menuControl.GetComponent<MenuScript>().EnablePanelProp(Global.lastPressedButton.name);
+            propriedades.GetComponent<PropObjetoGraficoScript>().Inicializa(this.propObjGrafico);
+            menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedades.name);
         }
     }
 
@@ -264,31 +265,26 @@ public class ObjetoGraficoScript : MonoBehaviour
     {
         if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
         {
-            PropriedadePeca prPeca;
-
             if (propPeca == null)
             {
-                prPeca = new PropriedadePeca();
+                this.propObjGrafico = new PropriedadePeca();
             }
             else
             {
-                prPeca = propPeca;
+                this.propObjGrafico = propPeca;
             }
-            prPeca.Nome = gameObject.name;
-            prPeca.Ativo = true;
+            this.propObjGrafico.Nome = Consts.OBJETOGRAFICO;
+            this.propObjGrafico.NomePeca = gameObject.name;
+            this.propObjGrafico.Ativo = true;
 
-            Global.propriedadePecas.Add(gameObject.name, prPeca);
+            Global.propriedadePecas.Add(this.propObjGrafico.NomePeca, this.propObjGrafico);
         }
     }
 
     public bool PodeEncaixar()
     {
-        const float VALOR_APROXIMADO = 2;
-        float pecaY = transform.position.y;
-
         if ((slot != null)
-            && (slot.transform.position.y + VALOR_APROXIMADO > pecaY)
-            && (slot.transform.position.y - VALOR_APROXIMADO < pecaY)
+            && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
             && !EstaEncaixado())
         {
             slotObjGrafNext = Instantiate(slot.transform.parent.gameObject, render.transform);

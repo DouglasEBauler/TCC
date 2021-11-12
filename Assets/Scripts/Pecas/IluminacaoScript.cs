@@ -7,35 +7,28 @@ public class IluminacaoScript : MonoBehaviour
     [SerializeField]
     Camera cam;
     [SerializeField]
-    GameObject posicaoColliderDestino;
-    [SerializeField]
-    GameObject abrePropriedade;
+    GameObject propriedades;
     [SerializeField]
     GameObject propCamera;
-    [SerializeField]
-    GameObject objGraficoSlot;
-    [SerializeField]
-    GameObject iluminacaoSlot;
     [SerializeField]
     GameObject menuControl;
     [SerializeField]
     GameObject panelArquivo;
     [SerializeField]
-    GameObject panelPropPeca;
-    [SerializeField]
     GameObject panelAjuda;
+    [SerializeField]
+    Tutorial tutorialScript;
 
     [HideInInspector]
     public GameObject slot;
 
-    Vector3 screenPoint, offset, scanPos, startPos;
+    Vector3 offset, scanPos, startPos;
     GameObject cloneFab;
-    Tutorial tutorialScript;
+    IluminacaoPropriedadePeca propIluminacao;
 
     void Start()
     {
         scanPos = startPos = gameObject.transform.position;
-        tutorialScript = GameObject.Find("PanelTutorial").GetComponent<Tutorial>();
     }
 
     void Update()
@@ -53,7 +46,7 @@ public class IluminacaoScript : MonoBehaviour
 
     void OnMouseDrag()
     {
-        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 100f);
         Vector3 curPosition = cam.ScreenToWorldPoint(curScreenPoint) + offset;
         transform.position = curPosition;
     }
@@ -68,7 +61,7 @@ public class IluminacaoScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains(Consts.ITERACAO_SLOT))
+        if (other.gameObject.name.Contains(Consts.ILUMINACAO_SLOT))
         {
             slot = other.gameObject;
         }
@@ -86,20 +79,24 @@ public class IluminacaoScript : MonoBehaviour
         {
             bool podeDestruir = PodeGerarCopia();
 
-            //if (podeDestruir && !EstaEncaixado())
-            //{
-            //    StartCoroutine(RemovePeca());
-            //}
-            //else
-            //{
-            //    Encaixa();
-            //}
+            if (podeDestruir && !EstaEncaixado())
+            {
+                StartCoroutine(RemovePeca());
+            }
+            else if (EstaEncaixado())
+            {
+                Encaixa();
+            }
+            else
+            {
+                StartCoroutine(RemovePeca());
+            }
         }
     }
 
     bool CheckPanelIsActive()
     {
-        return panelArquivo.activeSelf || panelPropPeca.activeSelf || panelAjuda.activeSelf;
+        return panelArquivo.activeSelf || panelAjuda.activeSelf;
     }
 
     public IEnumerator RemovePeca()
@@ -139,109 +136,116 @@ public class IluminacaoScript : MonoBehaviour
 
     public void AddIluminacao(bool tutorial = false)
     {
-        posicaoColliderDestino = GameObject.Find("IluminacaoSlot" + ((!tutorial) ? Global.countObjetosGraficos.ToString() : "Tutorial"));
-
         //Verifica se há câmera e aplica luz aos objetos com Layer "Formas"
         if (Global.cameraAtiva)
             GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
 
         if (!tutorialScript.EstaExecutandoTutorial)
         {
-            PropriedadePeca prPeca = new PropriedadePeca();
-            prPeca.Nome = gameObject.name;
-            //prPeca.NomeCuboAmbiente = "CuboAmbiente" + getNumObjeto(Global.listaEncaixes[gameObject.name]);
-            //prPeca.NomeCuboVis = "CuboVis" + getNumObjeto(Global.listaEncaixes[gameObject.name]);
-            prPeca.TipoLuz = 0;
-            Global.propriedadePecas.Add(gameObject.name, prPeca);
-
-            if (gameObject.name.Length > "Iluminacao".Length)
-                CriaLightObject(gameObject.name.Substring("Iluminacao".Length, 1));
+            CreatePropPeca();
+            CriaLightObject();
         }
     }
 
-    public void ConfiguraPropriedadePeca(PropriedadePeca propPeca = null)
+    public void ConfiguraPropriedadePeca(IluminacaoPropriedadePeca propPeca = null)
     {
-        //if (EstaEncaixado())
-        //{
-        //    Global.gameObjectName = gameObject.name;
-        //    Global.lastPressedButton?.SetActive(false);
-        //    Global.lastPressedButton = propriedades.gameObject;
+        if (EstaEncaixado())
+        {
+            CreatePropPeca(propPeca);
 
-        //    CreatePropPeca(propPeca);
-
-        //    propriedades.GetComponent<PropIluminacaoScript>().Inicializa();
-        //    menuControl.GetComponent<MenuScript>().EnablePanelProp(Global.lastPressedButton.name);
-        //}
+            propriedades.GetComponent<PropIluminacaoScript>().Inicializa(this.propIluminacao);
+            menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedades.name);
+        }
     }
 
-    public void CreatePropPeca(PropriedadePeca propPeca = null)
+    public void CreatePropPeca(IluminacaoPropriedadePeca propPeca = null)
     {
         if (!Global.propriedadePecas.ContainsKey(gameObject.name))
         {
-            PropriedadePeca prPeca;
+            if (propPeca == null)
+            {
+                this.propIluminacao = new IluminacaoPropriedadePeca();
+                this.propIluminacao.TipoLuz = 0;
+            }
+            else
+            {
+                this.propIluminacao = propPeca;
+            }
+            this.propIluminacao.NomePeca = gameObject.name;
+            this.propIluminacao.NomePecaAmbiente = GetNomePecaAmbiente() + Util_VisEdu.GetNumSlot(gameObject.name);
+            this.propIluminacao.NomePecaVis = GetNomePecaVis() + Util_VisEdu.GetNumSlot(gameObject.name);
 
-            //if (Global.gameObjectName.Contains(Consts.CUBO))
-            //{
-            //    prPeca = new CuboPropriedadePeca()
-            //    {
-            //        NomeCuboAmbiente = "CuboAmbiente" + getNumObjeto(Global.listaEncaixes[gameObject.name]),
-            //        NomeCuboVis = "CuboVis" + getNumObjeto(Global.listaEncaixes[gameObject.name])
-            //    };
-            //}
-            //else if (Global.gameObjectName.Contains(Consts.POLIGONO))
-            //{
-            //    prPeca = new PoligonoPropriedadePeca()
-            //    {
-            //        PoligonoAmbiente = "PoligonoAmbiente" + getNumObjeto(Global.listaEncaixes[gameObject.name]),
-            //        //, NomeCuboVis = "CuboVis" + getNumObjeto(Global.listaEncaixes[gameObject.name])
-            //    };
-            //}
-            //else if (propPeca == null)
-            //{
-            //    prPeca = new PropriedadePeca();
-            //}
-            //else
-            //{
-            //    prPeca = propPeca;
-            //}
-            //prPeca.Nome = gameObject.name;
-
-            //Global.propriedadePecas.Add(gameObject.name, prPeca);
+            Global.propriedadePecas.Add(this.propIluminacao.NomePeca, this.propIluminacao);
         }
     }
 
     public bool PodeEncaixar()
     {
-        const float VALOR_APROXIMADO = 2;
+        if ((slot != null)
+            && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
+            && !EstaEncaixado())
+        {
+            Destroy(slot.GetComponent<Rigidbody>());
+            gameObject.name += Util_VisEdu.GetNumSlot(slot.name);
 
-        float pecaY = transform.position.y;
+            if (!EstaEncaixado())
+            {
+                Global.listaEncaixes.Add(gameObject.name, slot.name);
+            }
+            else
+            {
+                Global.listaEncaixes[gameObject.name] = slot.name;
+                return false;
+            }
 
-        //foreach (var slot in Global.listaPosicaoSlot)
-        //{
-        //    //Verifica se o encaixe existe na lista 
-        //    if (slot.Key.Contains(Global.GetSlot(gameObject.name)))
-        //    {
-        //        //Verifica se a peça está próxima do encaixe e se o Slot ainda não está na lista de encaixes.
-        //        if ((slot.Value + VALOR_APROXIMADO > pecaY) && (slot.Value - VALOR_APROXIMADO < pecaY) && !Global.listaEncaixes.ContainsValue(slot.Key))
-        //        {
-        //            if (!Global.listaEncaixes.ContainsKey(gameObject.transform.name) && (GameObject.Find(slot.Key) != null))
-        //            {
-        //                Global.listaEncaixes.Add(gameObject.transform.name, slot.Key);
-        //            }
-        //            else if (Global.listaEncaixes[gameObject.name] != slot.Key)
-        //            {
-        //                ReposicionaSlots(Global.listaEncaixes[gameObject.name], slot.Key);
-        //                return false;
-        //            }
-        //            else
-        //                return false;
+            return true;
+        }
+        else
+        {
+            AjustaPeca();
+            return false;
+        }
+    }
 
-        //            return GameObject.Find(slot.Key) != null;
-        //        }
-        //    }
-        //}
+    string GetNomePecaAmbiente()
+    {
+        if (Global.listaEncaixes.ContainsKey(Consts.CUBO + Util_VisEdu.GetNumSlot(slot.name)))
+        {
+            return Consts.CUBO_AMB;
+        }
+        else if (Global.listaEncaixes.ContainsKey(Consts.POLIGONO + Util_VisEdu.GetNumSlot(slot.name)))
+        {
+            return Consts.POLIGONO_AMB;
+        }
+        else if (Global.listaEncaixes.ContainsKey(Consts.SPLINE + Util_VisEdu.GetNumSlot(slot.name)))
+        {
+            return Consts.SPLINE_AMB;
+        }
 
-        return false;
+        return string.Empty;
+    }
+
+    string GetNomePecaVis()
+    {
+        if (Global.listaEncaixes.ContainsKey(Consts.CUBO + Util_VisEdu.GetNumSlot(slot.name)))
+        {
+            return Consts.CUBO_VIS;
+        }
+        else if (Global.listaEncaixes.ContainsKey(Consts.POLIGONO + Util_VisEdu.GetNumSlot(slot.name)))
+        {
+            return Consts.POLIGONO_VIS;
+        }
+        else if (Global.listaEncaixes.ContainsKey(Consts.SPLINE + Util_VisEdu.GetNumSlot(slot.name)))
+        {
+            return Consts.SPLINE_VIS;
+        }
+
+        return string.Empty;
+    }
+
+    bool EstaEncaixado()
+    {
+        return Global.listaEncaixes.ContainsKey(gameObject.name);
     }
 
     public void CopiaPeca()
@@ -251,30 +255,25 @@ public class IluminacaoScript : MonoBehaviour
         cloneFab.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
     }
 
-    void CriaLightObject(string numLight)
+    void CriaLightObject()
     {
-        const string LightObjectsIluminacao = "LightObjectsIluminacao";
+        string numLight = Util_VisEdu.GetNumSlot(slot.name);
 
-        if (!Global.lightObjectList.Contains(LightObjectsIluminacao + numLight))
+        GameObject GOCloneLightObjects = GameObject.Find(Consts.LIGHT_OBJECTS_ILUMINACAO);
+        if (GOCloneLightObjects != null)
         {
-            GameObject cloneGO;
-            GameObject GOCloneLightObjects = GameObject.Find(LightObjectsIluminacao);
+            GameObject cloneGO = Instantiate(GOCloneLightObjects, GOCloneLightObjects.transform.position, GOCloneLightObjects.transform.rotation, GOCloneLightObjects.transform.parent);
+            cloneGO.name = Consts.LIGHT_OBJECTS_ILUMINACAO;
+            cloneGO.transform.position = new Vector3(GOCloneLightObjects.transform.position.x, GOCloneLightObjects.transform.position.y, GOCloneLightObjects.transform.position.z);
 
-            Global.lightObjectList.Add(LightObjectsIluminacao + numLight);
-
-            if (LightObjectsIluminacao + numLight != LightObjectsIluminacao)
-            {
-                cloneGO = Instantiate(GOCloneLightObjects, GOCloneLightObjects.transform.position, GOCloneLightObjects.transform.rotation, GOCloneLightObjects.transform.parent);
-                cloneGO.name = LightObjectsIluminacao + numLight;
-                cloneGO.transform.position = new Vector3(GOCloneLightObjects.transform.position.x, GOCloneLightObjects.transform.position.y, GOCloneLightObjects.transform.position.z);
-
-                RenomeiaLightObject(cloneGO, numLight);
-            }
+            RenomeiaLightObject(GOCloneLightObjects);
         }
     }
 
-    void RenomeiaLightObject(GameObject go, string numLight)
+    void RenomeiaLightObject(GameObject go)
     {
+        string numLight = Util_VisEdu.GetNumSlot(slot.name);
+
         for (int i = 0; i < go.transform.childCount; i++)
         {
             switch (i)

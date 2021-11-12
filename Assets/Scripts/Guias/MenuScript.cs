@@ -48,8 +48,6 @@ public class MenuScript : MonoBehaviour
 
         foreach (Transform child in goFabricaPecas.transform)
         {
-            if (Consts.FABRICAPECAS.Equals(child.name)) continue;
-
             if (child.name.Equals(Consts.PROPRIEDADEPECAS))
             {
                 child.gameObject.SetActive(true);
@@ -62,13 +60,6 @@ public class MenuScript : MonoBehaviour
                             (!string.Empty.Equals(activePanelProp) && _child.name.Equals(activePanelProp))
                             || (string.Empty.Equals(activePanelProp) && _child.name.Equals("LabelNomeCamera"))
                         );
-                    }
-                    else
-                    {
-                        foreach (Transform __child in _child.transform.GetChild(2))
-                            __child.gameObject.SetActive(false);
-
-                        _child.transform.GetChild(2).GetChild(Global.propriedadePecas[Global.gameObjectName].TipoLuz).gameObject.SetActive(true);
                     }
                 }
             }

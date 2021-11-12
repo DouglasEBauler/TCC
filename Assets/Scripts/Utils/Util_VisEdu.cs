@@ -34,6 +34,7 @@ public class Util_VisEdu : MonoBehaviour
             return _go_visualizador;
         }
     }
+
     static GameObject go_ambienteGrafico
     {
         get
@@ -47,62 +48,7 @@ public class Util_VisEdu : MonoBehaviour
         }
     }
 
-    public static string GetPecaByName(string nome, bool isTransf = false)
-    {
-        Transform parentTransf = GameObject.Find(Global.listaEncaixes[nome]).transform.parent;
-
-        if (!isTransf)
-        {
-            foreach (Transform child in parentTransf)
-            {
-                if (child.name.Contains(Consts.FORMA_SLOT))
-                {
-                    foreach (var encaixe in Global.listaEncaixes)
-                    {
-                        if (encaixe.Value.Equals(child.name)) return encaixe.Key;
-                    }
-                }
-            }
-        }
-        else
-        {
-            foreach (var encaixe in Global.listaEncaixes)
-            {
-                if (encaixe.Value.Equals(parentTransf.name)) return encaixe.Key;
-            }
-        }
-
-        return string.Empty;
-    }
-
-    public static string GetForma(string gameObjName)
-    {
-        string forma = GetPecaByName(gameObjName);
-
-        if (forma.Contains(Consts.CUBO))
-        {
-            return Consts.CUBO;
-        }
-        else if (forma.Contains(Consts.POLIGONO))
-        {
-            return Consts.POLIGONO;
-        }
-        else if (forma.Contains(Consts.SPLINE))
-        {
-            return Consts.SPLINE;
-        }
-
-        return string.Empty;
-    }
-
-    public static string GetSlot(string gameObjName)
-    {
-        string formaSlot = Global.listaEncaixes[GetPecaByName(gameObjName)];
-
-        return formaSlot.Substring(formaSlot.IndexOf("Slot") + 4);
-    }
-
-    public static string GetNumSlot(string slotName, bool isTransfSlot = false)
+   public static string GetNumSlot(string slotName, bool isTransfSlot = false)
     {
         string slot = slotName;
 
@@ -114,23 +60,6 @@ public class Util_VisEdu : MonoBehaviour
         }
 
         return slot;
-    }
-
-    public static string GetNumeroSlotObjetoGrafico(GameObject gameObj)
-    {
-        Transform parentTransf = GameObject.Find(Global.listaEncaixes[gameObj.name]).transform.parent;
-
-        if (parentTransf.name.Contains("ObjGraficoSlot") && parentTransf.name.Length > "ObjGraficoSlot".Length)
-        {
-            return parentTransf.name.Substring(parentTransf.name.IndexOf("Slot") + 4, 1);
-        }
-
-        return GetNumeroSlotObjetoGrafico(parentTransf.gameObject);
-    }
-
-    public static PropriedadePeca GetObjetoGraficoSlot(GameObject gameObject)
-    {
-        return Global.propriedadePecas["ObjetoGraficoP" + GetNumeroSlotObjetoGrafico(gameObject)];
     }
 
     public static void EnableColliderFabricaPecas(bool enable, bool enablePecas = true)
@@ -171,8 +100,8 @@ public class Util_VisEdu : MonoBehaviour
             }
 
             return "0";
-        }
-        else if (isTamInput)
+        } 
+        else if (isTamInput && "0".Equals(valor))
         {
             return "1";
         }
