@@ -28,18 +28,12 @@ public class ValorIluminacao : Valores
 public class PropriedadePeca
 {
     public string Nome;
+    [NonSerialized]
+    public string NomePeca;
     public Color Cor;
+    [NonSerialized]
     public Dictionary<string, string> ListPropLocks;
     public bool Ativo;
-
-    //Iluminação
-    public int TipoLuz;
-    public float Intensidade;
-    public ValorIluminacao ValorIluminacao;
-    public float Distancia;
-    public float Angulo;
-    public float Expoente;
-    public int UltimoIndexLuz;
 
     public PropriedadePeca()
     {
@@ -48,12 +42,39 @@ public class PropriedadePeca
 }
 
 [Serializable]
-public class PropriedadeTransformacao : PropriedadePeca
+public class IluminacaoPropriedadePeca : PropriedadePeca
 {
     public Posicao Pos;
-    public string NomePeca;
+    [NonSerialized]
+    public string NomePecaAmbiente;
+    [NonSerialized]
+    public string NomePecaVis;
+    public TipoIluminacao TipoLuz;
+    public float Intensidade;
+    public ValorIluminacao ValorIluminacao;
+    public float Distancia;
+    public float Angulo;
+    public float Expoente;
+    public int UltimoIndexLuz;
 
-    public PropriedadeTransformacao()
+    public IluminacaoPropriedadePeca() : base() 
+    {
+        Pos = new Posicao();
+        TipoLuz = TipoIluminacao.Ambiente;
+        ValorIluminacao = new ValorIluminacao();
+    }
+}
+
+[Serializable]
+public class TransformacaoPropriedadePeca : PropriedadePeca
+{
+    public Posicao Pos;
+    [NonSerialized]
+    public string NomePecaAmb;
+    [NonSerialized]
+    public string NomePecaVis;
+
+    public TransformacaoPropriedadePeca()
     {
         Pos = new Posicao();
     }
@@ -62,7 +83,9 @@ public class PropriedadeTransformacao : PropriedadePeca
 [Serializable]
 public class CuboPropriedadePeca : PropriedadePeca
 {
-    public string NomeCuboAmbiente;
+    [NonSerialized]
+    public string NomeCuboAmb;
+    [NonSerialized]
     public string NomeCuboVis;
     public Posicao Pos;
     public Tamanho Tam;
@@ -70,7 +93,7 @@ public class CuboPropriedadePeca : PropriedadePeca
 
     public CuboPropriedadePeca() : base() 
     {
-        NomeCuboAmbiente = string.Empty;
+        NomeCuboAmb = string.Empty;
         NomeCuboVis = string.Empty;
         Pos = new Posicao();
         Tam = new Tamanho();
@@ -80,17 +103,21 @@ public class CuboPropriedadePeca : PropriedadePeca
 [Serializable]
 public class PoligonoPropriedadePeca : PropriedadePeca
 {
-    public string PoligonoAmbiente;
+    [NonSerialized]
+    public string PoligonoAmb;
+    [NonSerialized]
+    public string PoligonoVis;
     public Posicao Pos;
     public int Pontos;
     public TipoPrimitiva Primitiva;
 
     public PoligonoPropriedadePeca() : base() 
     {
-        this.PoligonoAmbiente = string.Empty;
         this.Pos = new Posicao();
         this.Pontos = 3;
         this.Primitiva = TipoPrimitiva.Cheio;
+        this.PoligonoAmb = string.Empty;
+        this.PoligonoVis = string.Empty;
     }
 }
 
@@ -102,7 +129,10 @@ public class SplinePropriedadePeca : PropriedadePeca
     public Posicao P3;
     public Posicao P4;
     public Posicao P5;
-    public string SplineAmbiente;
+    [NonSerialized]
+    public string SplineAmb;
+    [NonSerialized]
+    public string SplineVis;
 
     public SplinePropriedadePeca() : base() 
     {
@@ -110,7 +140,8 @@ public class SplinePropriedadePeca : PropriedadePeca
         P2 = new Posicao();
         P3 = new Posicao();
         P4 = new Posicao();
-        SplineAmbiente = string.Empty;
+        SplineAmb = string.Empty;
+        SplineVis = string.Empty;
     }
 }
 
@@ -120,13 +151,20 @@ public class IteracaoPropriedadePeca : PropriedadePeca
     public Posicao Intervalo;
     public Posicao Min;
     public Posicao Max;
+    [NonSerialized]
     public string NomeTransformacao;
+    public bool AtivoX;
+    public bool AtivoY;
+    public bool AtivoZ;
 
     public IteracaoPropriedadePeca() : base()
     {
         Intervalo = new Posicao();
         Min = new Posicao();
         Max = new Posicao();
+        AtivoX = true;
+        AtivoY = false;
+        AtivoZ = false;
     }
 }
 
@@ -141,6 +179,7 @@ public class PropriedadeCamera : PropriedadePeca
     public bool JaIniciouValores;
     public bool ExisteCamera;
     public PropriedadeCameraInicial PropInicial;
+    [NonSerialized]
     public Dictionary<string, string> ListPropCamLocks;
 
     public PropriedadeCamera() 

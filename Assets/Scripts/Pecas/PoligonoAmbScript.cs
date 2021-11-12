@@ -13,6 +13,7 @@ public class PoligonoAmbScript : MonoBehaviour
     [SerializeField]
     GameObject lines;
 
+    [HideInInspector]
     public PoligonoPropriedadePeca PropPeca;
 
     Mesh mesh;
@@ -33,8 +34,6 @@ public class PoligonoAmbScript : MonoBehaviour
             new Vector2(-width, -height)
             , new Vector2(-width, height)
             , new Vector2(width, height)
-            //, new Vector2(width, -height)
-            //, new Vector2(-width*2.5f, height)
         };
 
         Triangulator triangulator = new Triangulator(vertices);
@@ -79,12 +78,13 @@ public class PoligonoAmbScript : MonoBehaviour
         EnabledVertices(false);
         lines.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y, gameObject.transform.localPosition.z);
         lineRender.enabled = true;
-        lineRender.positionCount = mesh.triangles.Length;
+        lineRender.positionCount = mesh.triangles.Length + 1;
 
         for (int i = 0; i < mesh.triangles.Length; i++)
         {
             lineRender.SetPosition(i, new Vector3(mesh.vertices[mesh.triangles[i]].x, mesh.vertices[mesh.triangles[i]].y, mesh.vertices[mesh.triangles[i]].z + round_z));
         }
+        lineRender.SetPosition(mesh.triangles.Length, new Vector3(mesh.vertices[mesh.triangles[0]].x, mesh.vertices[mesh.triangles[0]].y, mesh.vertices[mesh.triangles[0]].z + round_z));
 
         mesh.SetIndices(mesh.triangles, MeshTopology.Points, 0);
     }
@@ -107,13 +107,13 @@ public class PoligonoAmbScript : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < mesh.triangles.Length; i++)
+        foreach (int triangle in mesh.triangles)
         {
-            if (GameObject.Find("Vertex" + mesh.triangles[i]) == null)
+            if (GameObject.Find("Vertex" + triangle.ToString()) == null)
             {
                 GameObject vertexCircle = Instantiate(circle, circle.transform.position, circle.transform.rotation, circle.transform.parent);
-                vertexCircle.name = "Vertex" + mesh.triangles[i];
-                vertexCircle.transform.localPosition = new Vector3(mesh.vertices[mesh.triangles[i]].x, mesh.vertices[mesh.triangles[i]].y, mesh.vertices[mesh.triangles[i]].z + round_z);
+                vertexCircle.name = "Vertex" + triangle.ToString();
+                vertexCircle.transform.localPosition = new Vector3(mesh.vertices[triangle].x, mesh.vertices[triangle].y, mesh.vertices[triangle].z + round_z);
                 vertexCircle.GetComponent<SpriteRenderer>().enabled = true;
             }
         }

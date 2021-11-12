@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +23,7 @@ public class PoligonoScript : MonoBehaviour
     public GameObject slot;
 
     Vector3 offset, scanPos, startPos;
+    PoligonoPropriedadePeca propPeca;
     Tutorial tutorialScript;
 
     void Start()
@@ -83,9 +83,13 @@ public class PoligonoScript : MonoBehaviour
             {
                 StartCoroutine(RemovePeca());
             }
-            else
+            else if (EstaEncaixado())
             {
                 Encaixa();
+            }
+            else
+            {
+                StartCoroutine(RemovePeca());
             }
         }
     }
@@ -141,14 +145,15 @@ public class PoligonoScript : MonoBehaviour
 
         if (!tutorialScript.EstaExecutandoTutorial)
         {
-            if (Global.cameraAtiva && new PropIluminacaoPadrao().existeIluminacao())
-                GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
+            //if (Global.cameraAtiva && new PropIluminacaoPadrao().existeIluminacao())
+            //    GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
 
             ConfigPoligonoAmb();
+            ConfigPoligonoVis();
         }
         else
         {
-            GameObject.Find(Consts.POLIGONO_AMB + Global.countObjetosGraficos.ToString()).GetComponent<MeshRenderer>().enabled = true;
+            GameObject.Find(Consts.POLIGONO_AMB + Util_VisEdu.GetNumSlot(slot.name)).GetComponent<MeshRenderer>().enabled = true;
         }
 
         CreatePropPeca(propPeca);
@@ -156,16 +161,32 @@ public class PoligonoScript : MonoBehaviour
 
     void ConfigPoligonoAmb()
     {
-        GameObject poligonoAmb = GameObject.Find(Consts.POLIGONO_AMB);
-        if (poligonoAmb != null)
+        GameObject objPecaAmbiente = GameObject.Find(Consts.POLIGONO_AMB_OBJ);
+        if (objPecaAmbiente != null)
         {
-            GameObject cloneFab = Instantiate(poligonoAmb, poligonoAmb.transform.position, poligonoAmb.transform.rotation, poligonoAmb.transform.parent);
-            cloneFab.name = Consts.POLIGONO_AMB;
-            cloneFab.transform.position = new Vector3(poligonoAmb.transform.position.x, poligonoAmb.transform.position.y, poligonoAmb.transform.position.z);
-            cloneFab.GetComponent<MeshRenderer>().enabled = false;
+            GameObject cloneFab = Instantiate(objPecaAmbiente, objPecaAmbiente.transform.parent.position, objPecaAmbiente.transform.parent.rotation, objPecaAmbiente.transform.parent);
+            cloneFab.name = Consts.POLIGONO_AMB_OBJ;
+            cloneFab.transform.position = new Vector3(objPecaAmbiente.transform.position.x, objPecaAmbiente.transform.position.y, objPecaAmbiente.transform.position.z);
+            cloneFab.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false; //PoligonoAmbiente
 
-            poligonoAmb.name += Global.countObjetosGraficos.ToString();
-            poligonoAmb.GetComponent<MeshRenderer>().enabled = Global.propriedadePecas[Consts.OBJETOGRAFICO + Global.countObjetosGraficos.ToString()].Ativo;
+            objPecaAmbiente.name += Util_VisEdu.GetNumSlot(slot.name);
+            objPecaAmbiente.transform.GetChild(0).name += Util_VisEdu.GetNumSlot(slot.name);
+            objPecaAmbiente.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetNumSlot(slot.name)].Ativo;
+        }
+    }
+    void ConfigPoligonoVis()
+    {
+        GameObject objPecaVis = GameObject.Find(Consts.POLIGONO_VIS_OBJ);
+        if (objPecaVis != null)
+        {
+            GameObject cloneFab = Instantiate(objPecaVis, objPecaVis.transform.position, objPecaVis.transform.rotation, objPecaVis.transform.parent);
+            cloneFab.name = Consts.POLIGONO_VIS_OBJ;
+            cloneFab.transform.position = new Vector3(objPecaVis.transform.position.x, objPecaVis.transform.position.y, objPecaVis.transform.position.z);
+            cloneFab.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false; //PoligonoVis
+
+            objPecaVis.transform.name += Util_VisEdu.GetNumSlot(slot.name);
+            objPecaVis.transform.GetChild(0).name += Util_VisEdu.GetNumSlot(slot.name);
+            objPecaVis.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetNumSlot(slot.name)].Ativo && Global.cameraAtiva;
         }
     }
 
@@ -173,14 +194,10 @@ public class PoligonoScript : MonoBehaviour
     {
         if (EstaEncaixado())
         {
-            Global.gameObjectName = gameObject.name;
-            Global.lastPressedButton?.SetActive(false);
-            Global.lastPressedButton = propriedades.gameObject;
-
             CreatePropPeca(propPeca);
 
-            propriedades.GetComponent<PropPoligonoScript>().Inicializa();
-            menuControl.GetComponent<MenuScript>().EnablePanelProp(Global.lastPressedButton.name);
+            propriedades.GetComponent<PropPoligonoScript>().Inicializa(this.propPeca);
+            menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedades.name);
         }
     }
 
@@ -188,35 +205,33 @@ public class PoligonoScript : MonoBehaviour
     {
         if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
         {
-            PoligonoPropriedadePeca prPeca;
+            string numSlot = Util_VisEdu.GetNumSlot(slot.name);
 
             if (propPeca != null)
             {
-                prPeca = propPeca;
+                this.propPeca = propPeca;
             }
             else
             {
-                prPeca = new PoligonoPropriedadePeca();
+                this.propPeca = new PoligonoPropriedadePeca();
             }
-            prPeca.Nome = gameObject.name;
-            prPeca.PoligonoAmbiente = Consts.POLIGONO_AMB + Util_VisEdu.GetSlot(gameObject.name);
+            this.propPeca.Nome = Consts.POLIGONO;
+            this.propPeca.NomePeca = gameObject.name;
+            this.propPeca.PoligonoAmb = Consts.POLIGONO_AMB + numSlot;
+            this.propPeca.PoligonoVis = Consts.POLIGONO_AMB + numSlot;
 
-            Global.propriedadePecas.Add(prPeca.Nome, prPeca);
+            Global.propriedadePecas.Add(this.propPeca.NomePeca, this.propPeca);
         }
     }
 
     public bool PodeEncaixar()
     {
-        const float VALOR_APROXIMADO = 2;
-        float pecaY = transform.position.y;
-
         if ((slot != null)
-            && (slot.transform.position.y + VALOR_APROXIMADO > pecaY)
-            && (slot.transform.position.y - VALOR_APROXIMADO < pecaY)
+            && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
             && !EstaEncaixado())
         {
             Destroy(slot.GetComponent<Rigidbody>());
-            gameObject.name += Global.countObjetosGraficos.ToString();
+            gameObject.name += Util_VisEdu.GetNumSlot(slot.name);
 
             if (!EstaEncaixado())
             {

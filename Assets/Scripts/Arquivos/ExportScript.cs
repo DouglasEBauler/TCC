@@ -121,21 +121,21 @@ public class ExportScript : MonoBehaviour
                     Transform transformacao = transfSlot.transform.Find(Consts.ESCALAR + numTransfSlot);
                     if (transformacao != null && Global.propriedadePecas.ContainsKey(transformacao.name))
                     {
-                        listTransf.Add(CreateTransfProject(transformacao, Global.propriedadePecas[transformacao.name] as PropriedadeTransformacao));
+                        listTransf.Add(CreateTransfProject(transformacao, Global.propriedadePecas[transformacao.name] as TransformacaoPropriedadePeca));
                     }
                     else
                     {
                         transformacao = transfSlot.transform.Find(Consts.ROTACIONAR + numTransfSlot);
                         if (transformacao != null && Global.propriedadePecas.ContainsKey(transformacao.name))
                         {
-                            listTransf.Add(CreateTransfProject(transformacao, Global.propriedadePecas[transformacao.name] as PropriedadeTransformacao));
+                            listTransf.Add(CreateTransfProject(transformacao, Global.propriedadePecas[transformacao.name] as TransformacaoPropriedadePeca));
                         }
                         else
                         {
                             transformacao = transfSlot.transform.Find(Consts.TRANSLADAR + numTransfSlot);
                             if (transformacao != null && Global.propriedadePecas.ContainsKey(transformacao.name))
                             {
-                                listTransf.Add(CreateTransfProject(transformacao, Global.propriedadePecas[transformacao.name] as PropriedadeTransformacao));
+                                listTransf.Add(CreateTransfProject(transformacao, Global.propriedadePecas[transformacao.name] as TransformacaoPropriedadePeca));
                             }
                         }
                     }
@@ -165,7 +165,10 @@ public class ExportScript : MonoBehaviour
                     if (formaProj != null)
                     {
                         formaProj.Transformacoes = CreateTransformacoes(obgGrafSlot);
-                        formaProj.Iluminacao = CreateIluminacao(obgGrafSlot);
+                        if (Global.propriedadePecas.ContainsKey(Consts.ILUMINACAO + numSlot))
+                        {
+                            formaProj.Iluminacao = CreateIluminacao(Global.propriedadePecas[Consts.ILUMINACAO + numSlot] as IluminacaoPropriedadePeca);
+                        }
                         return formaProj;
                     }
                 }
@@ -189,12 +192,12 @@ public class ExportScript : MonoBehaviour
                 Transform forma = formaSlot.transform.Find(Consts.POLIGONO + numSlot);
                 if (forma != null && Global.propriedadePecas.ContainsKey(forma.name))
                 {
-                    PoligonoProject formaProj = CreateFormPoligono(forma.name, Global.propriedadePecas[forma.name] as PoligonoPropriedadePeca);
+                    PoligonoProject formaProj = CreateFormPoligono(Global.propriedadePecas[forma.name] as PoligonoPropriedadePeca);
 
                     if (formaProj != null)
                     {
                         formaProj.Transformacoes = CreateTransformacoes(obgGrafSlot);
-                        formaProj.Iluminacao = CreateIluminacao(obgGrafSlot);
+                        formaProj.Iluminacao = CreateIluminacao(Global.propriedadePecas[Consts.ILUMINACAO + numSlot] as IluminacaoPropriedadePeca);
                         return formaProj;
                     }
                 }
@@ -218,12 +221,12 @@ public class ExportScript : MonoBehaviour
                 Transform forma = formaSlot.transform.Find(Consts.SPLINE + numSlot);
                 if (forma != null && Global.propriedadePecas.ContainsKey(forma.name))
                 {
-                    SplineProject formaProj = CreateFormSpline(forma.name, Global.propriedadePecas[forma.name] as SplinePropriedadePeca);
+                    SplineProject formaProj = CreateFormSpline(Global.propriedadePecas[forma.name] as SplinePropriedadePeca);
 
                     if (formaProj != null)
                     {
                         formaProj.Transformacoes = CreateTransformacoes(obgGrafSlot);
-                        formaProj.Iluminacao = CreateIluminacao(obgGrafSlot);
+                        formaProj.Iluminacao = CreateIluminacao(Global.propriedadePecas[Consts.ILUMINACAO + numSlot] as IluminacaoPropriedadePeca);
                         return formaProj;
                     }
                 }
@@ -252,7 +255,7 @@ public class ExportScript : MonoBehaviour
                     Y = EncryptCuboPropPeca(propPeca, Property.PosY),
                     Z = EncryptCuboPropPeca(propPeca, Property.PosZ)
                 },
-                NomeCuboAmbiente = propPeca.NomeCuboAmbiente,
+                NomeCuboAmbiente = propPeca.NomeCuboAmb,
                 NomeCuboVis = propPeca.NomeCuboVis,
                 Cor = propPeca.Cor,
                 Textura = propPeca.Textura,
@@ -261,7 +264,7 @@ public class ExportScript : MonoBehaviour
         };
     }
 
-    PoligonoProject CreateFormPoligono(string formName, PoligonoPropriedadePeca propPeca)
+    PoligonoProject CreateFormPoligono(PoligonoPropriedadePeca propPeca)
     {
         return new PoligonoProject()
         {
@@ -275,13 +278,14 @@ public class ExportScript : MonoBehaviour
                 },
                 Pontos = EncryptPoligonoPropPeca(propPeca, Property.Pontos),
                 Primitiva = propPeca.Primitiva,
-                PoligonoAmbiente = propPeca.PoligonoAmbiente,
+                PoligonoAmb = propPeca.PoligonoAmb,
+                PoligonoVis = propPeca.PoligonoAmb,
                 Ativo = propPeca.Ativo
             }
         };
     }
 
-    SplineProject CreateFormSpline(string formName, SplinePropriedadePeca propPeca)
+    SplineProject CreateFormSpline(SplinePropriedadePeca propPeca)
     {
         return new SplineProject()
         {
@@ -317,17 +321,40 @@ public class ExportScript : MonoBehaviour
                     Y = EncryptSplinePropPeca(propPeca, Property.P5PosY),
                     Z = EncryptSplinePropPeca(propPeca, Property.P5PosZ),
                 },
-                SplineAmbiente = propPeca.SplineAmbiente
+                SplineAmb = propPeca.SplineAmb,
+                SplineVis = propPeca.SplineVis
             }
         };
     }
 
-    IluminacaoProject CreateIluminacao(Transform obgGrafSlot)
+    IluminacaoProject CreateIluminacao(IluminacaoPropriedadePeca propPeca)
     {
-        IluminacaoProject IluminacaoProj = new IluminacaoProject();
-        //IluminacaoProj.Propriedades = CreatePropPeca(propPeca);
-
-        return IluminacaoProj;
+        return new IluminacaoProject()
+        {
+            Propriedades = new PropriedadeIluminacaoPecaProject()
+            {
+                Nome = propPeca.Nome,
+                Cor = propPeca.Cor,
+                Pos = new PosicaoProject()
+                {
+                    X = EncryptIluminacaoPropPeca(propPeca, Property.PosX),
+                    Y = EncryptIluminacaoPropPeca(propPeca, Property.PosX),
+                    Z = EncryptIluminacaoPropPeca(propPeca, Property.PosX)
+                },
+                ValorIluminacao = new ValorIluminacaoProject()
+                {
+                    X = EncryptIluminacaoPropPeca(propPeca, Property.ValorX),
+                    Y = EncryptIluminacaoPropPeca(propPeca, Property.ValorY),
+                    Z = EncryptIluminacaoPropPeca(propPeca, Property.ValorZ)
+                },
+                Intensidade = EncryptIluminacaoPropPeca(propPeca, Property.Intensidade),
+                Distancia = EncryptIluminacaoPropPeca(propPeca, Property.Distancia),
+                Angulo = EncryptIluminacaoPropPeca(propPeca, Property.Angulo),
+                Expoente = EncryptIluminacaoPropPeca(propPeca, Property.Expoente),
+                TipoLuz = propPeca.TipoLuz,
+                Ativo = propPeca.Ativo
+            }
+        };
     }
 
     PropriedadeCameraProject CreatePropCamera(ProjectVisEduClass project)
@@ -345,7 +372,7 @@ public class ExportScript : MonoBehaviour
         };
     }
 
-    TransformacaoProject CreateTransfProject(Transform transformacao, PropriedadeTransformacao propPeca)
+    TransformacaoProject CreateTransfProject(Transform transformacao, TransformacaoPropriedadePeca propPeca)
     {
         TransformacaoProject transfProj = null;
 
@@ -423,7 +450,27 @@ public class ExportScript : MonoBehaviour
         }
     }
 
-    TransformacaoPropriedadePecaProject CreateTransformacaoPropPeca(PropriedadeTransformacao propPeca)
+    string EncryptIluminacaoPropPeca(IluminacaoPropriedadePeca propPeca, Property propType)
+    {
+        switch (propType)
+        {
+            case Property.PosX: return (propPeca.ListPropLocks.ContainsKey("PosX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosX"]) : propPeca.Pos.X.ToString();
+            case Property.PosY: return (propPeca.ListPropLocks.ContainsKey("PosY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosY"]) : propPeca.Pos.Y.ToString();
+            case Property.PosZ: return (propPeca.ListPropLocks.ContainsKey("PosZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosZ"]) : propPeca.Pos.Z.ToString();
+
+            case Property.ValorX: return (propPeca.ListPropLocks.ContainsKey("ValorX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["ValorX"]) : propPeca.ValorIluminacao.X.ToString();
+            case Property.ValorY: return (propPeca.ListPropLocks.ContainsKey("ValorY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["ValorY"]) : propPeca.ValorIluminacao.Y.ToString();
+            case Property.ValorZ: return (propPeca.ListPropLocks.ContainsKey("ValorZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["ValorZ"]) : propPeca.ValorIluminacao.Z.ToString();
+
+            case Property.Intensidade: return (propPeca.ListPropLocks.ContainsKey("Intensidade")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["Intensidade"]) : propPeca.Intensidade.ToString();
+            case Property.Distancia: return (propPeca.ListPropLocks.ContainsKey("Distancia")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["Distancia"]) : propPeca.Distancia.ToString();
+            case Property.Angulo: return (propPeca.ListPropLocks.ContainsKey("Angulo")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["Angulo"]) : propPeca.Angulo.ToString();
+            case Property.Expoente: return (propPeca.ListPropLocks.ContainsKey("Expoente")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["Expoente"]) : propPeca.Expoente.ToString();
+            default: return string.Empty;
+        }
+    }
+
+    TransformacaoPropriedadePecaProject CreateTransformacaoPropPeca(TransformacaoPropriedadePeca propPeca)
     {
         return new TransformacaoPropriedadePecaProject()
         {
@@ -434,12 +481,11 @@ public class ExportScript : MonoBehaviour
                 Y = EncryptTransformacaoPropPeca(propPeca, Property.PosY),
                 Z = EncryptTransformacaoPropPeca(propPeca, Property.PosZ)
             },
-            NomePeca = propPeca.NomePeca,
             Ativo = propPeca.Ativo
         };
     }
 
-    string EncryptTransformacaoPropPeca(PropriedadeTransformacao propPeca, Property propType)
+    string EncryptTransformacaoPropPeca(TransformacaoPropriedadePeca propPeca, Property propType)
     {
         switch (propType)
         {

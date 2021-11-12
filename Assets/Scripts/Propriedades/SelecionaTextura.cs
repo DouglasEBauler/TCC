@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SelecionaTextura : MonoBehaviour 
 {
     [SerializeField]
     Texture texturaObjeto;
+
+    public string NomePecaCubo;
 
     void OnMouseDown()
     {
@@ -13,12 +13,12 @@ public class SelecionaTextura : MonoBehaviour
         texturaObjeto = gameObject.GetComponent<MeshRenderer>().materials[0].mainTexture;
 
         //Inclui a textura no objeto
-        if (Global.propriedadePecas.ContainsKey(Global.gameObjectName))
-            (Global.propriedadePecas[Global.gameObjectName] as CuboPropriedadePeca).Textura = texturaObjeto;
+        if (Global.propriedadePecas.ContainsKey(this.NomePecaCubo))
+            (Global.propriedadePecas[this.NomePecaCubo] as CuboPropriedadePeca).Textura = texturaObjeto;
 
         //Texturiza os cubos
-        CuboPropriedadePeca cuboProp = Global.propriedadePecas[Global.gameObjectName] as CuboPropriedadePeca;
-        GameObject.Find(cuboProp.NomeCuboAmbiente).GetComponent<MeshRenderer>().materials[0].mainTexture = texturaObjeto;        
+        CuboPropriedadePeca cuboProp = Global.propriedadePecas[this.NomePecaCubo] as CuboPropriedadePeca;
+        GameObject.Find(cuboProp.NomeCuboAmb).GetComponent<MeshRenderer>().materials[0].mainTexture = texturaObjeto;        
         GameObject.Find(cuboProp.NomeCuboVis).GetComponent<MeshRenderer>().materials[0].mainTexture = texturaObjeto;
 
         //Muda seletor de textura para a textura selecionada

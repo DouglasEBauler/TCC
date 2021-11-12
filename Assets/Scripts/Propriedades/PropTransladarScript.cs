@@ -14,20 +14,20 @@ public class PropTransladarScript : MonoBehaviour
     [SerializeField]
     InputField posZ;
     [SerializeField]
-    Toggle toggleField;
+    Toggle ativo;
     [SerializeField]
-    Toggle toggleLockPosX;
+    Toggle lockPosX;
     [SerializeField]
-    Toggle toggleLockPosY;
+    Toggle lockPosY;
     [SerializeField]
-    Toggle toggleLockPosZ;
+    Toggle lockPosZ;
 
-    PropriedadeTransformacao prPeca;
+    TransformacaoPropriedadePeca prPeca;
     bool podeAtualizar;
 
-    public void Inicializa()
+    public void Inicializa(TransformacaoPropriedadePeca propTransformacao)
     {
-        prPeca = Global.propriedadePecas[Util_VisEdu.GetPecaByName(Global.gameObjectName) + Global.gameObjectName] as PropriedadeTransformacao;
+        prPeca = propTransformacao;
         prPeca.Ativo = true;
         podeAtualizar = true;
 
@@ -40,14 +40,10 @@ public class PropTransladarScript : MonoBehaviour
         try
         {
             nomePeca.text = prPeca.Nome;
-
-            if (Global.propriedadePecas.ContainsKey(prPeca.Nome))
-            {
-                posX.text = prPeca.Pos.X.ToString();
-                posY.text = prPeca.Pos.Y.ToString();
-                posZ.text = prPeca.Pos.Z.ToString();
-                toggleField.isOn = prPeca.Ativo;
-            }
+            posX.text = prPeca.Pos.X.ToString();
+            posY.text = prPeca.Pos.Y.ToString();
+            posZ.text = prPeca.Pos.Z.ToString();
+            ativo.isOn = prPeca.Ativo;
         }
         finally
         {
@@ -56,48 +52,60 @@ public class PropTransladarScript : MonoBehaviour
         }
     }
 
-    public void UpdateProp()
+    public void UpdateProp(bool isIteration = false)
     {
-        if (Global.propriedadePecas.ContainsKey(prPeca.Nome) && podeAtualizar)
+        if (isIteration || (podeAtualizar && Global.propriedadePecas.ContainsKey(this.prPeca.NomePeca)))
         {
-            prPeca.Pos.X = Util_VisEdu.ConvertField(posX.text);
-            prPeca.Pos.Y = Util_VisEdu.ConvertField(posY.text);
-            prPeca.Pos.Z = Util_VisEdu.ConvertField(posZ.text);
-            prPeca.Ativo = toggleField.isOn;
-
-            if (prPeca.Ativo)
+            podeAtualizar = false;
+            try
             {
-                GameObject goTransformacaoAmb = GameObject.Find(prPeca.Nome + "Amb");
-                if (goTransformacaoAmb != null)
+                if (!isIteration)
                 {
-                    goTransformacaoAmb.transform.localPosition = new Vector3(prPeca.Pos.X * -1, prPeca.Pos.Y, prPeca.Pos.Z);
+                    prPeca.Pos.X = Util_VisEdu.ConvertField(posX.text);
+                    prPeca.Pos.Y = Util_VisEdu.ConvertField(posY.text);
+                    prPeca.Pos.Z = Util_VisEdu.ConvertField(posZ.text);
+                    prPeca.Ativo = ativo.isOn;
                 }
 
-                GameObject goTransformacaoVis = GameObject.Find(prPeca.Nome + "Vis");
-                if (goTransformacaoVis != null)
+                if (prPeca.Ativo)
                 {
-                    goTransformacaoVis.transform.localPosition = new Vector3(prPeca.Pos.X, prPeca.Pos.Y, prPeca.Pos.Z);
+                    GameObject goTransformacaoAmb = GameObject.Find(prPeca.NomePecaAmb);
+                    if (goTransformacaoAmb != null)
+                    {
+                        goTransformacaoAmb.transform.localPosition = new Vector3(prPeca.Pos.X * -1, prPeca.Pos.Y, prPeca.Pos.Z);
+                    }
+
+                    GameObject goTransformacaoVis = GameObject.Find(prPeca.NomePecaVis);
+                    if (goTransformacaoVis != null)
+                    {
+                        goTransformacaoVis.transform.localPosition = new Vector3(prPeca.Pos.X, prPeca.Pos.Y, prPeca.Pos.Z);
+                    }
                 }
+
+                AtualizaListaProp();
+            }
+            finally
+            {
+                podeAtualizar = true;
             }
         }
 
-        AtualizaListaProp();
     }
 
     void AtualizaListaProp()
     {
-        if (Global.propriedadePecas.ContainsKey(prPeca.Nome))
+        if (Global.propriedadePecas.ContainsKey(this.prPeca.NomePeca))
         {
-            Global.propriedadePecas[prPeca.Nome] = prPeca;
+            Global.propriedadePecas[this.prPeca.NomePeca] = prPeca;
         }
     }
 
     public void UpdateLockFields()
     {
-        if (!toggleLockPosX.isOn)
+        if (!lockPosX.isOn)
         {
             prPeca.ListPropLocks.Remove("PosX");
-            toggleLockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            lockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
         }
         else
         {
@@ -110,13 +118,13 @@ public class PropTransladarScript : MonoBehaviour
                 prPeca.ListPropLocks.Add("PosX", Util_VisEdu.ConvertField(posX.text).ToString());
             }
 
-            toggleLockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+            lockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
 
-        if (!toggleLockPosY.isOn)
+        if (!lockPosY.isOn)
         {
             prPeca.ListPropLocks.Remove("PosY");
-            toggleLockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            lockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
         }
         else
         {
@@ -129,13 +137,13 @@ public class PropTransladarScript : MonoBehaviour
                 prPeca.ListPropLocks.Add("PosY", Util_VisEdu.ConvertField(posY.text).ToString());
             }
 
-            toggleLockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+            lockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
 
-        if (!toggleLockPosZ.isOn)
+        if (!lockPosZ.isOn)
         {
             prPeca.ListPropLocks.Remove("PosZ");
-            toggleLockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            lockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
         }
         else
         {
@@ -148,7 +156,7 @@ public class PropTransladarScript : MonoBehaviour
                 prPeca.ListPropLocks.Add("PosZ", Util_VisEdu.ConvertField(posZ.text).ToString());
             }
 
-            toggleLockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+            lockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 }

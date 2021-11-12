@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PropObjetoGraficoScript : MonoBehaviour
@@ -6,31 +7,62 @@ public class PropObjetoGraficoScript : MonoBehaviour
     [SerializeField]
     InputField nomePeca;
     [SerializeField]
+    Text matrix4x4;
+    [SerializeField]
     Toggle ativo;
 
     PropriedadePeca propPeca;
     bool podeAtualizar;
 
-    public void Inicializa()
+    void FixedUpdate()
     {
-        propPeca = Global.propriedadePecas[Global.gameObjectName];
+        UpdateMatrix();
+    }
+
+    void UpdateMatrix()
+    {
+        GameObject pecaAmb = GameObject.Find(GetPecaAmb());
+        if (pecaAmb != null)
+        {
+            matrix4x4.text = pecaAmb.transform.worldToLocalMatrix.ToString();
+        }
+        else
+        {
+            pecaAmb = GameObject.Find(GetPecaAmb());
+            if (pecaAmb != null)
+            {
+                matrix4x4.text = pecaAmb.transform.worldToLocalMatrix.ToString();
+            }
+            else
+            {
+                pecaAmb = GameObject.Find(GetPecaAmb());
+                if (pecaAmb != null)
+                {
+                    matrix4x4.text = pecaAmb.transform.worldToLocalMatrix.ToString();
+                }
+            }
+        }
+    }
+
+    public void Inicializa(PropriedadePeca propObjGrafico)
+    {
+        propPeca = propObjGrafico;
         propPeca.Ativo = true;
 
-        AtualizaListaProp();
         PreencheCampos();
     }
 
     void AtualizaListaProp()
     {
-        if (Global.propriedadePecas.ContainsKey(Global.gameObjectName))
+        if (Global.propriedadePecas.ContainsKey(this.propPeca.NomePeca))
         {
-            Global.propriedadePecas[Global.gameObjectName] = propPeca;
+            Global.propriedadePecas[this.propPeca.NomePeca] = propPeca;
         }    
     }
 
     void PreencheCampos()
     {
-        if (Global.propriedadePecas.ContainsKey(Global.gameObjectName))
+        if (Global.propriedadePecas.ContainsKey(this.propPeca.NomePeca))
         {
             podeAtualizar = false;
             try
@@ -48,23 +80,75 @@ public class PropObjetoGraficoScript : MonoBehaviour
 
     public void UpdateProp()
     {
-        if (podeAtualizar && Global.propriedadePecas.ContainsKey(Global.gameObjectName))
+        if (podeAtualizar && Global.propriedadePecas.ContainsKey(this.propPeca.NomePeca))
         {
-            MeshRenderer meshRender = null;
-
-            if (Global.propriedadePecas[Global.gameObjectName] is CuboPropriedadePeca)
+            podeAtualizar = false;
+            try
             {
-                meshRender = GameObject.Find((Global.propriedadePecas[Global.gameObjectName] as CuboPropriedadePeca).NomeCuboAmbiente).GetComponent<MeshRenderer>();
+                Global.propriedadePecas[this.propPeca.NomePeca].Ativo = ativo.isOn;
+
+                MeshRenderer meshRenderAmb = null, meshRenderVis = null;
+
+                string pecaName = GetPecaAmb();
+                string numSlot = this.propPeca.NomePeca.Substring(this.propPeca.NomePeca.IndexOf("P") + 1);
+
+                if (!string.Empty.Equals(pecaName))
+                {
+                    if (pecaName.Contains(Consts.CUBO))
+                    {
+                        meshRenderAmb = GameObject.Find((Global.propriedadePecas[Consts.CUBO + numSlot] as CuboPropriedadePeca).NomeCuboAmb).GetComponent<MeshRenderer>();
+                        meshRenderVis = GameObject.Find((Global.propriedadePecas[Consts.CUBO + numSlot] as CuboPropriedadePeca).NomeCuboVis).GetComponent<MeshRenderer>();
+                    }
+                    else if (pecaName.Contains(Consts.POLIGONO))
+                    {
+                        meshRenderAmb = GameObject.Find((Global.propriedadePecas[Consts.POLIGONO + numSlot] as PoligonoPropriedadePeca).PoligonoAmb).GetComponent<MeshRenderer>();
+                        meshRenderVis = GameObject.Find((Global.propriedadePecas[Consts.POLIGONO + numSlot] as PoligonoPropriedadePeca).PoligonoVis).GetComponent<MeshRenderer>();
+                    }
+                    else if (pecaName.Contains(Consts.SPLINE))
+                    {
+                        meshRenderAmb = GameObject.Find((Global.propriedadePecas[Consts.SPLINE + numSlot] as SplinePropriedadePeca).SplineAmb).GetComponent<MeshRenderer>();
+                        meshRenderVis = GameObject.Find((Global.propriedadePecas[Consts.SPLINE + numSlot] as SplinePropriedadePeca).SplineVis).GetComponent<MeshRenderer>();
+                    }
+
+                    if (meshRenderAmb != null)
+                    {
+                        meshRenderAmb.enabled = Global.propriedadePecas[this.propPeca.NomePeca].Ativo;
+                    }
+                    if (meshRenderVis != null)
+                    {
+                        meshRenderVis.enabled = Global.propriedadePecas[this.propPeca.NomePeca].Ativo;
+                    }
+                }
+
+                AtualizaListaProp();
             }
-            else if (Global.propriedadePecas[Global.gameObjectName] is PoligonoPropriedadePeca)
+            finally
             {
-                meshRender = GameObject.Find((Global.propriedadePecas[Global.gameObjectName] as PoligonoPropriedadePeca).PoligonoAmbiente).GetComponent<MeshRenderer>();
+                podeAtualizar = true;
             }
-
-            Global.propriedadePecas[Global.gameObjectName].Ativo = ativo.isOn;
-
-            if (meshRender != null)
-                meshRender.enabled = ativo.isOn;
         }
+    }
+
+    string GetPecaAmb()
+    {
+        if (this.propPeca != null)
+        {
+            string numSlot = this.propPeca.NomePeca.Substring(this.propPeca.NomePeca.IndexOf("P") + 1);
+
+            if (Global.listaEncaixes.ContainsKey(Consts.CUBO + numSlot))
+            {
+                return Consts.CUBO + Consts.AMB + numSlot;
+            }
+            else if (Global.listaEncaixes.ContainsKey(Consts.POLIGONO + numSlot))
+            {
+                return Consts.POLIGONO + Consts.AMB + numSlot;
+            }
+            else if (Global.listaEncaixes.ContainsKey(Consts.SPLINE + numSlot))
+            {
+                return Consts.SPLINE + Consts.AMB + numSlot;
+            }
+        }
+
+        return string.Empty;
     }
 }

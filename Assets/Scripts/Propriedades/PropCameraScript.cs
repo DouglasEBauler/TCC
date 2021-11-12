@@ -52,9 +52,7 @@ public class PropCameraScript : MonoBehaviour
             EnabledZ();
         }
 
-        if ((Global.gameObjectName != null)
-            && Global.propCameraGlobal.ExisteCamera
-            && (!Global.propCameraGlobal.JaIniciouValores))
+        if (Global.propCameraGlobal.ExisteCamera && (!Global.propCameraGlobal.JaIniciouValores))
         {
             PreencheCampos();
         }

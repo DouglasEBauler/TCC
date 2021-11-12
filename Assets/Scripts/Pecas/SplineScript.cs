@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +25,7 @@ public class SplineScript : MonoBehaviour
 
     Vector3 offset, scanPos, startPos;
     Tutorial tutorialScript;
+    SplinePropriedadePeca propPeca;
 
     void Start()
     {
@@ -78,10 +80,11 @@ public class SplineScript : MonoBehaviour
 
         if (!tutorialScript.EstaExecutandoTutorial)
         {
-            if (Global.cameraAtiva && new PropIluminacaoPadrao().existeIluminacao())
-                GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
+            //if (Global.cameraAtiva && new PropIluminacaoPadrao().existeIluminacao())
+            //    GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
 
             ConfigSplineAmb();
+            ConfigSplineVis();
         }
         else
         {
@@ -91,21 +94,49 @@ public class SplineScript : MonoBehaviour
         CreatePropPeca(propPeca);
     }
 
+    void ConfigSplineVis()
+    {
+        GameObject objPecaVis = GameObject.Find(Consts.SPLINE_VIS_OBJ);
+        if (objPecaVis != null)
+        {
+            GameObject cloneFab = Instantiate(objPecaVis, objPecaVis.transform.parent.position, objPecaVis.transform.parent.rotation, objPecaVis.transform.parent);
+            cloneFab.name = Consts.SPLINE_VIS_OBJ;
+            cloneFab.transform.position = new Vector3(objPecaVis.transform.position.x, objPecaVis.transform.position.y, objPecaVis.transform.position.z);
+            cloneFab.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false; //SplineVisObject
+
+            objPecaVis.transform.GetChild(0).name += Util_VisEdu.GetNumSlot(slot.name); //SplineVis
+
+            // GameObject gerado pelo proprio componente SplineMesh
+            // nao sendo possivel alterar seu nome, apenas o seu objeto pai pode ser redefinido
+            objPecaVis = GameObject.Find("segment 1 mesh");
+            if (objPecaVis != null)
+            {
+                objPecaVis.GetComponent<MeshRenderer>().enabled = 
+                    Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetNumSlot(slot.name)].Ativo && Global.cameraAtiva;
+            }
+        }
+    }
+
     void ConfigSplineAmb()
     {
-        GameObject splineAmb = GameObject.Find(Consts.SPLINE_AMB + Global.countObjetosGraficos.ToString());
-        if (splineAmb != null)
+        GameObject objPecaAmbiente = GameObject.Find(Consts.SPLINE_AMB_OBJ);
+        if (objPecaAmbiente != null)
         {
-            splineAmb.name += Global.countObjetosGraficos.ToString();
-        }
+            GameObject cloneFab = Instantiate(objPecaAmbiente, objPecaAmbiente.transform.parent.position, objPecaAmbiente.transform.parent.rotation, objPecaAmbiente.transform.parent);
+            cloneFab.name = Consts.SPLINE_AMB_OBJ;
+            cloneFab.transform.position = new Vector3(objPecaAmbiente.transform.position.x, objPecaAmbiente.transform.position.y, objPecaAmbiente.transform.position.z);
+            cloneFab.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false; //SplineAmbObject
 
-        // GameObject gerado pelo proprio componente SplineMesh
-        // nao sendo possivel alterar seu nome, apenas o seu objeto pai pode ser redefinido
-        splineAmb = GameObject.Find("segment 1 mesh");
-        if (splineAmb != null)
-        {
-            MeshRenderer mr = splineAmb.GetComponent<MeshRenderer>();
-            mr.enabled = Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetSlot(gameObject.name)].Ativo;
+            objPecaAmbiente.transform.GetChild(0).name += Util_VisEdu.GetNumSlot(slot.name); //SplineAmbiente
+
+            // GameObject gerado pelo proprio componente SplineMesh
+            // nao sendo possivel alterar seu nome, apenas o seu objeto pai pode ser redefinido
+            objPecaAmbiente = GameObject.Find("segment 1 mesh");
+            if (objPecaAmbiente != null)
+            {
+                objPecaAmbiente.GetComponent<MeshRenderer>().enabled = 
+                    Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetNumSlot(slot.name)].Ativo;
+            }
         }
     }
 
@@ -119,9 +150,13 @@ public class SplineScript : MonoBehaviour
             {
                 StartCoroutine(RemovePeca());
             }
+            else if (EstaEncaixado())
+            {
+                Encaixa();
+            }
             else
             {
-                EncaixaPecaAoSlot();
+                StartCoroutine(RemovePeca());
             }
         }
     }
@@ -171,50 +206,43 @@ public class SplineScript : MonoBehaviour
     {
         if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
         {
-            Global.gameObjectName = gameObject.name;
-            Global.lastPressedButton?.SetActive(false);
-            Global.lastPressedButton = propriedades.gameObject;
-
             CreatePropPeca(propPeca);
-
-            propriedades.GetComponent<PropSplineScript>().Inicializa();
-            menuControl.GetComponent<MenuScript>().EnablePanelProp(Global.lastPressedButton.name);
+            propriedades.GetComponent<PropSplineScript>().Inicializa(this.propPeca);
+            menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedades.name);
         }
     }
 
-    public void CreatePropPeca(SplinePropriedadePeca propPeca = null)
+    void CreatePropPeca(SplinePropriedadePeca propPeca = null)
     {
         if (!EstaEncaixado())
         {
-            SplinePropriedadePeca prPeca;
+            string numSlot = Util_VisEdu.GetNumSlot(slot.name);
 
             if (propPeca == null)
             {
-                prPeca = new SplinePropriedadePeca();
+                this.propPeca = new SplinePropriedadePeca();
             }
             else
             {
-                prPeca = propPeca;
+                this.propPeca = propPeca;
             }
-            prPeca.Nome = gameObject.name;
-            prPeca.SplineAmbiente = Consts.SPLINE_AMB + Global.countObjetosGraficos;
+            this.propPeca.Nome = Consts.SPLINE;
+            this.propPeca.NomePeca = gameObject.name;
+            this.propPeca.SplineAmb = Consts.SPLINE_AMB + numSlot;
+            this.propPeca.SplineVis = Consts.SPLINE_VIS + numSlot;
 
-            Global.propriedadePecas.Add(prPeca.Nome, prPeca);
+            Global.propriedadePecas.Add(this.propPeca.NomePeca, this.propPeca);
         }
     }
 
     public bool PodeEncaixar()
     {
-        const float VALOR_APROXIMADO = 2;
-        float pecaY = transform.position.y;
-
         if ((slot != null)
-            && (slot.transform.position.y + VALOR_APROXIMADO > pecaY)
-            && (slot.transform.position.y - VALOR_APROXIMADO < pecaY)
+            && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
             && !EstaEncaixado())
         {
             Destroy(slot.GetComponent<Rigidbody>());
-            gameObject.name += Global.countObjetosGraficos.ToString();
+            gameObject.name += Util_VisEdu.GetNumSlot(slot.name);
 
             if (!EstaEncaixado())
             {

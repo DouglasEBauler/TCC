@@ -43,23 +43,27 @@ public class PropIteracao : MonoBehaviour
     Toggle lockZMax;
     [SerializeField]
     Toggle ativo;
+    [SerializeField]
+    Toggle ativoX;
+    [SerializeField]
+    Toggle ativoY;
+    [SerializeField]
+    Toggle ativoZ;
 
     IteracaoPropriedadePeca propPeca;
-    GameObject goTransformacaoAmb;
     bool podeAtualizar;
 
-    public void Inicializa()
+    public void Inicializa(IteracaoPropriedadePeca propIteracao)
     {
-        propPeca = Global.propriedadePecas[Global.gameObjectName] as IteracaoPropriedadePeca;
+        propPeca = propIteracao;
         propPeca.Ativo = true;
 
         PreencheCampos();
-        AtualizaListaProp();
     }
 
     void PreencheCampos()
     {
-        if (Global.propriedadePecas.ContainsKey(propPeca.Nome))
+        if (Global.propriedadePecas.ContainsKey(this.propPeca.NomePeca))
         {
             podeAtualizar = false;
             try
@@ -75,8 +79,9 @@ public class PropIteracao : MonoBehaviour
                 yMax.text = propPeca.Max.Y.ToString();
                 zMax.text = propPeca.Max.Z.ToString();
                 ativo.isOn = propPeca.Ativo;
-
-                goTransformacaoAmb = GameObject.Find(propPeca.NomeTransformacao);
+                ativoX.isOn = propPeca.AtivoX;
+                ativoY.isOn = propPeca.AtivoY;
+                ativoZ.isOn = propPeca.AtivoZ;
             }
             finally
             {
@@ -88,29 +93,41 @@ public class PropIteracao : MonoBehaviour
 
     public void UpdateProp()
     {
-        if (podeAtualizar && Global.propriedadePecas.ContainsKey(propPeca.Nome))
+        if (podeAtualizar && Global.propriedadePecas.ContainsKey(this.propPeca.NomePeca))
         {
-            propPeca.Nome = nome.text;
-            propPeca.Intervalo.X = Util_VisEdu.ConvertField(xIntervalo.text);
-            propPeca.Intervalo.Y = Util_VisEdu.ConvertField(yIntervalo.text);
-            propPeca.Intervalo.Z = Util_VisEdu.ConvertField(zIntervalo.text);
-            propPeca.Min.X = Util_VisEdu.ConvertField(xMin.text);
-            propPeca.Min.Y = Util_VisEdu.ConvertField(yMin.text);
-            propPeca.Min.Z = Util_VisEdu.ConvertField(zMin.text);
-            propPeca.Max.X = Util_VisEdu.ConvertField(xMax.text);
-            propPeca.Max.Y = Util_VisEdu.ConvertField(yMax.text);
-            propPeca.Max.Z = Util_VisEdu.ConvertField(zMax.text);
-            propPeca.Ativo = ativo.isOn;
+            podeAtualizar = false;
+            try
+            {
+                propPeca.Nome = nome.text;
+                propPeca.Intervalo.X = Util_VisEdu.ConvertField(xIntervalo.text);
+                propPeca.Intervalo.Y = Util_VisEdu.ConvertField(yIntervalo.text);
+                propPeca.Intervalo.Z = Util_VisEdu.ConvertField(zIntervalo.text);
+                propPeca.Min.X = Util_VisEdu.ConvertField(xMin.text);
+                propPeca.Min.Y = Util_VisEdu.ConvertField(yMin.text);
+                propPeca.Min.Z = Util_VisEdu.ConvertField(zMin.text);
+                propPeca.Max.X = Util_VisEdu.ConvertField(xMax.text);
+                propPeca.Max.Y = Util_VisEdu.ConvertField(yMax.text);
+                propPeca.Max.Z = Util_VisEdu.ConvertField(zMax.text);
+                propPeca.Ativo = ativo.isOn;
+                propPeca.AtivoX = !propPeca.Ativo ? false : ativoX.isOn;
+                propPeca.AtivoY = !propPeca.Ativo ? false : ativoY.isOn;
+                propPeca.AtivoZ = !propPeca.Ativo ? false : ativoZ.isOn;
 
-            UpdateLockFields();
+                UpdateLockFields();
+                AtualizaListaProp();
+            }
+            finally
+            {
+                podeAtualizar = true;
+            }
         }
     }
 
     void AtualizaListaProp()
     {
-        if (Global.propriedadePecas.ContainsKey(propPeca.Nome))
+        if (Global.propriedadePecas.ContainsKey(this.propPeca.NomePeca))
         {
-            Global.propriedadePecas[propPeca.Nome] = propPeca;
+            Global.propriedadePecas[this.propPeca.NomePeca] = propPeca;
         }
     }
 

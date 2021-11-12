@@ -24,6 +24,7 @@ public class CuboScript : MonoBehaviour
 
     Vector3 offset, scanPos, startPos;
     Tutorial tutorialScript;
+    CuboPropriedadePeca propPeca;
 
     void Start()
     {
@@ -82,9 +83,13 @@ public class CuboScript : MonoBehaviour
             {
                 StartCoroutine(RemovePeca());
             }
-            else
+            else if (EstaEncaixado())
             {
                 Encaixa();
+            }
+            else
+            {
+                StartCoroutine(RemovePeca());
             }
         }
     }
@@ -135,15 +140,15 @@ public class CuboScript : MonoBehaviour
 
         if (!tutorialScript.EstaExecutandoTutorial)
         {
-            if (Global.cameraAtiva && new PropIluminacaoPadrao().existeIluminacao())
-                GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
+            //if (Global.cameraAtiva && new PropIluminacaoPadrao().existeIluminacao())
+            //    GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
 
             ConfigCuboAmb();
             ConfigCuboVis();
         }
         else
         {
-            GameObject.Find(Consts.CUBO_AMB + Util_VisEdu.GetSlot(gameObject.name)).GetComponent<MeshRenderer>().enabled = true;
+            GameObject.Find(Consts.CUBO_AMB + Util_VisEdu.GetNumSlot(slot.name)).GetComponent<MeshRenderer>().enabled = true;
         }
 
         CreatePropPeca(propPeca);
@@ -151,16 +156,17 @@ public class CuboScript : MonoBehaviour
 
     void ConfigCuboVis()
     {
-        GameObject cuboVis = GameObject.Find(Consts.CUBO_VIS);
-        if (cuboVis != null)
+        GameObject cuboVisObj = GameObject.Find(Consts.CUBO_VIS_OBJ);
+        if (cuboVisObj != null)
         {
-            GameObject cloneFab = Instantiate(cuboVis, cuboVis.transform.position, cuboVis.transform.rotation, cuboVis.transform.parent);
-            cloneFab.name = Consts.CUBO_VIS;
-            cloneFab.transform.position = new Vector3(cuboVis.transform.position.x, cuboVis.transform.position.y, cuboVis.transform.position.z);
-            cloneFab.GetComponent<MeshRenderer>().enabled = false;
+            GameObject cloneFab = Instantiate(cuboVisObj, cuboVisObj.transform.position, cuboVisObj.transform.rotation, cuboVisObj.transform.parent);
+            cloneFab.name = Consts.CUBO_VIS_OBJ;
+            cloneFab.transform.position = new Vector3(cuboVisObj.transform.position.x, cuboVisObj.transform.position.y, cuboVisObj.transform.position.z);
+            cloneFab.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
 
-            cuboVis.name += Global.countObjetosGraficos.ToString();
-            cuboVis.GetComponent<MeshRenderer>().enabled = Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetSlot(gameObject.name)].Ativo;
+            cuboVisObj.name += Util_VisEdu.GetNumSlot(slot.name);
+            cuboVisObj.transform.GetChild(0).name += Util_VisEdu.GetNumSlot(slot.name);
+            cuboVisObj.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetNumSlot(slot.name)].Ativo && Global.cameraAtiva;
         }
     }
 
@@ -174,9 +180,9 @@ public class CuboScript : MonoBehaviour
             cloneFab.transform.position = new Vector3(cuboAmbObj.transform.position.x, cuboAmbObj.transform.position.y, cuboAmbObj.transform.position.z);
             cloneFab.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
 
-            cuboAmbObj.name += Global.countObjetosGraficos.ToString();
-            cuboAmbObj.transform.GetChild(0).name += Global.countObjetosGraficos.ToString();
-            cuboAmbObj.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetSlot(gameObject.name)].Ativo;
+            cuboAmbObj.name += Util_VisEdu.GetNumSlot(slot.name);
+            cuboAmbObj.transform.GetChild(0).name += Util_VisEdu.GetNumSlot(slot.name);
+            cuboAmbObj.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetNumSlot(slot.name)].Ativo;
         }
     }
 
@@ -184,14 +190,10 @@ public class CuboScript : MonoBehaviour
     {
         if (EstaEncaixado())
         {
-            Global.gameObjectName = gameObject.name;
-            Global.lastPressedButton?.SetActive(false);
-            Global.lastPressedButton = propriedades.gameObject;
-
             CreatePropPeca(propPeca);
 
-            propriedades.GetComponent<PropCuboScript>().Inicializa();
-            menuControl.GetComponent<MenuScript>().EnablePanelProp(Global.lastPressedButton.name);
+            propriedades.GetComponent<PropCuboScript>().Inicializa(this.propPeca);
+            menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedades.name);
         }
     }
 
@@ -203,17 +205,18 @@ public class CuboScript : MonoBehaviour
 
             if (propPeca == null)
             {
-                prPeca = new CuboPropriedadePeca();
+                this.propPeca = new CuboPropriedadePeca();
             }
             else
             {
-                prPeca = propPeca;
+                this.propPeca = propPeca;
             }
-            prPeca.Nome = gameObject.name;
-            prPeca.NomeCuboAmbiente = Consts.CUBO_AMB + Util_VisEdu.GetSlot(gameObject.name);
-            prPeca.NomeCuboVis = Consts.CUBO_VIS + Util_VisEdu.GetSlot(gameObject.name);
+            this.propPeca.Nome = Consts.CUBO;
+            this.propPeca.NomePeca = gameObject.name;
+            this.propPeca.NomeCuboAmb = Consts.CUBO_AMB + Util_VisEdu.GetNumSlot(slot.name);
+            this.propPeca.NomeCuboVis = Consts.CUBO_VIS + Util_VisEdu.GetNumSlot(slot.name);
 
-            Global.propriedadePecas.Add(prPeca.Nome, prPeca);
+            Global.propriedadePecas.Add(this.propPeca.NomePeca, this.propPeca);
         }
     }
 
@@ -224,16 +227,12 @@ public class CuboScript : MonoBehaviour
 
     public bool PodeEncaixar()
     {
-        const float VALOR_APROXIMADO = 2;
-        float pecaY = transform.position.y;
-
         if ((slot != null)
-            && (slot.transform.position.y + VALOR_APROXIMADO > pecaY)
-            && (slot.transform.position.y - VALOR_APROXIMADO < pecaY)
+            && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
             && !EstaEncaixado())
         {
             Destroy(slot.GetComponent<Rigidbody>());
-            gameObject.name += Global.countObjetosGraficos.ToString();
+            gameObject.name += Util_VisEdu.GetNumSlot(slot.name);
 
             if (!EstaEncaixado())
             {
@@ -262,15 +261,5 @@ public class CuboScript : MonoBehaviour
             cloneFab.name = Consts.CUBO;
             cloneFab.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
         }
-    }
-
-    string GetNumeroSlotObjetoGrafico(Transform transformObj)
-    {
-        if (transformObj.name.Contains(Consts.OBJ_GRAFICO_SLOT))
-        {
-            return gameObject.name;
-        }
-
-        return GetNumeroSlotObjetoGrafico(gameObject.transform.parent);
     }
 }

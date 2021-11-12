@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,10 @@ public class TransformacaoScript : MonoBehaviour
     [SerializeField]
     GameObject render;
     [SerializeField]
+    GameObject posAmb;
+    [SerializeField]
+    GameObject posVis;
+    [SerializeField]
     GameObject tutorial;
 
     [HideInInspector]
@@ -27,6 +32,7 @@ public class TransformacaoScript : MonoBehaviour
     Vector3 offset, scanPos, startPos;
     GameObject slotTransfNext;
     Tutorial tutorialScript;
+    TransformacaoPropriedadePeca propTransformacao;
 
     void Start()
     {
@@ -85,9 +91,13 @@ public class TransformacaoScript : MonoBehaviour
             {
                 StartCoroutine(RemovePeca());
             }
-            else
+            else if (EstaEncaixado())
             {
                 Encaixa();
+            }
+            else
+            {
+                StartCoroutine(RemovePeca());
             }
         }
     }
@@ -132,40 +142,13 @@ public class TransformacaoScript : MonoBehaviour
         }
     }
 
-    public void AddTransformacao(PropriedadeTransformacao propPeca = null, bool tutorial = false)
+    public void AddTransformacao(TransformacaoPropriedadePeca propPeca = null, bool tutorial = false)
     {
         Encaixa();
 
         if (!tutorialScript.EstaExecutandoTutorial)
         {
-            string numSlot = GetNumSlot();
-
-            GameObject forma = GameObject.Find(Consts.CUBO + numSlot);
-            if (forma != null)
-            {
-                AddGameObjectTree(Consts.CUBO_AMB_OBJ + ((!tutorial) ? numSlot : Consts.TUTORIAL), Consts.AMB, forma.name, tutorial);
-                //AddGameObjectTree("CuboVisObject" + ((!tutorial) ? GetNumeroSlotObjetoGrafico() : "Tutorial"), Consts.VIS, "CuboVis" + ((!tutorial) ? GetNumeroSlotObjetoGrafico() : "Tutorial"));
-            }
-            else
-            {
-                forma = GameObject.Find(Consts.POLIGONO + numSlot);
-                if (forma != null)
-                {
-                    AddGameObjectTree(Consts.POLIGONO_AMB_OBJ + ((!tutorial) ? numSlot : Consts.TUTORIAL), Consts.AMB, forma.name, tutorial);
-                    //AddGameObjectTree("PoligonoVisObject" + ((!tutorial) ? GetNumeroSlotObjetoGrafico() : "Tutorial"), Consts.VIS, "CuboVis" + ((!tutorial) ? GetNumeroSlotObjetoGrafico() : "Tutorial"));
-                }
-                else
-                {
-                    forma = GameObject.Find(Consts.SPLINE + numSlot);
-                    if (forma != null)
-                    {
-                        AddGameObjectTree(Consts.SPLINE_AMB_OBJ + ((!tutorial) ? numSlot : Consts.TUTORIAL), Consts.AMB, forma.name, tutorial);
-                        //AddGameObjectTree("SplineVisObject" + ((!tutorial) ? GetNumeroSlotObjetoGrafico() : "Tutorial"), Consts.VIS, "CuboVis" + ((!tutorial) ? GetNumeroSlotObjetoGrafico() : "Tutorial"));
-                    }
-                }
-            }
-
-
+            AddGameObjectTree(tutorial);
         }
 
         InstantiateNextSlot();
@@ -179,131 +162,147 @@ public class TransformacaoScript : MonoBehaviour
         slotTransfNext.transform.SetSiblingIndex(index + 1);
     }
 
-    string GetNumSlot()
+    string GetNomeObjeto()
     {
-        return slot.name.Substring(slot.name.IndexOf("Slot") + 4, 1);
-    }
-
-
-    string GetNomeObjeto(string nomeObj)
-    {
-        if (nomeObj.Contains(Consts.ROTACIONAR)) return Consts.ROTACIONAR;
-        else if (nomeObj.Contains(Consts.TRANSLADAR)) return Consts.TRANSLADAR;
-        else if (nomeObj.Contains(Consts.ESCALAR)) return Consts.ESCALAR;
+        if (gameObject.name.Contains(Consts.ROTACIONAR)) return Consts.ROTACIONAR;
+        else if (gameObject.name.Contains(Consts.TRANSLADAR)) return Consts.TRANSLADAR;
+        else if (gameObject.name.Contains(Consts.ESCALAR)) return Consts.ESCALAR;
         else return string.Empty;
     }
 
-    void AddGameObjectTree(string firstNameObject, string extensionName, string forma, bool tutorial = false)
+    void AddGameObjectTree(bool tutorial = false)
     {
-        string mainGameObject = string.Empty;
+        string numFormaSlot = Util_VisEdu.GetNumSlot(slot.name);
+        GameObject transformacaoAmbVis, pecaAmbVis;
 
-        string slot = GetNumSlot();
-
-        if (forma.Contains(Consts.CUBO))
+        pecaAmbVis = GameObject.Find(Consts.CUBO_AMB + numFormaSlot);
+        if (pecaAmbVis != null)
         {
-            mainGameObject = Consts.CUBO_AMB + ((!tutorial) ? slot : Consts.TUTORIAL);
-        }
-        else if (forma.Contains(Consts.POLIGONO))
-        {
-            mainGameObject = Consts.POLIGONO_AMB + ((!tutorial) ? slot : Consts.TUTORIAL);
-        }
-        else if (forma.Contains(Consts.SPLINE))
-        {
-            mainGameObject = Consts.SPLINE_AMB + ((!tutorial) ? slot : Consts.TUTORIAL);
-        }
-
-        GameObject goFirst = GameObject.Find(firstNameObject);
-
-        GameObject go = Instantiate(new GameObject(), Vector3.zero, Quaternion.identity);
-
-        if (goFirst.transform.GetChild(0).name.Contains(Consts.CUBO_AMB)
-            || goFirst.transform.GetChild(0).name.Contains(Consts.POLIGONO_AMB)
-            || goFirst.transform.GetChild(0).name.Contains(Consts.SPLINE_AMB))
-        {
-            go.name = gameObject.name + extensionName;
-            go.transform.parent = goFirst.transform;
-
-            GameObject mainGO = GameObject.Find(mainGameObject);
-
-            if (mainGO != null)
-            {
-                go.transform.localPosition = mainGO.transform.localPosition;
-                go.transform.localRotation = mainGO.transform.localRotation;
-                go.transform.localScale = mainGO.transform.localScale;
-                mainGO.transform.parent = go.transform;
-            }
+            transformacaoAmbVis = Instantiate(new GameObject(), pecaAmbVis.transform.parent);
+            transformacaoAmbVis.name = gameObject.name + Consts.AMB;
+            pecaAmbVis.transform.parent = transformacaoAmbVis.transform;
         }
         else
         {
-            goFirst.transform.GetChild(0).parent = go.transform;
-            go.transform.parent = goFirst.transform;
-        }
-    }
-
-    public void ConfiguraPropriedadePeca(PropriedadeTransformacao propPeca = null)
-    {
-        if (EstaEncaixado())
-        {
-            Global.gameObjectName = gameObject.name;
-            Global.lastPressedButton?.SetActive(false);
-            Global.lastPressedButton = propriedades.gameObject;
-
-            CreatePropPeca(propPeca);
-
-            if (Global.gameObjectName.Contains(Consts.ROTACIONAR))
+            pecaAmbVis = GameObject.Find(Consts.POLIGONO_AMB + numFormaSlot);
+            if (pecaAmbVis != null)
             {
-                propriedades.GetComponent<PropRotacionarScript>().Inicializa();
-            }
-            else if (Global.gameObjectName.Contains(Consts.TRANSLADAR))
-            {
-                propriedades.GetComponent<PropTransladarScript>().Inicializa();
-            }
-            else if (Global.gameObjectName.Contains(Consts.ESCALAR))
-            {
-                propriedades.GetComponent<PropEscalarScript>().Inicializa();
-            }
-            menuControl.GetComponent<MenuScript>().EnablePanelProp(Global.lastPressedButton.name);
-        }
-    }
-
-    public void CreatePropPeca(PropriedadeTransformacao propPeca = null)
-    {
-        if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
-        {
-            PropriedadeTransformacao propTransf;
-            string forma = Util_VisEdu.GetPecaByName(gameObject.name);
-
-            if (forma.Contains(Consts.CUBO)
-                || forma.Contains(Consts.POLIGONO)
-                || forma.Contains(Consts.SPLINE))
-            {
-                propTransf = new PropriedadeTransformacao()
-                {
-                    NomePeca = forma
-                };
-            }
-            else if (propPeca == null)
-            {
-                propTransf = new PropriedadeTransformacao();
+                transformacaoAmbVis = Instantiate(new GameObject(), pecaAmbVis.transform.parent);
+                transformacaoAmbVis.name = gameObject.name + Consts.AMB;
+                pecaAmbVis.transform.parent = transformacaoAmbVis.transform;
             }
             else
             {
-                propTransf = propPeca;
+                pecaAmbVis = GameObject.Find(Consts.SPLINE_AMB + numFormaSlot);
+                if (pecaAmbVis != null)
+                {
+                    transformacaoAmbVis = Instantiate(new GameObject(), pecaAmbVis.transform.parent);
+                    transformacaoAmbVis.name = gameObject.name + Consts.AMB;
+                    pecaAmbVis.transform.parent = transformacaoAmbVis.transform;
+                }
             }
-            propTransf.Nome = forma + gameObject.name;
-
-            Global.propriedadePecas.Add(propTransf.Nome, propTransf);
         }
+
+        pecaAmbVis = GameObject.Find(Consts.CUBO_VIS + numFormaSlot);
+        if (pecaAmbVis != null)
+        {
+            transformacaoAmbVis = Instantiate(new GameObject(), pecaAmbVis.transform.parent);
+            transformacaoAmbVis.name = gameObject.name + Consts.VIS;
+            pecaAmbVis.transform.parent = transformacaoAmbVis.transform;
+        }
+        else
+        {
+            pecaAmbVis = GameObject.Find(Consts.POLIGONO_VIS + numFormaSlot);
+            if (pecaAmbVis != null)
+            {
+                transformacaoAmbVis = Instantiate(new GameObject(), pecaAmbVis.transform.parent);
+                transformacaoAmbVis.name = gameObject.name + Consts.VIS;
+                pecaAmbVis.transform.parent = transformacaoAmbVis.transform;
+            }
+            else
+            {
+                pecaAmbVis = GameObject.Find(Consts.SPLINE_VIS + numFormaSlot);
+                if (pecaAmbVis != null)
+                {
+                    transformacaoAmbVis = Instantiate(new GameObject(), pecaAmbVis.transform.parent);
+                    transformacaoAmbVis.name = gameObject.name + Consts.VIS;
+                    pecaAmbVis.transform.parent = transformacaoAmbVis.transform;
+                }
+            }
+        }
+    }
+
+    public void ConfiguraPropriedadePeca(TransformacaoPropriedadePeca propPeca = null)
+    {
+        if (EstaEncaixado())
+        {
+            CreatePropPeca(propPeca);
+
+            if (this.propTransformacao.NomePeca.Contains(Consts.ROTACIONAR))
+            {
+                propriedades.GetComponent<PropRotacionarScript>().Inicializa(this.propTransformacao);
+            }
+            else if (this.propTransformacao.NomePeca.Contains(Consts.TRANSLADAR))
+            {
+                propriedades.GetComponent<PropTransladarScript>().Inicializa(this.propTransformacao);
+            }
+            else if (this.propTransformacao.NomePeca.Contains(Consts.ESCALAR))
+            {
+                propriedades.GetComponent<PropEscalarScript>().Inicializa(this.propTransformacao);
+            }
+            menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedades.name);
+        }
+    }
+
+    public void CreatePropPeca(TransformacaoPropriedadePeca propPeca = null)
+    {
+        if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
+        {
+            if (propPeca == null)
+            {
+                this.propTransformacao = new TransformacaoPropriedadePeca()
+                {
+                    NomePeca = GetPeca(),
+                    NomePecaAmb = gameObject.name + Consts.AMB,
+                    NomePecaVis = gameObject.name + Consts.VIS
+                };
+            }
+            else
+            {
+                this.propTransformacao = propPeca;
+            }
+            this.propTransformacao.Nome = GetNomeObjeto();
+            this.propTransformacao.NomePeca = gameObject.name;
+
+            Global.propriedadePecas.Add(this.propTransformacao.NomePeca, propTransformacao);
+        }
+    }
+
+    string GetPeca()
+    {
+        string numSlot = Util_VisEdu.GetNumSlot(slot.name);
+
+        if (Global.listaEncaixes.ContainsKey(Consts.CUBO + numSlot))
+        {
+            return Consts.CUBO + numSlot;
+        }
+        else if (Global.listaEncaixes.ContainsKey(Consts.POLIGONO + numSlot))
+        {
+            return Consts.POLIGONO + numSlot;
+        }
+        else if (Global.listaEncaixes.ContainsKey(Consts.SPLINE + numSlot))
+        {
+            return Consts.SPLINE + numSlot;
+        }
+
+        return string.Empty;
     }
 
     public bool PodeEncaixar()
     {
-        const float VALOR_APROXIMADO = 2;
-        float pecaY = transform.position.y;
-
-        if ((slot != null)
-            && (slot.transform.position.y + VALOR_APROXIMADO > pecaY)
-            && (slot.transform.position.y - VALOR_APROXIMADO < pecaY)
+        if ((slot != null) 
+            && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
+            && ExisteFormaEncaixado()
             && !EstaEncaixado())
         {
             string numSlotGraf = Util_VisEdu.GetNumSlot(slot.name);
@@ -336,12 +335,17 @@ public class TransformacaoScript : MonoBehaviour
         }
     }
 
+    bool ExisteFormaEncaixado()
+    {
+        return !string.Empty.Equals(GetPeca());
+    }
+
     public void CopiaPeca()
     {
         if (PodeGerarCopiaPeca() && !EstaEncaixado())
         {
             GameObject cloneFab = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
-            cloneFab.name = GetNomeObjeto(gameObject.name);
+            cloneFab.name = GetNomeObjeto();
             cloneFab.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
         }
     }

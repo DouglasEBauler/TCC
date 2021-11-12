@@ -25,7 +25,7 @@ public class ImportScript : MonoBehaviour
     [SerializeField]
     IteracaoScript iteracaoScript;
     [SerializeField]
-    Controller iluminacaoScript;
+    IluminacaoScript iluminacaoScript;
 
     void OnMouseDown()
     {
@@ -117,10 +117,9 @@ public class ImportScript : MonoBehaviour
 
                                 if (obj.Cubo.Iluminacao != null)
                                 {
-                                    //ConfigPeca(iluminacaoScript);
                                     iluminacaoScript.AddIluminacao();
                                     iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                                    iluminacaoScript.ConfiguraPropriedadePeca(CreatePeca(obj.Cubo.Iluminacao.Propriedades));
+                                    iluminacaoScript.ConfiguraPropriedadePeca(CreatePecaIluminacao(obj.Cubo.Iluminacao.Propriedades));
                                 }
                             }
                             finally
@@ -147,10 +146,9 @@ public class ImportScript : MonoBehaviour
 
                                 if (obj.Poligono.Iluminacao != null)
                                 {
-                                    //ConfigPeca(iluminacaoScript);
                                     iluminacaoScript.AddIluminacao();
                                     iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                                    iluminacaoScript.ConfiguraPropriedadePeca(CreatePeca(obj.Poligono.Iluminacao.Propriedades));
+                                    iluminacaoScript.ConfiguraPropriedadePeca(CreatePecaIluminacao(obj.Poligono.Iluminacao.Propriedades));
                                 }
                             }
                             finally
@@ -177,10 +175,9 @@ public class ImportScript : MonoBehaviour
 
                                 if (obj.Spline.Iluminacao != null)
                                 {
-                                    //ConfigPeca(iluminacaoScript);
                                     iluminacaoScript.AddIluminacao();
                                     iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                                    iluminacaoScript.ConfiguraPropriedadePeca(CreatePeca(obj.Spline.Iluminacao.Propriedades));
+                                    iluminacaoScript.ConfiguraPropriedadePeca(CreatePecaIluminacao(obj.Spline.Iluminacao.Propriedades));
                                 }
                             }
                             finally
@@ -284,9 +281,9 @@ public class ImportScript : MonoBehaviour
         };
     }
 
-    PropriedadeTransformacao CreatePropTransformacao(TransformacaoPropriedadePecaProject propriedades)
+    TransformacaoPropriedadePeca CreatePropTransformacao(TransformacaoPropriedadePecaProject propriedades)
     {
-        return new PropriedadeTransformacao()
+        return new TransformacaoPropriedadePeca()
         {
             Nome = propriedades.Nome,
             Pos = new Posicao()
@@ -327,9 +324,7 @@ public class ImportScript : MonoBehaviour
         return new PoligonoPropriedadePeca()
         {
             Pontos = Convert.ToInt32(DecodeField(propriedades.Pontos)),
-            Primitiva = propriedades.Primitiva,
-            PoligonoAmbiente = propriedades.PoligonoAmbiente,
-            ListPropLocks = new Dictionary<string, string>()
+            Primitiva = propriedades.Primitiva
         };
     }
     SplinePropriedadePeca CreateSpline(SplinePropriedadePecaProject propriedades)
@@ -365,8 +360,7 @@ public class ImportScript : MonoBehaviour
                 X = DecodeField(propriedades.P5.X),
                 Y = DecodeField(propriedades.P5.Y),
                 Z = DecodeField(propriedades.P5.Z)
-            },
-            SplineAmbiente = propriedades.SplineAmbiente
+            }
         };
     }
 
@@ -381,67 +375,34 @@ public class ImportScript : MonoBehaviour
             FOV = DecodeField(propProj.FOV),
             CameraAtiva = propProj.CameraAtiva,
             JaIniciouValores = propProj.JaIniciouValores,
-            ExisteCamera = propProj.ExisteCamera,
-            ListPropCamLocks = new Dictionary<string, string>()
+            ExisteCamera = propProj.ExisteCamera
         };
     }
 
-    CuboPropriedadePeca CreateCuboPeca(CuboPropriedadePecaProject cuboPropPecaProj)
+    IluminacaoPropriedadePeca CreatePecaIluminacao(PropriedadeIluminacaoPecaProject propIluminacaoPecaProj)
     {
-        return new CuboPropriedadePeca()
+        return new IluminacaoPropriedadePeca()
         {
-            Nome = cuboPropPecaProj.Nome,
-            Tam = new Tamanho()
-            {
-                X = DecodeField(cuboPropPecaProj.Tam.X),
-                Y = DecodeField(cuboPropPecaProj.Tam.Y),
-                Z = DecodeField(cuboPropPecaProj.Tam.Z)
-            },
+            Nome = propIluminacaoPecaProj.Nome,
+            Cor = propIluminacaoPecaProj.Cor,
             Pos = new Posicao()
             {
-                X = DecodeField(cuboPropPecaProj.Pos.X),
-                Y = DecodeField(cuboPropPecaProj.Pos.Y),
-                Z = DecodeField(cuboPropPecaProj.Pos.Z)
+                X = DecodeField(propIluminacaoPecaProj.Pos.X),
+                Y = DecodeField(propIluminacaoPecaProj.Pos.Y),
+                Z = DecodeField(propIluminacaoPecaProj.Pos.Z)
             },
-            Ativo = cuboPropPecaProj.Ativo,
-            Cor = cuboPropPecaProj.Cor,
-            Textura = cuboPropPecaProj.Textura,
-            ListPropLocks = new Dictionary<string, string>(),
-            TipoLuz = cuboPropPecaProj.TipoLuz,
-            Intensidade = DecodeField(cuboPropPecaProj.Intensidade),
             ValorIluminacao = new ValorIluminacao()
             {
-                X = DecodeField(cuboPropPecaProj.ValorIluminacao.X),
-                Y = DecodeField(cuboPropPecaProj.ValorIluminacao.Y),
-                Z = DecodeField(cuboPropPecaProj.ValorIluminacao.Z)
+                X = DecodeField(propIluminacaoPecaProj.ValorIluminacao.X),
+                Y = DecodeField(propIluminacaoPecaProj.ValorIluminacao.Y),
+                Z = DecodeField(propIluminacaoPecaProj.ValorIluminacao.Z)
             },
-            Distancia = DecodeField(cuboPropPecaProj.Distancia),
-            Angulo = DecodeField(cuboPropPecaProj.Angulo),
-            Expoente = DecodeField(cuboPropPecaProj.Expoente),
-            UltimoIndexLuz = cuboPropPecaProj.UltimoIndexLuz
-        };
-    }
-
-    PropriedadePeca CreatePeca(PropriedadePecaProject propPecaProj)
-    {
-        return new PropriedadePeca()
-        {
-            Nome = propPecaProj.Nome,
-            Ativo = propPecaProj.Ativo,
-            Cor = propPecaProj.Cor,
-            ListPropLocks = new Dictionary<string, string>(),
-            TipoLuz = propPecaProj.TipoLuz,
-            Intensidade = DecodeField(propPecaProj.Intensidade),
-            ValorIluminacao = new ValorIluminacao()
-            {
-                X = DecodeField(propPecaProj.ValorIluminacao.X),
-                Y = DecodeField(propPecaProj.ValorIluminacao.Y),
-                Z = DecodeField(propPecaProj.ValorIluminacao.Z)
-            },
-            Distancia = DecodeField(propPecaProj.Distancia),
-            Angulo = DecodeField(propPecaProj.Angulo),
-            Expoente = DecodeField(propPecaProj.Expoente),
-            UltimoIndexLuz = propPecaProj.UltimoIndexLuz
+            Intensidade = DecodeField(propIluminacaoPecaProj.Intensidade),
+            Distancia = DecodeField(propIluminacaoPecaProj.Distancia),
+            Angulo = DecodeField(propIluminacaoPecaProj.Angulo),
+            Expoente = DecodeField(propIluminacaoPecaProj.Expoente),
+            TipoLuz = propIluminacaoPecaProj.TipoLuz,
+            Ativo = propIluminacaoPecaProj.Ativo
         };
     }
 

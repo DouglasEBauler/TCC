@@ -77,21 +77,20 @@ public class PropSplineScript : MonoBehaviour
 
     SplinePropriedadePeca prPeca;
     Spline splineAmb;
-    //GameObject splineVis;
+    Spline splineVis;
     bool podeAtualizar;
 
-    public void Inicializa()
+    public void Inicializa(SplinePropriedadePeca propPeca)
     {
-        prPeca = Global.propriedadePecas[Global.gameObjectName] as SplinePropriedadePeca;
+        prPeca = propPeca;
         prPeca.Ativo = true;
 
-        AtualizaListaProp();
         PreencheCampos();
     }
 
     void PreencheCampos()
     {
-        if (Global.propriedadePecas.ContainsKey(prPeca.Nome))
+        if (Global.propriedadePecas.ContainsKey(prPeca.NomePeca))
         {
             nomePeca.text = prPeca.Nome;
             ativo.isOn = prPeca.Ativo;
@@ -111,13 +110,13 @@ public class PropSplineScript : MonoBehaviour
                 p4X.text = prPeca.P4.X.ToString();
                 p4Y.text = prPeca.P4.Y.ToString();
                 p4Z.text = prPeca.P4.Z.ToString();
-                p5X.text = prPeca.P4.X.ToString();
-                p5Y.text = prPeca.P4.Y.ToString();
-                p5Z.text = prPeca.P4.Z.ToString();
+                p5X.text = prPeca.P5.X.ToString();
+                p5Y.text = prPeca.P5.Y.ToString();
+                p5Z.text = prPeca.P5.Z.ToString();
                 corSelecionado.color = prPeca.Cor;
 
-                splineAmb = GameObject.Find(prPeca.SplineAmbiente).GetComponent<Spline>();
-                //splineVis = GameObject.Find(prPeca.NomeCuboVis);
+                splineAmb = GameObject.Find(prPeca.SplineAmb).GetComponent<Spline>();
+                splineVis = GameObject.Find(prPeca.SplineVis).GetComponent<Spline>();
             }
             finally
             {
@@ -129,61 +128,76 @@ public class PropSplineScript : MonoBehaviour
 
     public void UpdateProp()
     {
-        if (podeAtualizar && Global.propriedadePecas.ContainsKey(prPeca.Nome))
+        if (podeAtualizar && Global.propriedadePecas.ContainsKey(prPeca.NomePeca))
         {
-            prPeca.Nome = nomePeca.text;
-            prPeca.P1.X = Util_VisEdu.ConvertField(p1X.text);
-            prPeca.P1.Y = Util_VisEdu.ConvertField(p1Y.text);
-            prPeca.P1.Z = Util_VisEdu.ConvertField(p1Z.text);
-            prPeca.P2.X = Util_VisEdu.ConvertField(p2X.text);
-            prPeca.P2.Y = Util_VisEdu.ConvertField(p2Y.text);
-            prPeca.P2.Z = Util_VisEdu.ConvertField(p2Z.text);
-            prPeca.P3.X = Util_VisEdu.ConvertField(p3X.text);
-            prPeca.P3.Y = Util_VisEdu.ConvertField(p3Y.text);
-            prPeca.P3.Z = Util_VisEdu.ConvertField(p3Z.text);
-            prPeca.P4.X = Util_VisEdu.ConvertField(p4X.text);
-            prPeca.P4.Y = Util_VisEdu.ConvertField(p4Y.text);
-            prPeca.P4.Z = Util_VisEdu.ConvertField(p4Z.text);
-            prPeca.P5.X = Util_VisEdu.ConvertField(p5X.text);
-            prPeca.P5.Y = Util_VisEdu.ConvertField(p5Y.text);
-            prPeca.P5.Z = Util_VisEdu.ConvertField(p5Z.text);
-            prPeca.Ativo = ativo.isOn;
-
-            if (prPeca.Ativo)
+            podeAtualizar = false;
+            try
             {
-                if (splineAmb != null)
-                {
-                    splineAmb.nodes[0].Position =
-                        new Vector3(splineAmb.nodes[0].Position.x + prPeca.P1.X, splineAmb.nodes[0].Position.y + prPeca.P1.Y, splineAmb.nodes[0].Position.z + prPeca.P1.Z);
-                    splineAmb.nodes[1].Position =
-                        new Vector3(splineAmb.nodes[0].Position.x + prPeca.P2.X, splineAmb.nodes[0].Position.y + prPeca.P2.Y, splineAmb.nodes[0].Position.z + prPeca.P2.Z);
-                    splineAmb.nodes[2].Position =
-                        new Vector3(splineAmb.nodes[0].Position.x + prPeca.P3.X, splineAmb.nodes[0].Position.y + prPeca.P3.Y, splineAmb.nodes[0].Position.z + prPeca.P3.Z);
-                    splineAmb.nodes[3].Position =
-                        new Vector3(splineAmb.nodes[0].Position.x + prPeca.P4.X, splineAmb.nodes[0].Position.y + prPeca.P4.Y, splineAmb.nodes[0].Position.z + prPeca.P4.Z);
-                    splineAmb.nodes[4].Position =
-                        new Vector3(splineAmb.nodes[0].Position.x + prPeca.P5.X, splineAmb.nodes[0].Position.y + prPeca.P5.Y, splineAmb.nodes[0].Position.z + prPeca.P5.Z);
-                }
+                prPeca.Nome = nomePeca.text;
+                prPeca.P1.X = Util_VisEdu.ConvertField(p1X.text);
+                prPeca.P1.Y = Util_VisEdu.ConvertField(p1Y.text);
+                prPeca.P1.Z = Util_VisEdu.ConvertField(p1Z.text);
+                prPeca.P2.X = Util_VisEdu.ConvertField(p2X.text);
+                prPeca.P2.Y = Util_VisEdu.ConvertField(p2Y.text);
+                prPeca.P2.Z = Util_VisEdu.ConvertField(p2Z.text);
+                prPeca.P3.X = Util_VisEdu.ConvertField(p3X.text);
+                prPeca.P3.Y = Util_VisEdu.ConvertField(p3Y.text);
+                prPeca.P3.Z = Util_VisEdu.ConvertField(p3Z.text);
+                prPeca.P4.X = Util_VisEdu.ConvertField(p4X.text);
+                prPeca.P4.Y = Util_VisEdu.ConvertField(p4Y.text);
+                prPeca.P4.Z = Util_VisEdu.ConvertField(p4Z.text);
+                prPeca.P5.X = Util_VisEdu.ConvertField(p5X.text);
+                prPeca.P5.Y = Util_VisEdu.ConvertField(p5Y.text);
+                prPeca.P5.Z = Util_VisEdu.ConvertField(p5Z.text);
+                prPeca.Ativo = ativo.isOn;
 
-                podeAtualizar = false;
-                try
+                if (prPeca.Ativo)
                 {
+                    if (splineAmb != null)
+                    {
+                        splineAmb.nodes[0].Position =
+                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P1.X, splineAmb.nodes[0].Position.y + prPeca.P1.Y, splineAmb.nodes[0].Position.z + prPeca.P1.Z);
+                        splineAmb.nodes[1].Position =
+                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P2.X, splineAmb.nodes[0].Position.y + prPeca.P2.Y, splineAmb.nodes[0].Position.z + prPeca.P2.Z);
+                        splineAmb.nodes[2].Position =
+                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P3.X, splineAmb.nodes[0].Position.y + prPeca.P3.Y, splineAmb.nodes[0].Position.z + prPeca.P3.Z);
+                        splineAmb.nodes[3].Position =
+                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P4.X, splineAmb.nodes[0].Position.y + prPeca.P4.Y, splineAmb.nodes[0].Position.z + prPeca.P4.Z);
+                        splineAmb.nodes[4].Position =
+                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P5.X, splineAmb.nodes[0].Position.y + prPeca.P5.Y, splineAmb.nodes[0].Position.z + prPeca.P5.Z);
+                    }
+
+                    if (splineVis != null)
+                    {
+                        splineVis.nodes[0].Position =
+                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P1.X, splineVis.nodes[0].Position.y + prPeca.P1.Y, splineVis.nodes[0].Position.z + prPeca.P1.Z);
+                        splineVis.nodes[1].Position =
+                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P2.X, splineVis.nodes[0].Position.y + prPeca.P2.Y, splineVis.nodes[0].Position.z + prPeca.P2.Z);
+                        splineVis.nodes[2].Position =
+                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P3.X, splineVis.nodes[0].Position.y + prPeca.P3.Y, splineVis.nodes[0].Position.z + prPeca.P3.Z);
+                        splineVis.nodes[3].Position =
+                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P4.X, splineVis.nodes[0].Position.y + prPeca.P4.Y, splineVis.nodes[0].Position.z + prPeca.P4.Z);
+                        splineVis.nodes[4].Position =
+                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P5.X, splineVis.nodes[0].Position.y + prPeca.P5.Y, splineVis.nodes[0].Position.z + prPeca.P5.Z);
+                    }
+
                     UpdateLockFields();
                     UpdateColor();
+                    AtualizaListaProp();
                 }
-                finally
-                {
-                    podeAtualizar = true;
-                }
+            }
+            finally
+            {
+                podeAtualizar = true;
             }
         }
     }
 
     void AtualizaListaProp()
     {
-        if (Global.propriedadePecas.ContainsKey(prPeca.Nome))
+        if (Global.propriedadePecas.ContainsKey(this.prPeca.NomePeca))
         {
-            Global.propriedadePecas[prPeca.Nome] = prPeca;
+            Global.propriedadePecas[this.prPeca.NomePeca] = prPeca;
         }
     }
 
@@ -490,10 +504,12 @@ public class PropSplineScript : MonoBehaviour
         if (splineAmb != null)
         {
             splineAmb.GetComponent<SplineMeshTiling>().material.color = corSelecionado.color;
+            splineAmb.GetComponent<SplineMeshTiling>().material.SetColor("_EmissionColor", corSelecionado.color);
         }
-        //if (splineVis != null)
-        //{
-        //  splineVis.GetComponent<SplineMeshTiling>().material.color = corSelecionado.color;
-        //}
+        if (splineVis != null)
+        {
+            splineVis.GetComponent<SplineMeshTiling>().material.color = corSelecionado.color;
+            splineVis.GetComponent<SplineMeshTiling>().material.SetColor("_EmissionColor", corSelecionado.color);
+        }
     }
 }

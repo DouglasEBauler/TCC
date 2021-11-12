@@ -8,7 +8,7 @@ public class LixeiraScript : MonoBehaviour
     [SerializeField]
     GameObject render;
     [SerializeField]
-    GameObject propCamera;
+    PropCameraScript propCamera;
     [SerializeField]
     GameObject menuControl;
     [SerializeField]
@@ -19,7 +19,6 @@ public class LixeiraScript : MonoBehaviour
     GameObject posicaoVis;
 
     GameObject objDrop;
-    Controller controller;
 
     void FixedUpdate()
     {
@@ -33,11 +32,6 @@ public class LixeiraScript : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         objDrop = other.gameObject;
-
-        if (objDrop.name.Contains(Consts.ILUMINACAO))
-        {
-            controller = objDrop.GetComponent<Controller>();
-        }
     }
 
     void RemovePeca()
@@ -45,34 +39,29 @@ public class LixeiraScript : MonoBehaviour
         EnabledColliderPecas(false);
         try
         {
-            if (objDrop.name.Contains(Consts.OBJETOGRAFICO))
+            if (objDrop.name.Contains(Consts.CAMERA))
+            {
+                RemoveCameraP();
+            }
+            else if (objDrop.name.Contains(Consts.OBJETOGRAFICO))
             {
                 RemoveObjetoGrafico();
             }
-            else
+            else if (objDrop.name.Contains(Consts.CUBO) || objDrop.name.Contains(Consts.POLIGONO) || objDrop.name.Contains(Consts.SPLINE))
             {
-                if (objDrop.name.Contains(Consts.CUBO) || objDrop.name.Contains(Consts.POLIGONO) || objDrop.name.Contains(Consts.SPLINE))
-                {
-                    RemoveForma();
-                }
-                else
-                {
-                    if (objDrop.name.Contains(Consts.ROTACIONAR) || objDrop.name.Contains(Consts.ESCALAR) || objDrop.name.Contains(Consts.TRANSLADAR))
-                    {
-                        RemoveTransformacao();
-                    }
-                    else
-                    {
-                        if (objDrop.name.Contains(Consts.ITERACAO))
-                        {
-                            RemoveIteracao();
-                        }
-                        else if (objDrop.name.Contains(Consts.ILUMINACAO))
-                        {
-                            RemoveIluminacao();
-                        }
-                    }
-                }
+                RemoveForma();
+            }
+            else if (objDrop.name.Contains(Consts.ROTACIONAR) || objDrop.name.Contains(Consts.ESCALAR) || objDrop.name.Contains(Consts.TRANSLADAR))
+            {
+                RemoveTransformacao();
+            }
+            else if (objDrop.name.Contains(Consts.ITERACAO))
+            {
+                RemoveIteracao();
+            }
+            else if (objDrop.name.Contains(Consts.ILUMINACAO))
+            {
+                RemoveIluminacao();
             }
 
             menuControl.GetComponent<MenuScript>().EnablePanelFabPecas();
@@ -84,14 +73,64 @@ public class LixeiraScript : MonoBehaviour
         }
     }
 
+    void RemoveCameraP()
+    {
+        propCamera.DemosntraCamera(false);
+        Global.propriedadePecas.Remove(objDrop.name);
+        Global.listaEncaixes.Remove(objDrop.name);
+    }
+
     void RemoveIluminacao()
     {
-        throw new NotImplementedException();
+        string numFormaSlot = Util_VisEdu.GetNumSlot(objDrop.transform.parent.name);
+        Transform slot, peca;
+
+        foreach (Transform child in render.transform)
+        {
+            if (child.name.Contains(Consts.SLOT_ILUMINACAO + numFormaSlot))
+            {
+                slot = child.transform.Find(Consts.ILUMINACAO_SLOT + numFormaSlot);
+
+                if (slot != null)
+                {
+                    peca = slot.transform.Find(Consts.PECA_ILUMINACAO + numFormaSlot);
+
+                    if (peca)
+                    {
+                        Global.listaEncaixes.Remove(peca.name);
+                        Global.propriedadePecas.Remove(peca.name);
+                        Destroy(peca.gameObject);
+                    }
+                }
+            }
+        }
     }
 
     void RemoveIteracao()
     {
-        throw new NotImplementedException();
+        string numTransfSlot = Util_VisEdu.GetNumSlot(objDrop.transform.parent.name, true);
+        Transform peca;
+
+        foreach (Transform child in render.transform)
+        {
+            if (child.name.Contains(Consts.SLOT_TRANSF + numTransfSlot))
+            {
+                Transform _child = child.GetChild(0).Find(Consts.ITERACAO_SLOT + numTransfSlot);
+                if (_child != null)
+                {
+                    peca = _child.transform.Find(Consts.ITERACAO + numTransfSlot);
+
+                    if (peca != null)
+                    {
+                        Global.listaEncaixes.Remove(peca.gameObject.name);
+                        Global.propriedadePecas.Remove(peca.gameObject.name);
+                        Destroy(peca.gameObject);
+                    }
+
+                    _child.gameObject.AddComponent<Rigidbody>();
+                }
+            }
+        }
     }
 
     void EnabledColliderPecas(bool status)
@@ -110,9 +149,9 @@ public class LixeiraScript : MonoBehaviour
 
         foreach (Transform child in posicaoAmb.transform)
         {
-            if (child.name.Contains(Consts.CUBO_AMB_OBJ + numFormaSlot)
-                || child.name.Contains(Consts.POLIGONO_AMB_OBJ + numFormaSlot)
-                || child.name.Contains(Consts.SPLINE_AMB_OBJ + numFormaSlot))
+            if (child.name.Equals(Consts.CUBO_AMB_OBJ + numFormaSlot)
+                || child.name.Equals(Consts.POLIGONO_AMB_OBJ + numFormaSlot)
+                || child.name.Equals(Consts.SPLINE_AMB_OBJ + numFormaSlot))
             {
                 Destroy(child.gameObject);
             }
@@ -120,9 +159,9 @@ public class LixeiraScript : MonoBehaviour
 
         foreach (Transform child in posicaoVis.transform)
         {
-            if (child.name.Contains(Consts.CUBO_AMB_OBJ + numFormaSlot)
-                || child.name.Contains(Consts.POLIGONO_AMB_OBJ + numFormaSlot)
-                || child.name.Contains(Consts.SPLINE_AMB_OBJ + numFormaSlot))
+            if (child.name.Equals(Consts.CUBO_AMB_OBJ + numFormaSlot)
+                || child.name.Equals(Consts.POLIGONO_AMB_OBJ + numFormaSlot)
+                || child.name.Equals(Consts.SPLINE_AMB_OBJ + numFormaSlot))
             {
                 Destroy(child.gameObject);
             }
@@ -418,61 +457,24 @@ public class LixeiraScript : MonoBehaviour
         return null;
     }
 
-    void DestroyIluminacao(string key)
-    {
-        PropIluminacaoPadrao luz = new PropIluminacaoPadrao();
+    //void DestroyIluminacao(string key)
+    //{
+    //    PropIluminacaoPadrao luz = new PropIluminacaoPadrao();
 
-        if (key.Contains(Consts.ILUMINACAO))
-        {
-            Global.propriedadeIluminacao.Remove(key);
+    //    if (key.Contains(Consts.ILUMINACAO))
+    //    {
+    //        //Global.propriedadeIluminacao.Remove(key);
 
-            if (key.Length > "Iluminacao".Length)
-            {
-                Destroy(GameObject.Find("LightObjects" + key));
-            }
-            else if (Global.propriedadePecas.ContainsKey(key))
-            {
-                luz.AtivaIluminacao(luz.GetTipoLuzPorExtenso(Global.propriedadePecas[key].TipoLuz) + key, false);
-            }
-        }
-    }
-
-    void configuraIluminacao(string sinal)
-    {
-        float valorInc = 0;
-        string iluminacao = "Iluminacao";
-
-        valorInc = sinal.Equals("+") ? 3f : -3f;
-
-        GameObject goObj = GameObject.Find("ObjGraficoSlot" + controller.GetComponent<Controller>().concatNumber);
-
-        foreach (Transform child in goObj.transform)
-        {
-            if (child.name.Contains(Consts.ILUMINACAO_SLOT))
-            {
-                foreach (var peca in Global.listaEncaixes)
-                {
-                    if (child.name.Equals(peca.Value))
-                        iluminacao = peca.Key;
-                }
-            }
-        }
-
-        GameObject ilumunacao = GameObject.Find(Consts.ILUMINACAO_SLOT + controller.GetComponent<Controller>().concatNumber);
-        Vector3 pos = ilumunacao.transform.position;
-        pos.y += valorInc;
-        ilumunacao.transform.position = pos;
-
-        // Se a peça "Iluminação já foi selecionada, será devidamente reposicionada"        
-        GameObject IlumPeca = GameObject.Find(iluminacao);
-
-        if (!tutorial.GetComponent<Tutorial>().EstaExecutandoTutorial
-            //&& Global.listaObjetos.Contains(IlumPeca)
-            )
-        {
-            IlumPeca.transform.position = new Vector3(IlumPeca.transform.position.x, pos.y, IlumPeca.transform.position.z);
-        }
-    }
+    //        if (key.Length > "Iluminacao".Length)
+    //        {
+    //            Destroy(GameObject.Find("LightObjects" + key));
+    //        }
+    //        else if (Global.propriedadePecas.ContainsKey(key))
+    //        {
+    //            //luz.AtivaIluminacao(luz.GetTipoLuzPorExtenso(Global.propriedadePecas[key].TipoLuz) + key, false);
+    //        }
+    //    }
+    //}
 
     void ReactiveColliderPeca()
     {

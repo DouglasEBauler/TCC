@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,12 +32,13 @@ public class PropPoligonoScript : MonoBehaviour
     Toggle ativo;
 
     PoligonoPropriedadePeca propPeca;
-    GameObject goPoligonoAmb;
+    GameObject pecaAmb;
+    GameObject pecaVis;
     bool podeAtualizar;
 
-    public void Inicializa()
+    public void Inicializa(PoligonoPropriedadePeca prPeca)
     {
-        propPeca = Global.propriedadePecas[Global.gameObjectName] as PoligonoPropriedadePeca;
+        propPeca = prPeca;
         propPeca.Ativo = true;
 
         PreencheCampos();
@@ -45,7 +47,7 @@ public class PropPoligonoScript : MonoBehaviour
 
     void PreencheCampos()
     {
-        if (Global.propriedadePecas.ContainsKey(propPeca.Nome))
+        if (Global.propriedadePecas.ContainsKey(this.propPeca.NomePeca))
         {
             podeAtualizar = false;
             try
@@ -59,8 +61,17 @@ public class PropPoligonoScript : MonoBehaviour
                 ativo.isOn = propPeca.Ativo;
 
                 corSeletor.GetComponent<Image>().material.color = propPeca.Cor;
-                goPoligonoAmb = GameObject.Find(propPeca.PoligonoAmbiente);
-                goPoligonoAmb.GetComponent<PoligonoAmbScript>().PropPeca = propPeca;
+                pecaAmb = GameObject.Find(propPeca.PoligonoAmb);
+                if (pecaAmb != null)
+                {
+                    pecaAmb.GetComponent<PoligonoAmbScript>().PropPeca = propPeca;
+                }
+
+                pecaVis = GameObject.Find(propPeca.PoligonoVis);
+                if (pecaAmb != null)
+                {
+                    pecaAmb.GetComponent<PoligonoAmbScript>().PropPeca = propPeca;
+                }
             }
             finally
             {
@@ -72,35 +83,59 @@ public class PropPoligonoScript : MonoBehaviour
 
     public void UpdateProp()
     {
-        if (podeAtualizar && Global.propriedadePecas.ContainsKey(propPeca.Nome))
+        if (podeAtualizar && Global.propriedadePecas.ContainsKey(this.propPeca.NomePeca))
         {
-            propPeca.Nome = nome.text;
-            propPeca.Pontos = Util_VisEdu.ConvertField(pontos.text);
-            propPeca.Pos.X = Util_VisEdu.ConvertField(posX.text);
-            propPeca.Pos.Y = Util_VisEdu.ConvertField(posY.text);
-            propPeca.Pos.Z = Util_VisEdu.ConvertField(posZ.text);
-            propPeca.Cor = corSelecionada.color;
-            propPeca.Primitiva = (TipoPrimitiva)primitiva.value;
-            propPeca.Ativo = ativo.isOn;
+            podeAtualizar = false;
+            try
+            {
+                propPeca.Nome = nome.text;
+                propPeca.Pontos = Util_VisEdu.ConvertField(pontos.text);
+                propPeca.Pos.X = Util_VisEdu.ConvertField(posX.text);
+                propPeca.Pos.Y = Util_VisEdu.ConvertField(posY.text);
+                propPeca.Pos.Z = Util_VisEdu.ConvertField(posZ.text);
+                propPeca.Cor = corSelecionada.color;
+                propPeca.Primitiva = (TipoPrimitiva)primitiva.value;
+                propPeca.Ativo = ativo.isOn;
 
-            corSeletor.GetComponent<Image>().material.color = propPeca.Cor;
-
-            UpdateLockFields();
-            UpdatePoligonoAmbiente();
+                UpdateLockFields();
+                UpdatePoligonoAmbiente();
+                AtualizaListaProp();
+            }
+            finally
+            {
+                podeAtualizar = true;
+            }
         }
     }
 
     void UpdatePoligonoAmbiente()
     {
-        if (goPoligonoAmb != null)
+        if (pecaAmb != null)
         {
-            goPoligonoAmb.transform.localPosition = new Vector3(propPeca.Pos.X, propPeca.Pos.Y, propPeca.Pos.Z);
-            goPoligonoAmb.GetComponent<MeshRenderer>().materials[0].color = propPeca.Cor;
-            goPoligonoAmb.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
+            pecaAmb.transform.localPosition = new Vector3(propPeca.Pos.X, propPeca.Pos.Y, propPeca.Pos.Z);
+            UpdateColor();
+            pecaAmb.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
             if (propPeca.Ativo)
             {
-                goPoligonoAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
+                pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
             }
+        }
+    }
+
+    void UpdateColor()
+    {
+        corSeletor.GetComponent<Image>().material.color = corSelecionada.color;
+        corSeletor.GetComponent<Image>().material.SetColor("_EmissionColor", corSelecionada.color);
+
+        if (pecaAmb != null)
+        {
+            pecaAmb.GetComponent<MeshRenderer>().material.color = corSelecionada.color;
+            pecaAmb.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", corSelecionada.color);
+        }
+        if (pecaVis != null)
+        {
+            pecaVis.GetComponent<MeshRenderer>().material.color = corSelecionada.color;
+            pecaVis.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", corSelecionada.color);
         }
     }
 
@@ -111,9 +146,9 @@ public class PropPoligonoScript : MonoBehaviour
 
     void AtualizaListaProp()
     {
-        if (Global.propriedadePecas.ContainsKey(propPeca.Nome))
+        if (Global.propriedadePecas.ContainsKey(this.propPeca.NomePeca))
         {
-            Global.propriedadePecas[propPeca.Nome] = propPeca;
+            Global.propriedadePecas[this.propPeca.NomePeca] = propPeca;
         }
     }
 

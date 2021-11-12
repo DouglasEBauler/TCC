@@ -28,6 +28,8 @@ public class PropCuboScript : MonoBehaviour
     [SerializeField]
     GameObject texturaSelecionada;
     [SerializeField]
+    GameObject baseTexturas;
+    [SerializeField]
     Toggle ativo;
     [SerializeField]
     Toggle lockPosX;
@@ -43,22 +45,22 @@ public class PropCuboScript : MonoBehaviour
     Toggle lockTamZ;
 
     CuboPropriedadePeca prPeca;
-    GameObject goTransformacaoAmb;
-    GameObject goTransformacaoVis;
+    GameObject pecaAmbiente;
+    GameObject pecaVis;
     bool podeAtualizar;
 
     void FixedUpdate()
     {
-        if (Global.gameObjectName != null && Global.gameObjectName.Contains(Consts.CUBO))
+        if (this.prPeca != null)
         {
             EnabledZ();
             UpdateColor();
         }
     }
 
-    public void Inicializa()
+    public void Inicializa(CuboPropriedadePeca propPeca)
     {
-        prPeca = Global.propriedadePecas[Global.gameObjectName] as CuboPropriedadePeca;
+        prPeca = propPeca;
         prPeca.Ativo = true;
 
         AtualizaListaProp();
@@ -67,24 +69,28 @@ public class PropCuboScript : MonoBehaviour
 
     void PreencheCampos()
     {
-        if (Global.propriedadePecas.ContainsKey(Global.gameObjectName))
+        if (Global.propriedadePecas.ContainsKey(this.prPeca.NomePeca))
         {
             podeAtualizar = false;
             try
             {
                 nomePeca.text = prPeca.Nome;
-                tamX.text = prPeca.Tam.X.ToString();
-                tamY.text = prPeca.Tam.Y.ToString();
-                tamZ.text = prPeca.Tam.Z.ToString();
+                tamX.text = Util_VisEdu.ValidaVazio(prPeca.Tam.X.ToString(), true);
+                tamY.text = Util_VisEdu.ValidaVazio(prPeca.Tam.Y.ToString(), true);
+                tamZ.text = Util_VisEdu.ValidaVazio(prPeca.Tam.Z.ToString(), true);
                 posX.text = prPeca.Pos.X.ToString();
                 posY.text = prPeca.Pos.Y.ToString();
                 posZ.text = prPeca.Pos.Z.ToString();
                 corSelecionado.color = prPeca.Cor;
                 texturaSelecionada.GetComponent<MeshRenderer>().materials[0].mainTexture = prPeca.Textura;
+                foreach (Transform child in baseTexturas.transform)
+                {
+                    child.gameObject.GetComponent<SelecionaTextura>().NomePecaCubo = this.prPeca.NomePeca;
+                }
                 ativo.isOn = prPeca.Ativo;
 
-                goTransformacaoAmb = GameObject.Find(prPeca.NomeCuboAmbiente);
-                goTransformacaoVis = GameObject.Find(prPeca.NomeCuboVis);
+                pecaAmbiente = GameObject.Find(prPeca.NomeCuboAmb);
+                pecaVis = GameObject.Find(prPeca.NomeCuboVis);
             }
             finally
             {
@@ -96,7 +102,7 @@ public class PropCuboScript : MonoBehaviour
 
     public void UpdateProp()
     {
-        if (podeAtualizar && Global.propriedadePecas.ContainsKey(Global.gameObjectName))
+        if (podeAtualizar && Global.propriedadePecas.ContainsKey(this.prPeca.NomePeca))
         {
             podeAtualizar = false;
             try
@@ -110,22 +116,21 @@ public class PropCuboScript : MonoBehaviour
                 prPeca.Pos.X = Util_VisEdu.ConvertField(posY.text);
                 prPeca.Pos.X = Util_VisEdu.ConvertField(posZ.text);
 
-                if (goTransformacaoAmb != null)
+                if (pecaAmbiente != null)
                 {
-                    goTransformacaoAmb.transform.localPosition = new Vector3(prPeca.Pos.X, prPeca.Pos.Y, prPeca.Pos.Z);
-                    goTransformacaoAmb.transform.localScale = new Vector3(prPeca.Tam.X, prPeca.Tam.Y, prPeca.Tam.Z);
+                    pecaAmbiente.transform.localPosition = new Vector3(prPeca.Pos.X, prPeca.Pos.Y, prPeca.Pos.Z);
+                    pecaAmbiente.transform.localScale = new Vector3(prPeca.Tam.X, prPeca.Tam.Y, prPeca.Tam.Z);
                 }
 
-                if (goTransformacaoVis != null)
+                if (pecaVis != null)
                 {
-                    goTransformacaoVis.transform.localPosition = new Vector3(prPeca.Pos.X, prPeca.Pos.Y, prPeca.Pos.Z);
-                    goTransformacaoVis.transform.localScale = new Vector3(prPeca.Tam.X, prPeca.Tam.Y, prPeca.Tam.Z);
+                    pecaVis.transform.localPosition = new Vector3(prPeca.Pos.X, prPeca.Pos.Y, prPeca.Pos.Z);
+                    pecaVis.transform.localScale = new Vector3(prPeca.Tam.X, prPeca.Tam.Y, prPeca.Tam.Z);
                 }
-
-                ConfigCuboAmb();
 
                 UpdateLockFields();
                 UpdateColor();
+                AtualizaListaProp();
             }
             finally
             {
@@ -136,17 +141,10 @@ public class PropCuboScript : MonoBehaviour
 
     void AtualizaListaProp()
     {
-        if (Global.propriedadePecas.ContainsKey(Global.gameObjectName))
+        if (Global.propriedadePecas.ContainsKey(this.prPeca.NomePeca))
         {
-            Global.propriedadePecas[Global.gameObjectName] = prPeca;
+            Global.propriedadePecas[this.prPeca.NomePeca] = prPeca;
         }
-    }
-
-    void ConfigCuboAmb()
-    {
-        PropriedadePeca propObjGraf = Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetSlot(prPeca.Nome)];
-        MeshRenderer meshRendererCubo = GameObject.Find(prPeca.NomeCuboAmbiente).GetComponent<MeshRenderer>();
-        meshRendererCubo.enabled = prPeca.Ativo && propObjGraf.Ativo;
     }
 
     public void ControlCorPanel()
@@ -277,14 +275,17 @@ public class PropCuboScript : MonoBehaviour
     void UpdateColor()
     {
         seletorCor.GetComponent<Image>().material.color = corSelecionado.color;
+        seletorCor.GetComponent<Image>().material.SetColor("_EmissionColor", corSelecionado.color);
 
-        if (goTransformacaoAmb != null)
+        if (pecaAmbiente != null)
         {
-            goTransformacaoAmb.GetComponent<MeshRenderer>().materials[0].color = corSelecionado.color;
+            pecaAmbiente.GetComponent<MeshRenderer>().material.color = corSelecionado.color;
+            pecaAmbiente.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", corSelecionado.color);
         }
-        if (goTransformacaoVis != null)
+        if (pecaVis != null)
         {
-            goTransformacaoVis.GetComponent<MeshRenderer>().materials[0].color = corSelecionado.color;
+            pecaVis.GetComponent<MeshRenderer>().material.color = corSelecionado.color;
+            pecaVis.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", corSelecionado.color);
         }
     }
 
