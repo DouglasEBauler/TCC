@@ -105,3 +105,8 @@ Não conversamos, desmarquei.
 Não aparceu no horário marcado. Remarcamos para as 22:00.  
 Fez vários ajustes. Mudou componentes que eram só para usar no EditorUnity.  
 E mexeu um pouco no artigo.  
+
+## 2021-11-25
+
+Conversou com o Maurício e está acertando o artigo. Muarício sugeriu usar o tradicional: especificação, código e manual do usuário.  
+Tem ainda uns *bugs* no código. Vai arrumar e me enviar para testar até próxima terça (vai me avisar).  
