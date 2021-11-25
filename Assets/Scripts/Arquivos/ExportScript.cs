@@ -6,7 +6,7 @@ using SimpleFileBrowser;
 public class ExportScript : MonoBehaviour
 {
     [SerializeField]
-    GameObject render;
+    GameObject contentRender;
 
     void OnMouseDown()
     {
@@ -39,7 +39,7 @@ public class ExportScript : MonoBehaviour
     {
         var project = new ProjectVisEduClass();
 
-        foreach (Transform child in render.transform)
+        foreach (Transform child in contentRender.transform)
         {
             if (child.name.Contains(Consts.SLOT_CAM))
             {
@@ -99,7 +99,7 @@ public class ExportScript : MonoBehaviour
         string numSlot = Util_VisEdu.GetNumSlot(obgGrafSlot.name);
         List<TransformacaoProject> listTransf = new List<TransformacaoProject>();
 
-        foreach (Transform child in render.transform)
+        foreach (Transform child in contentRender.transform)
         {
             if (child.name.Contains(Consts.SLOT_TRANSF + numSlot))
             {
@@ -321,6 +321,7 @@ public class ExportScript : MonoBehaviour
                     Y = EncryptSplinePropPeca(propPeca, Property.P5PosY),
                     Z = EncryptSplinePropPeca(propPeca, Property.P5PosZ),
                 },
+                QuantidadePontos = EncryptSplinePropPeca(propPeca, Property.QuantidadePontos),
                 SplineAmb = propPeca.SplineAmb,
                 SplineVis = propPeca.SplineVis
             }
@@ -435,17 +436,17 @@ public class ExportScript : MonoBehaviour
     {
         switch (propType)
         {
-            case Property.IntervaloX: return (propPeca.ListPropLocks.ContainsKey("IntervaloX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["IntervaloX"]) : propPeca.Intervalo.X.ToString();
-            case Property.IntervaloY: return (propPeca.ListPropLocks.ContainsKey("IntervaloY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["IntervaloY"]) : propPeca.Intervalo.Y.ToString();
-            case Property.IntervaloZ: return (propPeca.ListPropLocks.ContainsKey("IntervaloZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["IntervaloZ"]) : propPeca.Intervalo.Z.ToString();
+            case Property.IntervaloX: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.X.ToString();
+            case Property.IntervaloY: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Y.ToString();
+            case Property.IntervaloZ: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Z.ToString();
 
-            case Property.MinX: return (propPeca.ListPropLocks.ContainsKey("MinX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MinX"]) : propPeca.Intervalo.X.ToString();
-            case Property.MinY: return (propPeca.ListPropLocks.ContainsKey("MinY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MinY"]) : propPeca.Intervalo.Y.ToString();
-            case Property.MinZ: return (propPeca.ListPropLocks.ContainsKey("MinZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MinZ"]) : propPeca.Intervalo.Z.ToString();
-
-            case Property.MaxX: return (propPeca.ListPropLocks.ContainsKey("MaxX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MaxX"]) : propPeca.Intervalo.X.ToString();
-            case Property.MaxY: return (propPeca.ListPropLocks.ContainsKey("MaxY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MaxY"]) : propPeca.Intervalo.Y.ToString();
-            case Property.MaxZ: return (propPeca.ListPropLocks.ContainsKey("MaxZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["MaxZ"]) : propPeca.Intervalo.Z.ToString();
+            case Property.MinX: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.X.ToString();
+            case Property.MinY: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Y.ToString();
+            case Property.MinZ: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Z.ToString();
+                                                                                                                                        
+            case Property.MaxX: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.X.ToString();
+            case Property.MaxY: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Y.ToString();
+            case Property.MaxZ: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Z.ToString();
             default: return string.Empty;
         }
     }
@@ -454,18 +455,18 @@ public class ExportScript : MonoBehaviour
     {
         switch (propType)
         {
-            case Property.PosX: return (propPeca.ListPropLocks.ContainsKey("PosX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosX"]) : propPeca.Pos.X.ToString();
-            case Property.PosY: return (propPeca.ListPropLocks.ContainsKey("PosY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosY"]) : propPeca.Pos.Y.ToString();
-            case Property.PosZ: return (propPeca.ListPropLocks.ContainsKey("PosZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosZ"]) : propPeca.Pos.Z.ToString();
+            case Property.PosX: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Pos.X.ToString();
+            case Property.PosY: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Pos.Y.ToString();
+            case Property.PosZ: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Pos.Z.ToString();
 
-            case Property.ValorX: return (propPeca.ListPropLocks.ContainsKey("ValorX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["ValorX"]) : propPeca.ValorIluminacao.X.ToString();
-            case Property.ValorY: return (propPeca.ListPropLocks.ContainsKey("ValorY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["ValorY"]) : propPeca.ValorIluminacao.Y.ToString();
-            case Property.ValorZ: return (propPeca.ListPropLocks.ContainsKey("ValorZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["ValorZ"]) : propPeca.ValorIluminacao.Z.ToString();
+            case Property.ValorX: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.ValorIluminacao.X.ToString();
+            case Property.ValorY: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.ValorIluminacao.Y.ToString();
+            case Property.ValorZ: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.ValorIluminacao.Z.ToString();
 
-            case Property.Intensidade: return (propPeca.ListPropLocks.ContainsKey("Intensidade")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["Intensidade"]) : propPeca.Intensidade.ToString();
-            case Property.Distancia: return (propPeca.ListPropLocks.ContainsKey("Distancia")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["Distancia"]) : propPeca.Distancia.ToString();
-            case Property.Angulo: return (propPeca.ListPropLocks.ContainsKey("Angulo")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["Angulo"]) : propPeca.Angulo.ToString();
-            case Property.Expoente: return (propPeca.ListPropLocks.ContainsKey("Expoente")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["Expoente"]) : propPeca.Expoente.ToString();
+            case Property.Intensidade: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intensidade.ToString();
+            case Property.Distancia: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Distancia.ToString();
+            case Property.Angulo: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Angulo.ToString();
+            case Property.Expoente: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Expoente.ToString();
             default: return string.Empty;
         }
     }
@@ -489,23 +490,23 @@ public class ExportScript : MonoBehaviour
     {
         switch (propType)
         {
-            case Property.PosX: return (propPeca.ListPropLocks.ContainsKey("PosX")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosX"]) : propPeca.Pos.X.ToString();
-            case Property.PosY: return (propPeca.ListPropLocks.ContainsKey("PosY")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosY"]) : propPeca.Pos.Y.ToString();
-            case Property.PosZ: return (propPeca.ListPropLocks.ContainsKey("PosZ")) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks["PosZ"]) : propPeca.Pos.Z.ToString();
+            case Property.PosX: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Pos.X.ToString();
+            case Property.PosY: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Pos.Y.ToString();
+            case Property.PosZ: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Pos.Z.ToString();
             default: return string.Empty;
         }
     }
 
-    string EncryptPropCam(Property prop)
+    string EncryptPropCam(Property propType)
     {
         PropriedadeCamera propCam = Global.propCameraGlobal;
 
-        switch (prop)
+        switch (propType)
         {
-            case Property.PosX: return (propCam.ListPropCamLocks.ContainsKey("PosX")) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks["PosX"]) : propCam.PosX.ToString();
-            case Property.PosY: return (propCam.ListPropCamLocks.ContainsKey("PosY")) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks["PosY"]) : propCam.PosY.ToString();
-            case Property.PosZ: return (propCam.ListPropCamLocks.ContainsKey("PosZ")) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks["PosZ"]) : propCam.PosZ.ToString();
-            case Property.FOV: return (propCam.ListPropCamLocks.ContainsKey("FOV")) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks["FOV"]) : propCam.FOV.ToString();
+            case Property.PosX: return (propCam.ListPropCamLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks[propType]) : propCam.PosX.ToString();
+            case Property.PosY: return (propCam.ListPropCamLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks[propType]) : propCam.PosY.ToString();
+            case Property.PosZ: return (propCam.ListPropCamLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks[propType]) : propCam.PosZ.ToString();
+            case Property.FOV: return (propCam.ListPropCamLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks[propType]) : propCam.FOV.ToString();
             default: return string.Empty;
         }
     }
@@ -514,12 +515,12 @@ public class ExportScript : MonoBehaviour
     {
         switch (propType)
         {
-            case Property.PosX: return (peca.ListPropLocks.ContainsKey("PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["PosX"]) : peca.Pos.X.ToString();
-            case Property.PosY: return (peca.ListPropLocks.ContainsKey("PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["PosY"]) : peca.Pos.Y.ToString();
-            case Property.PosZ: return (peca.ListPropLocks.ContainsKey("PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["PosZ"]) : peca.Pos.Z.ToString();
-            case Property.TamX: return (peca.ListPropLocks.ContainsKey("TamX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["TamX"]) : peca.Tam.X.ToString();
-            case Property.TamY: return (peca.ListPropLocks.ContainsKey("TamY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["TamY"]) : peca.Tam.Y.ToString();
-            case Property.TamZ: return (peca.ListPropLocks.ContainsKey("TamZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["TamZ"]) : peca.Tam.Z.ToString();
+            case Property.PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Pos.X.ToString();
+            case Property.PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Pos.Y.ToString();
+            case Property.PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Pos.Z.ToString();
+            case Property.TamX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Tam.X.ToString();
+            case Property.TamY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Tam.Y.ToString();
+            case Property.TamZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Tam.Z.ToString();
             default: return string.Empty;
         }
     }
@@ -527,10 +528,10 @@ public class ExportScript : MonoBehaviour
     {
         switch (propType)
         {
-            case Property.Pontos: return (peca.ListPropLocks.ContainsKey("Pontos")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["Pontos"]) : peca.Pontos.ToString();
-            case Property.PosX: return (peca.ListPropLocks.ContainsKey("PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["PosX"]) : peca.Pos.X.ToString();
-            case Property.PosY: return (peca.ListPropLocks.ContainsKey("PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["PosY"]) : peca.Pos.Y.ToString();
-            case Property.PosZ: return (peca.ListPropLocks.ContainsKey("PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["PosZ"]) : peca.Pos.Z.ToString();
+            case Property.Pontos: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Pontos.ToString();
+            case Property.PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Pos.X.ToString();
+            case Property.PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Pos.Y.ToString();
+            case Property.PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.Pos.Z.ToString();
             default: return string.Empty;
         }
     }
@@ -539,25 +540,25 @@ public class ExportScript : MonoBehaviour
     {
         switch (propType)
         {
-            case Property.P1PosX: return (peca.ListPropLocks.ContainsKey("P1PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P1PosX"]) : peca.P1.X.ToString();
-            case Property.P1PosY: return (peca.ListPropLocks.ContainsKey("P1PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P1PosY"]) : peca.P1.Y.ToString();
-            case Property.P1PosZ: return (peca.ListPropLocks.ContainsKey("P1PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P1PosZ"]) : peca.P1.Z.ToString();
-
-            case Property.P2PosX: return (peca.ListPropLocks.ContainsKey("P2PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P2PosX"]) : peca.P2.X.ToString();
-            case Property.P2PosY: return (peca.ListPropLocks.ContainsKey("P2PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P2PosY"]) : peca.P2.Y.ToString();
-            case Property.P2PosZ: return (peca.ListPropLocks.ContainsKey("P2PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P2PosZ"]) : peca.P2.Z.ToString();
-
-            case Property.P3PosX: return (peca.ListPropLocks.ContainsKey("P3PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P3PosX"]) : peca.P3.X.ToString();
-            case Property.P3PosY: return (peca.ListPropLocks.ContainsKey("P3PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P3PosY"]) : peca.P3.Y.ToString();
-            case Property.P3PosZ: return (peca.ListPropLocks.ContainsKey("P3PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P3PosZ"]) : peca.P3.Z.ToString();
-
-            case Property.P4PosX: return (peca.ListPropLocks.ContainsKey("P4PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P4PosX"]) : peca.P4.X.ToString();
-            case Property.P4PosY: return (peca.ListPropLocks.ContainsKey("P4PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P4PosY"]) : peca.P4.Y.ToString();
-            case Property.P4PosZ: return (peca.ListPropLocks.ContainsKey("P4PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P4PosZ"]) : peca.P4.Z.ToString();
-
-            case Property.P5PosX: return (peca.ListPropLocks.ContainsKey("P5PosX")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P5PosX"]) : peca.P5.X.ToString();
-            case Property.P5PosY: return (peca.ListPropLocks.ContainsKey("P5PosY")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P5PosY"]) : peca.P5.Y.ToString();
-            case Property.P5PosZ: return (peca.ListPropLocks.ContainsKey("P5PosZ")) ? Util_VisEdu.Base64Encode(peca.ListPropLocks["P5PosZ"]) : peca.P5.Z.ToString();
+            case Property.P1PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P1.X.ToString();
+            case Property.P1PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P1.Y.ToString();
+            case Property.P1PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P1.Z.ToString();
+                                                                                                                          
+            case Property.P2PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P2.X.ToString();
+            case Property.P2PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P2.Y.ToString();
+            case Property.P2PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P2.Z.ToString();
+                                                                                                                          
+            case Property.P3PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P3.X.ToString();
+            case Property.P3PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P3.Y.ToString();
+            case Property.P3PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P3.Z.ToString();
+                                                                                                                          
+            case Property.P4PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P4.X.ToString();
+            case Property.P4PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P4.Y.ToString();
+            case Property.P4PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P4.Z.ToString();
+                                                                                                                          
+            case Property.P5PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P5.X.ToString();
+            case Property.P5PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P5.Y.ToString();
+            case Property.P5PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P5.Z.ToString();
 
             default: return string.Empty;
         }

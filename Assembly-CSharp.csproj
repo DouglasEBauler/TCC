@@ -84,9 +84,8 @@
     <Compile Include="Assets\Scripts\Propriedades\PropSplineScript.cs" />
     <Compile Include="Assets\Scripts\Pecas\IteracaoScript.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleTrack.cs" />
-    <Compile Include="Assets\Scripts\Tutorial\BotaoTutorial.cs" />
     <Compile Include="Assets\FlexibleColorPicker\Scripts\FlexibleColorPicker.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\CameraPScript.cs" />
+    <Compile Include="Assets\Scripts\Pecas\CameraPScript.cs" />
     <Compile Include="Assets\Scripts\Guias\AjudaScript.cs" />
     <Compile Include="Assets\Scripts\Pecas\SplineScript.cs" />
     <Compile Include="Assets\Scripts\Cameras\CameraScript.cs" />
@@ -108,6 +107,7 @@
     <Compile Include="Assets\Scripts\Cameras\VisualizadorGrafScript.cs" />
     <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
     <Compile Include="Assets\Scripts\Guias\MenuScript.cs" />
+    <Compile Include="Assets\Scripts\Utils\ScrollViewRenderScript.cs" />
     <Compile Include="Assets\Scripts\Pecas\PoligonoAmbScript.cs" />
     <Compile Include="Assets\Scripts\Cameras\mover.cs" />
     <Compile Include="Assets\Scripts\Cameras\MoveAmbiente.cs" />
@@ -116,7 +116,6 @@
     <Compile Include="Assets\Scripts\Pecas\IluminacaoScript.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropRotacionarScript.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Utils\MeshUtility.cs" />
-    <Compile Include="Assets\Scripts\Utils\Polygon.cs" />
     <Compile Include="Assets\Scripts\Pecas\RenderScript.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropPoligonoScript.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleGrowingRoot.cs" />

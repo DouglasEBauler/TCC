@@ -126,8 +126,10 @@ public class LixeiraScript : MonoBehaviour
                         Global.propriedadePecas.Remove(peca.gameObject.name);
                         Destroy(peca.gameObject);
                     }
-
-                    _child.gameObject.AddComponent<Rigidbody>();
+                    
+                    Rigidbody rigiBody = _child.gameObject.AddComponent<Rigidbody>();
+                    rigiBody.useGravity = false;
+                    rigiBody.constraints = RigidbodyConstraints.FreezeAll;
                 }
             }
         }

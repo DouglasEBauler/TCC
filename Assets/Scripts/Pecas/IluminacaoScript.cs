@@ -136,10 +136,6 @@ public class IluminacaoScript : MonoBehaviour
 
     public void AddIluminacao(bool tutorial = false)
     {
-        //Verifica se há câmera e aplica luz aos objetos com Layer "Formas"
-        if (Global.cameraAtiva)
-            GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
-
         if (!tutorialScript.EstaExecutandoTutorial)
         {
             CreatePropPeca();
@@ -160,7 +156,7 @@ public class IluminacaoScript : MonoBehaviour
 
     public void CreatePropPeca(IluminacaoPropriedadePeca propPeca = null)
     {
-        if (!Global.propriedadePecas.ContainsKey(gameObject.name))
+        if (!EstaEncaixado())
         {
             if (propPeca == null)
             {

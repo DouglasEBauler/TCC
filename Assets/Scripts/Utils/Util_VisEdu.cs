@@ -82,7 +82,7 @@ public class Util_VisEdu : MonoBehaviour
 
     public static float ConvertField(string input, bool isTamInput = false)
     {
-        return float.Parse(ValidaVazio(input, isTamInput), CultureInfo.InvariantCulture.NumberFormat);
+        return float.Parse(ValidaVazio(input, isTamInput).Trim(), CultureInfo.InvariantCulture.NumberFormat);
     }
 
     public static int ConvertField(string input)

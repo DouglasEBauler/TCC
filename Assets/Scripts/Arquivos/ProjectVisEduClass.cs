@@ -87,7 +87,7 @@ public class PoligonoProject
     public List<TransformacaoProject> Transformacoes;
     public IluminacaoProject Iluminacao;
 
-    public PoligonoProject() 
+    public PoligonoProject()
     {
         this.Propriedades = new PoligonoPropriedadePecaProject();
     }
@@ -112,7 +112,7 @@ public class TransformacaoProject
     public TransformacaoPropriedadePecaProject Propriedades;
     public TypeTransform TipoTransformacao;
     public IteracaoProject Iteracao;
-    
+
     public TransformacaoProject(TypeTransform tipoTransformacao)
     {
         this.Propriedades = new TransformacaoPropriedadePecaProject();
@@ -152,7 +152,7 @@ public class IteracaoPropriedadePecaProject : PropriedadePecaProject
 public class IluminacaoProject
 {
     public PropriedadeIluminacaoPecaProject Propriedades;
-    
+
     public IluminacaoProject()
     {
         this.Propriedades = new PropriedadeIluminacaoPecaProject();
@@ -192,7 +192,7 @@ public class CuboPropriedadePecaProject : PropriedadePecaProject
     public TamanhoProject Tam;
     public Texture Textura;
 
-    public CuboPropriedadePecaProject() : base() 
+    public CuboPropriedadePecaProject() : base()
     {
         this.NomeCuboAmbiente = string.Empty;
         this.NomeCuboVis = string.Empty;
@@ -228,6 +228,7 @@ public class SplinePropriedadePecaProject : PropriedadePecaProject
     public PosicaoProject P3;
     public PosicaoProject P4;
     public PosicaoProject P5;
+    public string QuantidadePontos;
     public string SplineAmb;
     public string SplineVis;
 
@@ -237,6 +238,7 @@ public class SplinePropriedadePecaProject : PropriedadePecaProject
         P2 = new PosicaoProject();
         P3 = new PosicaoProject();
         P4 = new PosicaoProject();
+        QuantidadePontos = string.Empty;
         SplineAmb = string.Empty;
         SplineVis = string.Empty;
     }

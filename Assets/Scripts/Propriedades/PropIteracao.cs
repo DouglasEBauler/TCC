@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +52,8 @@ public class PropIteracao : MonoBehaviour
     Toggle ativoZ;
 
     IteracaoPropriedadePeca propPeca;
+    Dictionary<Property, InputField> propList;
+    Dictionary<Property, Toggle> lockList;
     bool podeAtualizar;
 
     public void Inicializa(IteracaoPropriedadePeca propIteracao)
@@ -68,6 +71,8 @@ public class PropIteracao : MonoBehaviour
             podeAtualizar = false;
             try
             {
+                InicializaListas();
+
                 nome.text = propPeca.Nome;
                 xIntervalo.text = propPeca.Intervalo.X.ToString();
                 yIntervalo.text = propPeca.Intervalo.Y.ToString();
@@ -89,6 +94,35 @@ public class PropIteracao : MonoBehaviour
                 UpdateProp();
             }
         }
+    }
+
+    void InicializaListas()
+    {
+        propList = new Dictionary<Property, InputField>()
+        {
+            { Property.IntervaloX, xIntervalo },
+            { Property.IntervaloY, yIntervalo },
+            { Property.IntervaloZ, zIntervalo },
+            { Property.MinX, xMin },
+            { Property.MinY, yMin },
+            { Property.MinZ, zMin },
+            { Property.MaxX, xMax },
+            { Property.MaxY, yMax },
+            { Property.MaxZ, zMax }
+        };
+
+        lockList = new Dictionary<Property, Toggle>()
+        {
+            { Property.IntervaloX, lockXIntervalo },
+            { Property.IntervaloY, lockYIntervalo },
+            { Property.IntervaloZ, lockZIntervalo },
+            { Property.MinX, lockXMin },
+            { Property.MinY, lockYMin },
+            { Property.MinZ, lockZMin },
+            { Property.MaxX, lockXMax },
+            { Property.MaxY, lockYMax },
+            { Property.MaxZ, lockZMax }
+        };
     }
 
     public void UpdateProp()
@@ -113,7 +147,7 @@ public class PropIteracao : MonoBehaviour
                 propPeca.AtivoY = !propPeca.Ativo ? false : ativoY.isOn;
                 propPeca.AtivoZ = !propPeca.Ativo ? false : ativoZ.isOn;
 
-                UpdateLockFields();
+                UpdateAllLockFields();
                 AtualizaListaProp();
             }
             finally
@@ -131,177 +165,41 @@ public class PropIteracao : MonoBehaviour
         }
     }
 
-    public void UpdateLockFields()
+    void UpdateAllLockFields()
     {
-        if (!lockXIntervalo.isOn)
+        foreach (var lockItem in lockList)
         {
-            propPeca.ListPropLocks.Remove("IntervaloX");
-            lockXIntervalo.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            UpdateLockFields(lockItem.Key);
         }
-        else
+    }
+
+    public void UpdateLockFields(int typeProperty)
+    {
+        UpdateLockFields((Property)typeProperty);
+    }
+
+    void UpdateLockFields(Property typeProperty)
+    {
+        if (podeAtualizar)
         {
-            if (propPeca.ListPropLocks.ContainsKey("IntervaloX"))
+            if (!lockList[typeProperty].isOn)
             {
-                propPeca.ListPropLocks["IntervaloX"] = Util_VisEdu.ConvertField(xIntervalo.text).ToString();
+                propPeca.ListPropLocks.Remove(typeProperty);
+                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
             }
             else
             {
-                propPeca.ListPropLocks.Add("IntervaloX", Util_VisEdu.ConvertField(xIntervalo.text).ToString());
-            }
+                if (propPeca.ListPropLocks.ContainsKey(typeProperty))
+                {
+                    propPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
+                }
+                else
+                {
+                    propPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
+                }
 
-            lockXIntervalo.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-        
-        if (!lockYIntervalo.isOn)
-        {
-            propPeca.ListPropLocks.Remove("IntervaloY");
-            lockYIntervalo.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("IntervaloY"))
-            {
-                propPeca.ListPropLocks["IntervaloY"] = Util_VisEdu.ConvertField(yIntervalo.text).ToString();
+                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
             }
-            else
-            {
-                propPeca.ListPropLocks.Add("IntervaloY", Util_VisEdu.ConvertField(yIntervalo.text).ToString());
-            }
-
-            lockYIntervalo.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockZIntervalo.isOn)
-        {
-            propPeca.ListPropLocks.Remove("IntervaloZ");
-            lockZIntervalo.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("IntervaloZ"))
-            {
-                propPeca.ListPropLocks["IntervaloZ"] = Util_VisEdu.ConvertField(zIntervalo.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("IntervaloZ", Util_VisEdu.ConvertField(zIntervalo.text).ToString());
-            }
-
-            lockZIntervalo.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockXMin.isOn)
-        {
-            propPeca.ListPropLocks.Remove("MinX");
-            lockXMin.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("MinX"))
-            {
-                propPeca.ListPropLocks["MinX"] = Util_VisEdu.ConvertField(xMin.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("MinX", Util_VisEdu.ConvertField(xMin.text).ToString());
-            }
-
-            lockXMin.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockYMin.isOn)
-        {
-            propPeca.ListPropLocks.Remove("MinY");
-            lockYMin.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("MinY"))
-            {
-                propPeca.ListPropLocks["MinY"] = Util_VisEdu.ConvertField(yMin.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("MinY", Util_VisEdu.ConvertField(yMin.text).ToString());
-            }
-
-            lockYMin.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockZMin.isOn)
-        {
-            propPeca.ListPropLocks.Remove("MinZ");
-            lockZMin.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("MinZ"))
-            {
-                propPeca.ListPropLocks["MinZ"] = Util_VisEdu.ConvertField(zMin.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("MinZ", Util_VisEdu.ConvertField(zMin.text).ToString());
-            }
-
-            lockZMin.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockXMax.isOn)
-        {
-            propPeca.ListPropLocks.Remove("MaxX");
-            lockXMax.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("MaxX"))
-            {
-                propPeca.ListPropLocks["MaxX"] = Util_VisEdu.ConvertField(xMax.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("MaxX", Util_VisEdu.ConvertField(xMax.text).ToString());
-            }
-
-            lockXMax.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockYMax.isOn)
-        {
-            propPeca.ListPropLocks.Remove("MaxY");
-            lockYMax.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("MaxY"))
-            {
-                propPeca.ListPropLocks["MaxY"] = Util_VisEdu.ConvertField(yMax.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("MaxY", Util_VisEdu.ConvertField(yMax.text).ToString());
-            }
-
-            lockYMax.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockZMax.isOn)
-        {
-            propPeca.ListPropLocks.Remove("MaxZ");
-            lockZMax.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("MaxZ"))
-            {
-                propPeca.ListPropLocks["MaxZ"] = Util_VisEdu.ConvertField(zMax.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("MaxZ", Util_VisEdu.ConvertField(zMax.text).ToString());
-            }
-
-            lockZMax.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 }

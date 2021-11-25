@@ -138,16 +138,7 @@ public class CameraPScript : MonoBehaviour
     public void AddCamera(PropriedadeCamera proCam = null)
     {
         Encaixa();
-
-        propriedades.GetComponent<PropCameraScript>().DemosntraCamera(true);
-
-        //if (lightProperty.existeIluminacao())
-        //    GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
-
-        // Verifica se existem cubos e iluminações mas a câmera ainda não foi colocada.
-        Global.propCameraGlobal.ExisteCamera = true;
-
-        CreatePropPeca(proCam);
+        CreatePropPeca();
     }
 
     public void ConfiguraPropriedadePeca()
@@ -166,8 +157,6 @@ public class CameraPScript : MonoBehaviour
                 Global.propCameraGlobal = camProp;
             }
             propriedades.GetComponent<PropCameraScript>().PreencheCampos();
-            propriedades.GetComponent<PropCameraScript>().UpdateProp();
-            propriedades.GetComponent<PropCameraScript>().DemosntraCamera(true);
 
             menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedades.name);
         }
@@ -175,7 +164,7 @@ public class CameraPScript : MonoBehaviour
 
     public void CreatePropPeca(PropriedadeCamera propPeca = null)
     {
-        if (!EstaEncaixado())
+        if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
         {
             if (propPeca != null)
             {
@@ -193,7 +182,7 @@ public class CameraPScript : MonoBehaviour
 
     bool EstaEncaixado()
     {
-        return Global.listaEncaixes.ContainsKey(gameObject.name);
+        return Global.listaEncaixes.ContainsKey(Consts.CAMERA + "1");
     }
 
     public bool PodeEncaixar()

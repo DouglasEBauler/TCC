@@ -683,11 +683,24 @@ public class Tutorial : MonoBehaviour
                 if (painelActive.transform.childCount > 1)
                     painelActive.transform.GetChild(1).gameObject.SetActive(active);
 
-                painelActive.transform.parent.GetComponent<BoxCollider>().enabled = active;
-
                 AbriuMessageBox = active;
             }
         }
+    }
+
+    public void SetAnswerMsg(GameObject button)
+    {
+        if ("Pular".Equals(button.name))
+        {
+            PassoTutorial = Passo.PulouTutorial;
+            PulouTutorial();
+        }
+        else
+        {
+            AnswerMsg = 1;
+        }
+
+        MessageBoxVisEdu("PainelConfirmacao", false);
     }
 }
 
