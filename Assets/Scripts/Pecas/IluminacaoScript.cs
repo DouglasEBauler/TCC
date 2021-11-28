@@ -128,19 +128,17 @@ public class IluminacaoScript : MonoBehaviour
 
                 yield return null;
             }
-
-            transform.parent = slot.transform;
-            gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
+
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
-    public void AddIluminacao(bool tutorial = false)
+    public void AddIluminacao()
     {
-        if (!tutorialScript.EstaExecutandoTutorial)
-        {
-            CreatePropPeca();
-            CriaLightObject();
-        }
+        Encaixa();
+        CreatePropPeca();
+        CriaLightObject();
     }
 
     public void ConfiguraPropriedadePeca(IluminacaoPropriedadePeca propPeca = null)
@@ -177,10 +175,16 @@ public class IluminacaoScript : MonoBehaviour
 
     public bool PodeEncaixar()
     {
-        if ((slot != null)
+        if ((tutorialScript.EstaExecutandoTutorial)
+            || ((slot != null)
             && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
-            && !EstaEncaixado())
+            && !EstaEncaixado()))
         {
+            if (tutorialScript.EstaExecutandoTutorial)
+            {
+                slot = GameObject.Find(Consts.ILUMINACAO_SLOT + "1");
+            }
+
             Destroy(slot.GetComponent<Rigidbody>());
             gameObject.name += Util_VisEdu.GetNumSlot(slot.name);
 
@@ -246,20 +250,21 @@ public class IluminacaoScript : MonoBehaviour
 
     public void CopiaPeca()
     {
-        cloneFab = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
-        cloneFab.name = Consts.PECA_ILUMINACAO;
-        cloneFab.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+        if (PodeGerarCopia() && !EstaEncaixado())
+        {
+            cloneFab = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
+            cloneFab.name = Consts.PECA_ILUMINACAO;
+            cloneFab.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+        }
     }
 
     void CriaLightObject()
     {
-        string numLight = Util_VisEdu.GetNumSlot(slot.name);
-
         GameObject GOCloneLightObjects = GameObject.Find(Consts.LIGHT_OBJECTS_ILUMINACAO);
         if (GOCloneLightObjects != null)
         {
             GameObject cloneGO = Instantiate(GOCloneLightObjects, GOCloneLightObjects.transform.position, GOCloneLightObjects.transform.rotation, GOCloneLightObjects.transform.parent);
-            cloneGO.name = Consts.LIGHT_OBJECTS_ILUMINACAO;
+            cloneGO.name += Util_VisEdu.GetNumSlot(slot.name).ToString();
             cloneGO.transform.position = new Vector3(GOCloneLightObjects.transform.position.x, GOCloneLightObjects.transform.position.y, GOCloneLightObjects.transform.position.z);
 
             RenomeiaLightObject(GOCloneLightObjects);

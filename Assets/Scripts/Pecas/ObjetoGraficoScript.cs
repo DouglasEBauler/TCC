@@ -137,10 +137,10 @@ public class ObjetoGraficoScript : MonoBehaviour
 
                 yield return null;
             }
-
-            transform.parent = slot.transform;
-            gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
+
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
     public void AddObjGrafico(PropriedadePeca propPeca = null)

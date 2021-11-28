@@ -22,6 +22,7 @@ public class Util_VisEdu : MonoBehaviour
             return _fabricaPecas;
         }
     }
+
     static GameObject go_visualizador
     {
         get

@@ -4,9 +4,7 @@ using UnityEngine.UI;
 
 public class PropEscalarScript : MonoBehaviour
 {
-    const float SCALE_X = 1000f;
-    const float SCALE_Y = 1000f;
-    const float SCALE_Z = 1000f;
+    const float ESCALA_PADRAO = 1f;
 
     [SerializeField]
     GameObject label;
@@ -95,19 +93,28 @@ public class PropEscalarScript : MonoBehaviour
                     prPeca.Ativo = ativo.isOn;
                 }
 
+                float x, y, z;
                 if (prPeca.Ativo)
                 {
-                    GameObject goTransformacaoAmb = GameObject.Find(prPeca.NomePecaAmb);
-                    if (goTransformacaoAmb != null)
-                    {
-                        goTransformacaoAmb.transform.localScale = new Vector3(prPeca.Pos.X + SCALE_X, prPeca.Pos.Y + SCALE_Y, prPeca.Pos.Z + SCALE_Z);
-                    }
+                    x = prPeca.Pos.X + ESCALA_PADRAO;
+                    y = prPeca.Pos.Y + ESCALA_PADRAO;
+                    z = prPeca.Pos.Z + ESCALA_PADRAO;
+                }
+                else
+                {
+                    x = y = z = ESCALA_PADRAO;
+                }
 
-                    GameObject goTransformacaoVis = GameObject.Find(prPeca.NomePecaVis);
-                    if (goTransformacaoVis != null)
-                    {
-                        goTransformacaoVis.transform.localScale = new Vector3(prPeca.Pos.X + SCALE_X, prPeca.Pos.Y + SCALE_Y, prPeca.Pos.Z + SCALE_Z);
-                    }
+                GameObject goTransformacao = GameObject.Find(prPeca.NomePecaAmb);
+                if (goTransformacao != null)
+                {
+                    goTransformacao.transform.localScale = new Vector3(x, y, z);
+                }
+
+                goTransformacao = GameObject.Find(prPeca.NomePecaVis);
+                if (goTransformacao != null)
+                {
+                    goTransformacao.transform.localScale = new Vector3(x, y, z);
                 }
 
                 AtualizaListaProp();

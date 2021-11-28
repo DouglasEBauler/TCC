@@ -433,8 +433,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -2762,7 +2762,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -728.2, y: 348.5}
-  m_SizeDelta: {x: 1292.99, y: 711.83997}
+  m_SizeDelta: {x: 1309, y: 711.83997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &64374798
 MonoBehaviour:
@@ -3548,7 +3548,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 761754038}
   m_HandleRect: {fileID: 761754037}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0.9999962
   m_Size: 0.72525334
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6341,8 +6341,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.200001, y: 72.001}
-  m_SizeDelta: {x: 1152.5, y: 534.42}
+  m_AnchoredPosition: {x: 21.825092, y: 69.15548}
+  m_SizeDelta: {x: 1165.7499, y: 540.11096}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &176413088
 MonoBehaviour:
@@ -6555,8 +6555,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -7721,7 +7721,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 633.4447, y: -409.96}
+  m_AnchoredPosition: {x: 625.8493, y: -409.96}
   m_SizeDelta: {x: 1242.7, y: 819.92}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &202869095
@@ -8139,8 +8139,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.201, y: 71.995}
-  m_SizeDelta: {x: 1152.5, y: 534.41}
+  m_AnchoredPosition: {x: 22.825542, y: 68.84999}
+  m_SizeDelta: {x: 1167.749, y: 540.69995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &206303833
 MonoBehaviour:
@@ -13393,10 +13393,10 @@ RectTransform:
   m_Father: {fileID: 335892366}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.041727565, y: 0.8506735}
-  m_AnchorMax: {x: 0.28056648, y: 0.95015526}
-  m_AnchoredPosition: {x: 0.116241455, y: -0.8088684}
-  m_SizeDelta: {x: 3.5162916, y: 2.1659803}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -271.11636, y: 191.56313}
+  m_SizeDelta: {x: 194.69331, y: 49.960236}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!65 &324163785
 BoxCollider:
@@ -15588,8 +15588,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.200001, y: 72.001}
-  m_SizeDelta: {x: 1152.5, y: 534.42}
+  m_AnchoredPosition: {x: 22.87505, y: 68.45546}
+  m_SizeDelta: {x: 1167.8499, y: 541.5109}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &378348112
 MonoBehaviour:
@@ -16377,8 +16377,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -16552,8 +16552,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 626.25, y: -324.14}
-  m_SizeDelta: {x: 1252.5, y: 648.28}
+  m_AnchoredPosition: {x: 632.87494, y: -320.05548}
+  m_SizeDelta: {x: 1265.7499, y: 640.11096}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &401537210
 MonoBehaviour:
@@ -18297,10 +18297,10 @@ RectTransform:
   m_Father: {fileID: 335892366}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.041727565, y: 0.55471265}
-  m_AnchorMax: {x: 0.28952336, y: 0.6541977}
-  m_AnchoredPosition: {x: -0.8816223, y: -0.08264923}
-  m_SizeDelta: {x: 1.9116014, y: 2.406139}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -268.52948, y: 50.10099}
+  m_SizeDelta: {x: 200.25809, y: 50.201965}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &461055354
 MonoBehaviour:
@@ -19967,8 +19967,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97adb809fd30ed14b9802d790d473c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorial: {fileID: 1533376975}
-  tutorialScript: {fileID: 0}
 --- !u!224 &496478808
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22427,7 +22425,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1881101602}
   m_HandleRect: {fileID: 1881101601}
   m_Direction: 2
-  m_Value: 0.9999987
+  m_Value: 0.99999917
   m_Size: 0.35295442
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -29310,8 +29308,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -30557,8 +30555,8 @@ RectTransform:
   m_Father: {fileID: 1851898036}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.27474666}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0.2747456}
+  m_AnchorMax: {x: 1, y: 0.9999993}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -31875,8 +31873,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.200001, y: 72.001}
-  m_SizeDelta: {x: 1152.5, y: 534.42}
+  m_AnchoredPosition: {x: 23.12505, y: 67.90548}
+  m_SizeDelta: {x: 1168.3499, y: 542.61096}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &791180716
 MonoBehaviour:
@@ -33708,8 +33706,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 17.11, y: 72}
-  m_SizeDelta: {x: 1148.68, y: 534.42}
+  m_AnchoredPosition: {x: 25.884995, y: 68.854996}
+  m_SizeDelta: {x: 1166.23, y: 540.70996}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &823694396
 MonoBehaviour:
@@ -34142,8 +34140,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 626.25, y: -317.21}
-  m_SizeDelta: {x: 1252.5, y: 634.42}
+  m_AnchoredPosition: {x: 633.9249, y: -320.75546}
+  m_SizeDelta: {x: 1267.8499, y: 641.5109}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &838661113
 MonoBehaviour:
@@ -37148,8 +37146,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -37258,7 +37256,7 @@ MonoBehaviour:
   panelArquivo: {fileID: 1720303194}
   panelPropPeca: {fileID: 1199164510}
   panelAjuda: {fileID: 1883107359}
-  render: {fileID: 1082818229}
+  render: {fileID: 1647939627}
   posAmb: {fileID: 1795892008}
   posVis: {fileID: 204193473}
   tutorial: {fileID: 1533376975}
@@ -37635,8 +37633,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -43836,8 +43834,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -561.0505, y: -195.21}
-  m_SizeDelta: {x: 1152.5, y: 534.42}
+  m_AnchoredPosition: {x: -561.0505, y: -204.1}
+  m_SizeDelta: {x: 1167.9504, y: 543.3099}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1110314689
 MonoBehaviour:
@@ -46601,10 +46599,10 @@ RectTransform:
   m_Father: {fileID: 335892366}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.041727565, y: 0.69647616}
-  m_AnchorMax: {x: 0.41200003, y: 0.7984449}
-  m_AnchoredPosition: {x: -0.07583618, y: 1.0419617}
-  m_SizeDelta: {x: 3.6111994, y: 0.7962489}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -218.70589, y: 119.93}
+  m_SizeDelta: {x: 299.99332, y: 49.78534}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1171361955
 MonoBehaviour:
@@ -47988,10 +47986,10 @@ RectTransform:
   m_Father: {fileID: 335892366}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.31788525, y: 0.55471265}
-  m_AnchorMax: {x: 0.5641887, y: 0.6541977}
-  m_AnchoredPosition: {x: -0.72958374, y: -0.13322449}
-  m_SizeDelta: {x: 3.2692041, y: 2.228518}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -47.92614, y: 50.050415}
+  m_SizeDelta: {x: 200.42117, y: 50.024345}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1203318448
 MonoBehaviour:
@@ -49855,12 +49853,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 534669904}
-  propriedades: {fileID: 603229995}
+  propriedades: {fileID: 202570965}
   menuControl: {fileID: 1974743836}
   panelArquivo: {fileID: 1720303194}
   panelPropPeca: {fileID: 1199164510}
   panelAjuda: {fileID: 1883107359}
-  render: {fileID: 1082818229}
+  render: {fileID: 1647939627}
   posAmb: {fileID: 1795892008}
   posVis: {fileID: 204193473}
   tutorial: {fileID: 1533376975}
@@ -50299,8 +50297,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.200001, y: 71.99}
-  m_SizeDelta: {x: 1152.5, y: 534.42}
+  m_AnchoredPosition: {x: 21.454914, y: 68.34996}
+  m_SizeDelta: {x: 1165.0103, y: 541.69995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1276842668
 MonoBehaviour:
@@ -50668,8 +50666,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -51469,8 +51467,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -55164,7 +55162,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00019789596, y: 0.000054343735}
+  m_AnchoredPosition: {x: -0.00031996623, y: 0.000054343735}
   m_SizeDelta: {x: 0, y: 819.92}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1381243125
@@ -55398,8 +55396,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -55563,8 +55561,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.200001, y: 71.99}
-  m_SizeDelta: {x: 1152.5, y: 534.42}
+  m_AnchoredPosition: {x: 21.725056, y: 69.19998}
+  m_SizeDelta: {x: 1165.5499, y: 539.99994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1386675451
 MonoBehaviour:
@@ -58736,8 +58734,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -60036,7 +60034,7 @@ MonoBehaviour:
   Nivel: 
   AnswerMsg: 0
   AbriuMessageBox: 0
-  CursorMouse: {fileID: 751779650}
+  cursorMouse: {fileID: 751779650}
   cameraP: {fileID: 324163783}
   objGraficoP: {fileID: 1171361953}
   cubo: {fileID: 461055352}
@@ -60063,6 +60061,7 @@ MonoBehaviour:
   iluminacaoSlot: {fileID: 602809825}
   go_fabricaPecas: {fileID: 1964242227}
   fabricaPecas: {fileID: 335892365}
+  lixeiraScript: {fileID: 1869702898}
 --- !u!1 &1537669222
 GameObject:
   m_ObjectHideFlags: 0
@@ -61417,8 +61416,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -74353,8 +74352,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:
@@ -75009,6 +75008,7 @@ MonoBehaviour:
   fabricaPecas: {fileID: 335892365}
   posicaoAmb: {fileID: 1795892008}
   posicaoVis: {fileID: 204193473}
+  objDrop: {fileID: 0}
 --- !u!65 &1869702899
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -75095,8 +75095,8 @@ RectTransform:
   m_Father: {fileID: 1712254722}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.6470447}
-  m_AnchorMax: {x: 1, y: 0.99999917}
+  m_AnchorMin: {x: 0, y: 0.6470456}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -76902,7 +76902,7 @@ MonoBehaviour:
   panelArquivo: {fileID: 1720303194}
   panelPropPeca: {fileID: 1199164510}
   panelAjuda: {fileID: 1883107359}
-  render: {fileID: 1082818229}
+  render: {fileID: 1647939627}
   posAmb: {fileID: 1795892008}
   posVis: {fileID: 204193473}
   tutorial: {fileID: 1533376975}
@@ -77426,8 +77426,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 626.25, y: -324.14}
-  m_SizeDelta: {x: 1252.5, y: 648.28}
+  m_AnchoredPosition: {x: 632.77496, y: -319.99997}
+  m_SizeDelta: {x: 1265.5499, y: 639.99994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1957593670
 MonoBehaviour:
@@ -81150,7 +81150,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.5954, y: 26.81}
+  m_AnchoredPosition: {x: 4, y: 26.81}
   m_SizeDelta: {x: 1259.7, y: 594.65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2057016298
@@ -82207,8 +82207,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 496478807}
-        m_TargetAssemblyTypeName: BotaoTutorial, Assembly-CSharp
+      - m_Target: {fileID: 1533376977}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
         m_MethodName: SetAnswerMsg
         m_Mode: 2
         m_Arguments:

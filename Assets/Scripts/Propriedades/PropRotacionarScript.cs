@@ -93,19 +93,29 @@ public class PropRotacionarScript : MonoBehaviour
                     prPeca.Ativo = ativo.isOn;
                 }
 
+
+                float x, y, z;
                 if (prPeca.Ativo)
                 {
-                    GameObject goTransformacaoAmb = GameObject.Find(prPeca.NomePecaAmb);
-                    if (goTransformacaoAmb != null)
-                    {
-                        goTransformacaoAmb.transform.localEulerAngles = new Vector3(prPeca.Pos.X, prPeca.Pos.Y + (prPeca.NomePeca.Contains(Consts.POLIGONO) ? 180 : 0), prPeca.Pos.Z);
-                    }
+                    x = prPeca.Pos.X;
+                    y = prPeca.Pos.Y;
+                    z = prPeca.Pos.Z;
+                }
+                else
+                {
+                    x = y = z = 0;
+                }
 
-                    GameObject goTransformacaoVis = GameObject.Find(prPeca.NomePecaVis);
-                    if (goTransformacaoVis != null)
-                    {
-                        goTransformacaoVis.transform.localEulerAngles = new Vector3(prPeca.Pos.X, prPeca.Pos.Y + (prPeca.NomePeca.Contains(Consts.POLIGONO) ? 180 : 0), prPeca.Pos.Z);
-                    }
+                GameObject goTransformacaoAmb = GameObject.Find(prPeca.NomePecaAmb);
+                if (goTransformacaoAmb != null)
+                {
+                    goTransformacaoAmb.transform.localEulerAngles = new Vector3(x, y + (prPeca.NomePeca.Contains(Consts.POLIGONO) ? 180 : 0), z);
+                }
+
+                GameObject goTransformacaoVis = GameObject.Find(prPeca.NomePecaVis);
+                if (goTransformacaoVis != null)
+                {
+                    goTransformacaoVis.transform.localEulerAngles = new Vector3(x, y + (prPeca.NomePeca.Contains(Consts.POLIGONO) ? 180 : 0), z);
                 }
 
                 UpdateAllLockFields();

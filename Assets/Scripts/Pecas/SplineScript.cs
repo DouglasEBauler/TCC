@@ -129,7 +129,7 @@ public class SplineScript : MonoBehaviour
             Transform splineMesh = objPecaAmbiente.transform.GetChild(0).GetChild(0).Find("segment 1 mesh");
             if (splineMesh != null)
             {
-                splineMesh.gameObject.GetComponent<MeshRenderer>().enabled = 
+                splineMesh.gameObject.GetComponent<MeshRenderer>().enabled =
                     Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetNumSlot(slot.name)].Ativo;
             }
         }
@@ -191,10 +191,10 @@ public class SplineScript : MonoBehaviour
 
                 yield return null;
             }
-
-            transform.parent = slot.transform;
-            gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
+
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
     public void ConfiguraPropriedadePeca(SplinePropriedadePeca propPeca = null, PropriedadeCamera camProp = null)

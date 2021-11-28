@@ -128,10 +128,10 @@ public class CuboScript : MonoBehaviour
 
                 yield return null;
             }
-
-            transform.parent = slot.transform;
-            gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
+
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
     public void AddCubo(CuboPropriedadePeca propPeca = null)
