@@ -395,6 +395,7 @@ public class IteracaoScript : MonoBehaviour
             {
                 this.propIteracao = propPeca;
             }
+            this.propIteracao.Nome = Consts.ITERACAO;
             this.propIteracao.NomePeca = gameObject.name;
 
             Global.propriedadePecas.Add(this.propIteracao.NomePeca, this.propIteracao);

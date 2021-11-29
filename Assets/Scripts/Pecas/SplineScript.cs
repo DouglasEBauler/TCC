@@ -1,3 +1,4 @@
+using SplineMesh;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -99,7 +100,8 @@ public class SplineScript : MonoBehaviour
             GameObject cloneFab = Instantiate(objPecaVis, objPecaVis.transform.parent.position, objPecaVis.transform.parent.rotation, objPecaVis.transform.parent);
             cloneFab.name = Consts.SPLINE_VIS_OBJ;
             cloneFab.transform.position = new Vector3(objPecaVis.transform.position.x, objPecaVis.transform.position.y, objPecaVis.transform.position.z);
-
+            
+            objPecaVis.name += Util_VisEdu.GetNumSlot(slot.name); // SplineVisObject
             objPecaVis.transform.GetChild(0).name += Util_VisEdu.GetNumSlot(slot.name); //SplineVis
 
             // GameObject gerado pelo proprio componente SplineMesh
@@ -108,7 +110,7 @@ public class SplineScript : MonoBehaviour
             if (splineMesh != null)
             {
                 splineMesh.gameObject.GetComponent<MeshRenderer>().enabled =
-                    Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetNumSlot(slot.name)].Ativo;
+                    Global.propriedadePecas[Consts.OBJETOGRAFICO + Util_VisEdu.GetNumSlot(slot.name)].Ativo && Global.cameraAtiva;
             }
         }
     }
@@ -122,6 +124,7 @@ public class SplineScript : MonoBehaviour
             cloneFab.name = Consts.SPLINE_AMB_OBJ;
             cloneFab.transform.position = new Vector3(objPecaAmbiente.transform.position.x, objPecaAmbiente.transform.position.y, objPecaAmbiente.transform.position.z);
 
+            objPecaAmbiente.name += Util_VisEdu.GetNumSlot(slot.name); //SplineAmbObject
             objPecaAmbiente.transform.GetChild(0).name += Util_VisEdu.GetNumSlot(slot.name); //SplineAmb
 
             // GameObject gerado pelo proprio componente SplineMesh

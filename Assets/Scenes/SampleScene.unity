@@ -2762,7 +2762,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -728.2, y: 348.5}
-  m_SizeDelta: {x: 1309, y: 711.83997}
+  m_SizeDelta: {x: 1315, y: 711.83997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &64374798
 MonoBehaviour:
@@ -59244,8 +59244,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1906002505}
-        m_TargetAssemblyTypeName: PropCuboScript, Assembly-CSharp
+      - m_Target: {fileID: 102539567}
+        m_TargetAssemblyTypeName: PropSplineScript, Assembly-CSharp
         m_MethodName: ControlCorPanel
         m_Mode: 1
         m_Arguments:

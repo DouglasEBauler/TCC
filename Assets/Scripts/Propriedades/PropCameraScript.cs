@@ -69,7 +69,6 @@ public class PropCameraScript : MonoBehaviour
             podeAtualizar = false;
             try
             {
-                InicializaListas();
                 InitPropCam();
                 nomeCamera.text = string.Empty.Equals(Global.propCameraGlobal.Nome) ? "Camera" : Global.propCameraGlobal.Nome;
                 posX.text = Global.propCameraGlobal.PosX.Equals(0) ? "0" : Global.propCameraGlobal.PosX.ToString();
@@ -153,6 +152,11 @@ public class PropCameraScript : MonoBehaviour
 
     public void UpdateAllLockFields()
     {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
         foreach (var lockItem in lockList)
         {
             UpdateLockFields(lockItem.Key);
@@ -161,6 +165,11 @@ public class PropCameraScript : MonoBehaviour
 
     void UpdateLockFields(Property typeProperty)
     {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
         if (!lockList[typeProperty].isOn)
         {
             Global.propCameraGlobal.ListPropLocks.Remove(typeProperty);

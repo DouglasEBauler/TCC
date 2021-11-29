@@ -57,6 +57,10 @@ public class PropPoligonoScript : MonoBehaviour
             propCamera.EnabledPecasVis(this.propPeca.NomePeca, false);
             pecaVis.GetComponent<MeshRenderer>().enabled = true;
         }
+        else
+        {
+            pecaVis.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     public void Inicializa(PoligonoPropriedadePeca prPeca)
@@ -75,8 +79,6 @@ public class PropPoligonoScript : MonoBehaviour
             podeAtualizar = false;
             try
             {
-                InicializaListas();
-
                 nome.text = propPeca.Nome;
                 posX.text = propPeca.Pos.X.ToString();
                 posY.text = propPeca.Pos.Y.ToString();
@@ -141,7 +143,7 @@ public class PropPoligonoScript : MonoBehaviour
                 if (pecaVis != null)
                 {
                     pecaVis.GetComponent<PoligonoAmbScript>().PropPeca = propPeca;
-                    pecaVis.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
+                    pecaVis.GetComponent<MeshRenderer>().enabled = propPeca.Ativo && Global.cameraAtiva;
                     FocusPoligonoVis();
                 }
 
@@ -202,6 +204,11 @@ public class PropPoligonoScript : MonoBehaviour
 
     void UpdateAllLockFields()
     {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
         foreach (var lockItem in lockList)
         {
             UpdateLockFields((lockItem.Key));
@@ -215,26 +222,28 @@ public class PropPoligonoScript : MonoBehaviour
 
     void UpdateLockFields(Property typeProperty)
     {
-        if (podeAtualizar)
+        if (lockList == null || propList == null)
         {
-            if (!lockList[typeProperty].isOn)
+            InicializaListas();
+        }
+
+        if (!lockList[typeProperty].isOn)
+        {
+            propPeca.ListPropLocks.Remove(typeProperty);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+        }
+        else
+        {
+            if (propPeca.ListPropLocks.ContainsKey(typeProperty))
             {
-                propPeca.ListPropLocks.Remove(typeProperty);
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+                propPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
             }
             else
             {
-                if (propPeca.ListPropLocks.ContainsKey(typeProperty))
-                {
-                    propPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
-                }
-                else
-                {
-                    propPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
-                }
-
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+                propPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
             }
+
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 }

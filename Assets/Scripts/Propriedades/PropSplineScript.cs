@@ -92,6 +92,7 @@ public class PropSplineScript : MonoBehaviour
     {
         if (this.prPeca != null)
         {
+            UpdateColor();
             FocusSplineVis();
         }
     }
@@ -102,6 +103,10 @@ public class PropSplineScript : MonoBehaviour
         {
             propCamera.EnabledPecasVis(this.prPeca.NomePeca, false);
             splineVis.transform.GetChild(0).Find("segment 1 mesh").GetComponent<MeshRenderer>().enabled = true;
+        }
+        else
+        {
+            splineVis.transform.GetChild(0).Find("segment 1 mesh").GetComponent<MeshRenderer>().enabled = false;
         }
     }
 
@@ -140,7 +145,6 @@ public class PropSplineScript : MonoBehaviour
                 p5Z.text = prPeca.P5.Z.ToString();
                 quantidadePontos.text = prPeca.QuantidadePontos.ToString();
                 corSelecionado.color = prPeca.Cor;
-                InicializaLista();
 
                 splineAmb = GameObject.Find(prPeca.SplineAmb).GetComponent<Spline>();
                 splineVis = GameObject.Find(prPeca.SplineVis).GetComponent<Spline>();
@@ -153,7 +157,7 @@ public class PropSplineScript : MonoBehaviour
         }
     }
 
-    void InicializaLista()
+    void InicializaListas()
     {
         propList = new Dictionary<Property, InputField>()
         {
@@ -261,8 +265,8 @@ public class PropSplineScript : MonoBehaviour
                         new Vector3(splineVis.nodes[3].Position.x + prPeca.P4.X, splineVis.nodes[3].Position.y + prPeca.P4.Y, splineVis.nodes[3].Position.z + prPeca.P4.Z);
                     splineVis.nodes[4].Position =
                         new Vector3(splineVis.nodes[4].Position.x + prPeca.P5.X, splineVis.nodes[4].Position.y + prPeca.P5.Y, splineVis.nodes[4].Position.z + prPeca.P5.Z);
-                    splineVis.transform.GetChild(0).Find("segment 1 mesh").GetComponent<MeshRenderer>().enabled = prPeca.Ativo;
-                    
+                    splineVis.transform.GetChild(0).Find("segment 1 mesh").GetComponent<MeshRenderer>().enabled = prPeca.Ativo && Global.cameraAtiva;
+
                     if ((Util_VisEdu.ConvertField(quantidadePontos.text) / 100f) < 100)
                     {
                         splineVis.GetComponent<SplineSmoother>().curvature = Util_VisEdu.ConvertField(quantidadePontos.text) / 100f;
@@ -273,7 +277,7 @@ public class PropSplineScript : MonoBehaviour
                         prPeca.QuantidadePontos = 99;
                         quantidadePontos.text = (prPeca.QuantidadePontos / 100f).ToString();
                     }
-                    
+
                     FocusSplineVis();
                 }
 
@@ -303,6 +307,11 @@ public class PropSplineScript : MonoBehaviour
 
     void UpdateAllLockFields()
     {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
         foreach (var lockItem in lockList)
         {
             UpdateLockFields((lockItem.Key));
@@ -316,26 +325,28 @@ public class PropSplineScript : MonoBehaviour
 
     void UpdateLockFields(Property typeProperty)
     {
-        if (podeAtualizar)
+        if (lockList == null || propList == null)
         {
-            if (!lockList[typeProperty].isOn)
+            InicializaListas();
+        }
+
+        if (!lockList[typeProperty].isOn)
+        {
+            prPeca.ListPropLocks.Remove(typeProperty);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+        }
+        else
+        {
+            if (prPeca.ListPropLocks.ContainsKey(typeProperty))
             {
-                prPeca.ListPropLocks.Remove(typeProperty);
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+                prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
             }
             else
             {
-                if (prPeca.ListPropLocks.ContainsKey(typeProperty))
-                {
-                    prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
-                }
-
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+                prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
             }
+
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 

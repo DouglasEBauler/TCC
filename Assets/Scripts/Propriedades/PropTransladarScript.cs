@@ -42,11 +42,12 @@ public class PropTransladarScript : MonoBehaviour
         podeAtualizar = false;
         try
         {
+            InicializaListas();
+
             nomePeca.text = prPeca.Nome;
             posX.text = prPeca.Pos.X.ToString();
             posY.text = prPeca.Pos.Y.ToString();
             posZ.text = prPeca.Pos.Z.ToString();
-            InicializaListas();
             ativo.isOn = prPeca.Ativo;
         }
         finally
@@ -55,6 +56,7 @@ public class PropTransladarScript : MonoBehaviour
             UpdateProp();
         }
     }
+
     void InicializaListas()
     {
         propList = new Dictionary<Property, InputField>()
@@ -111,6 +113,7 @@ public class PropTransladarScript : MonoBehaviour
                     goTransformacaoVis.transform.localPosition = new Vector3(x, y, z);
                 }
 
+                UpdateAllLockFields();
                 AtualizaListaProp();
             }
             finally
@@ -131,6 +134,11 @@ public class PropTransladarScript : MonoBehaviour
 
     void UpdateAllLockFields()
     {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
         foreach (var lockItem in lockList)
         {
             UpdateLockFields((lockItem.Key));
@@ -144,28 +152,28 @@ public class PropTransladarScript : MonoBehaviour
 
     void UpdateLockFields(Property typeProperty)
     {
-        if (podeAtualizar)
+        if (lockList == null || propList == null)
         {
-            //Property property = (Property)typeProperty;
+            InicializaListas();
+        }
 
-            if (!lockList[typeProperty].isOn)
+        if (!lockList[typeProperty].isOn)
+        {
+            prPeca.ListPropLocks.Remove(typeProperty);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+        }
+        else
+        {
+            if (prPeca.ListPropLocks.ContainsKey(typeProperty))
             {
-                prPeca.ListPropLocks.Remove(typeProperty);
-                propList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+                prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
             }
             else
             {
-                if (prPeca.ListPropLocks.ContainsKey(typeProperty))
-                {
-                    prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
-                }
-
-                propList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+                prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
             }
+
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 }

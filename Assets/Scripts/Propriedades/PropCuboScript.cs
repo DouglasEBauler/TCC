@@ -73,6 +73,10 @@ public class PropCuboScript : MonoBehaviour
             propCamera.EnabledPecasVis(this.prPeca.NomePeca, false);
             pecaVis.GetComponent<MeshRenderer>().enabled = true;
         }
+        else
+        {
+            pecaVis.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     public void Inicializa(CuboPropriedadePeca propPeca)
@@ -104,7 +108,6 @@ public class PropCuboScript : MonoBehaviour
                 {
                     child.gameObject.GetComponent<SelecionaTextura>().NomePecaCubo = this.prPeca.NomePeca;
                 }
-                InicializaListas();
                 ativo.isOn = prPeca.Ativo;
 
                 pecaAmbiente = GameObject.Find(prPeca.NomeCuboAmb);
@@ -166,7 +169,7 @@ public class PropCuboScript : MonoBehaviour
 
                 if (pecaVis != null)
                 {
-                    pecaVis.transform.localPosition = 
+                    pecaVis.transform.localPosition =
                         new Vector3(pecaVis.transform.localPosition.x + prPeca.Pos.X, pecaVis.transform.localPosition.y + prPeca.Pos.Y, pecaVis.transform.localPosition.z + prPeca.Pos.Z);
                     pecaVis.transform.localScale = new Vector3(prPeca.Tam.X, prPeca.Tam.Y, prPeca.Tam.Z);
                     FocusCuboVis();
@@ -198,6 +201,11 @@ public class PropCuboScript : MonoBehaviour
 
     void UpdateAllLockFields()
     {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
         foreach (var lockItem in lockList)
         {
             UpdateLockFields((lockItem.Key));
@@ -210,26 +218,28 @@ public class PropCuboScript : MonoBehaviour
 
     void UpdateLockFields(Property typeProperty)
     {
-        if (podeAtualizar)
+        if (lockList == null || propList == null)
         {
-            if (!lockList[typeProperty].isOn)
+            InicializaListas();
+        }
+
+        if (!lockList[typeProperty].isOn)
+        {
+            prPeca.ListPropLocks.Remove(typeProperty);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+        }
+        else
+        {
+            if (prPeca.ListPropLocks.ContainsKey(typeProperty))
             {
-                prPeca.ListPropLocks.Remove(typeProperty);
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+                prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
             }
             else
             {
-                if (prPeca.ListPropLocks.ContainsKey(typeProperty))
-                {
-                    prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
-                }
-
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+                prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
             }
+
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 

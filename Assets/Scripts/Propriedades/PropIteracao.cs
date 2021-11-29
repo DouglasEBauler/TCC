@@ -71,8 +71,6 @@ public class PropIteracao : MonoBehaviour
             podeAtualizar = false;
             try
             {
-                InicializaListas();
-
                 nome.text = propPeca.Nome;
                 xIntervalo.text = propPeca.Intervalo.X.ToString();
                 yIntervalo.text = propPeca.Intervalo.Y.ToString();
@@ -167,6 +165,11 @@ public class PropIteracao : MonoBehaviour
 
     void UpdateAllLockFields()
     {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
         foreach (var lockItem in lockList)
         {
             UpdateLockFields(lockItem.Key);
@@ -180,26 +183,28 @@ public class PropIteracao : MonoBehaviour
 
     void UpdateLockFields(Property typeProperty)
     {
-        if (podeAtualizar)
+        if (lockList == null || propList == null)
         {
-            if (!lockList[typeProperty].isOn)
+            InicializaListas();
+        }
+
+        if (!lockList[typeProperty].isOn)
+        {
+            propPeca.ListPropLocks.Remove(typeProperty);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+        }
+        else
+        {
+            if (propPeca.ListPropLocks.ContainsKey(typeProperty))
             {
-                propPeca.ListPropLocks.Remove(typeProperty);
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+                propPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
             }
             else
             {
-                if (propPeca.ListPropLocks.ContainsKey(typeProperty))
-                {
-                    propPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
-                }
-                else
-                {
-                    propPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
-                }
-
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+                propPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
             }
+
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 }

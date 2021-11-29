@@ -313,9 +313,9 @@ public class LixeiraScript : MonoBehaviour
 
         foreach (Transform child in posicaoVis.transform)
         {
-            if (child.name.Contains(Consts.CUBO_AMB_OBJ + numFormaSlot)
-                || child.name.Contains(Consts.POLIGONO_AMB_OBJ + numFormaSlot)
-                || child.name.Contains(Consts.SPLINE_AMB_OBJ + numFormaSlot))
+            if (child.name.Contains(Consts.CUBO_VIS_OBJ + numFormaSlot)
+                || child.name.Contains(Consts.POLIGONO_VIS_OBJ + numFormaSlot)
+                || child.name.Contains(Consts.SPLINE_VIS_OBJ + numFormaSlot))
             {
                 Destroy(child.gameObject);
                 break;

@@ -50,7 +50,6 @@ public class PropEscalarScript : MonoBehaviour
                 tamX.text = Util_VisEdu.ValidaVazio(prPeca.Pos.X.ToString(), true);
                 tamY.text = Util_VisEdu.ValidaVazio(prPeca.Pos.Y.ToString(), true);
                 tamZ.text = Util_VisEdu.ValidaVazio(prPeca.Pos.Z.ToString(), true);
-                InicializaListas();
                 ativo.isOn = prPeca.Ativo;
             }
         }
@@ -117,8 +116,8 @@ public class PropEscalarScript : MonoBehaviour
                     goTransformacao.transform.localScale = new Vector3(x, y, z);
                 }
 
-                AtualizaListaProp();
                 UpdateAllLockFields();
+                AtualizaListaProp();
             }
             finally
             {
@@ -137,6 +136,11 @@ public class PropEscalarScript : MonoBehaviour
 
     void UpdateAllLockFields()
     {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
         foreach (var lockItem in lockList)
         {
             UpdateLockFields((lockItem.Key));
@@ -150,26 +154,28 @@ public class PropEscalarScript : MonoBehaviour
 
     void UpdateLockFields(Property typeProperty)
     {
-        if (podeAtualizar)
+        if (lockList == null || propList == null)
         {
-            if (!lockList[typeProperty].isOn)
+            InicializaListas();
+        }
+
+        if (!lockList[typeProperty].isOn)
+        {
+            prPeca.ListPropLocks.Remove(typeProperty);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+        }
+        else
+        {
+            if (prPeca.ListPropLocks.ContainsKey(typeProperty))
             {
-                prPeca.ListPropLocks.Remove(typeProperty);
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+                prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
             }
             else
             {
-                if (prPeca.ListPropLocks.ContainsKey(typeProperty))
-                {
-                    prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
-                }
-
-                lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+                prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
             }
+
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 }
