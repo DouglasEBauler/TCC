@@ -154,7 +154,7 @@ public class IluminacaoScript : MonoBehaviour
 
     public void CreatePropPeca(IluminacaoPropriedadePeca propPeca = null)
     {
-        if (!EstaEncaixado())
+        if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
         {
             if (propPeca == null)
             {
@@ -165,6 +165,7 @@ public class IluminacaoScript : MonoBehaviour
             {
                 this.propIluminacao = propPeca;
             }
+            this.propIluminacao.Nome = Consts.ILUMINACAO;
             this.propIluminacao.NomePeca = gameObject.name;
             this.propIluminacao.NomePecaAmbiente = GetNomePecaAmbiente() + Util_VisEdu.GetNumSlot(gameObject.name);
             this.propIluminacao.NomePecaVis = GetNomePecaVis() + Util_VisEdu.GetNumSlot(gameObject.name);
@@ -178,6 +179,7 @@ public class IluminacaoScript : MonoBehaviour
         if ((tutorialScript.EstaExecutandoTutorial)
             || ((slot != null)
             && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
+            && ExisteFormaEncaixado()
             && !EstaEncaixado()))
         {
             if (tutorialScript.EstaExecutandoTutorial)
@@ -253,7 +255,7 @@ public class IluminacaoScript : MonoBehaviour
         if (PodeGerarCopia() && !EstaEncaixado())
         {
             cloneFab = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
-            cloneFab.name = Consts.PECA_ILUMINACAO;
+            cloneFab.name = Consts.ILUMINACAO;
             cloneFab.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
         }
     }
@@ -264,11 +266,37 @@ public class IluminacaoScript : MonoBehaviour
         if (GOCloneLightObjects != null)
         {
             GameObject cloneGO = Instantiate(GOCloneLightObjects, GOCloneLightObjects.transform.position, GOCloneLightObjects.transform.rotation, GOCloneLightObjects.transform.parent);
-            cloneGO.name += Util_VisEdu.GetNumSlot(slot.name).ToString();
+            cloneGO.name = Consts.LIGHT_OBJECTS_ILUMINACAO;
             cloneGO.transform.position = new Vector3(GOCloneLightObjects.transform.position.x, GOCloneLightObjects.transform.position.y, GOCloneLightObjects.transform.position.z);
 
+            GOCloneLightObjects.name += Util_VisEdu.GetNumSlot(slot.name);
             RenomeiaLightObject(GOCloneLightObjects);
         }
+    }
+
+    string GetPeca()
+    {
+        string numSlot = Util_VisEdu.GetNumSlot(slot.name);
+
+        if (Global.listaEncaixes.ContainsKey(Consts.CUBO + numSlot))
+        {
+            return Consts.CUBO + numSlot;
+        }
+        else if (Global.listaEncaixes.ContainsKey(Consts.POLIGONO + numSlot))
+        {
+            return Consts.POLIGONO + numSlot;
+        }
+        else if (Global.listaEncaixes.ContainsKey(Consts.SPLINE + numSlot))
+        {
+            return Consts.SPLINE + numSlot;
+        }
+
+        return string.Empty;
+    }
+
+    bool ExisteFormaEncaixado()
+    {
+        return !string.Empty.Equals(GetPeca());
     }
 
     void RenomeiaLightObject(GameObject go)

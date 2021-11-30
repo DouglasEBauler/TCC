@@ -26,22 +26,6 @@ public class PropObjetoGraficoScript : MonoBehaviour
         {
             matrix4x4.text = pecaAmb.transform.worldToLocalMatrix.ToString();
         }
-        else
-        {
-            pecaAmb = GameObject.Find(GetPecaAmb());
-            if (pecaAmb != null)
-            {
-                matrix4x4.text = pecaAmb.transform.worldToLocalMatrix.ToString();
-            }
-            else
-            {
-                pecaAmb = GameObject.Find(GetPecaAmb());
-                if (pecaAmb != null)
-                {
-                    matrix4x4.text = pecaAmb.transform.worldToLocalMatrix.ToString();
-                }
-            }
-        }
     }
 
     public void Inicializa(PropriedadePeca propObjGrafico)
@@ -116,7 +100,7 @@ public class PropObjetoGraficoScript : MonoBehaviour
                     }
                     if (meshRenderVis != null)
                     {
-                        meshRenderVis.enabled = Global.propriedadePecas[this.propPeca.NomePeca].Ativo;
+                        meshRenderVis.enabled = Global.propriedadePecas[this.propPeca.NomePeca].Ativo && Global.cameraAtiva;
                     }
                 }
 

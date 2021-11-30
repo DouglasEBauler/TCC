@@ -94,14 +94,25 @@ public class LixeiraScript : MonoBehaviour
 
                 if (slot != null)
                 {
-                    peca = slot.transform.Find(Consts.PECA_ILUMINACAO + numFormaSlot);
+                    peca = slot.transform.Find(Consts.ILUMINACAO + numFormaSlot);
 
                     if (peca)
                     {
                         Global.listaEncaixes.Remove(peca.name);
                         Global.propriedadePecas.Remove(peca.name);
                         Destroy(peca.gameObject);
+
+                        GameObject objGameLightIluminacao = GameObject.Find(Consts.LIGHT_OBJECTS_ILUMINACAO + numFormaSlot);
+                        if (objGameLightIluminacao != null)
+                        {
+                            Destroy(objGameLightIluminacao);
+                        }
                     }
+
+                    Rigidbody rigiBody = slot.gameObject.AddComponent<Rigidbody>();
+                    rigiBody.useGravity = false;
+                    rigiBody.constraints = RigidbodyConstraints.FreezeAll;
+                    break;
                 }
             }
         }
@@ -127,7 +138,7 @@ public class LixeiraScript : MonoBehaviour
                         Global.propriedadePecas.Remove(peca.gameObject.name);
                         Destroy(peca.gameObject);
                     }
-                    
+
                     Rigidbody rigiBody = _child.gameObject.AddComponent<Rigidbody>();
                     rigiBody.useGravity = false;
                     rigiBody.constraints = RigidbodyConstraints.FreezeAll;
@@ -208,16 +219,25 @@ public class LixeiraScript : MonoBehaviour
             {
                 slot = child.transform.GetChild(0);
 
-                foreach (Transform _slot in slot.transform)
+                if (slot != null)
                 {
-                    if (_slot.name.Contains(Consts.ILUMINACAO))
+                    Transform peca = slot.transform.Find(Consts.ILUMINACAO + numFormaSlot);
+
+                    if (peca)
                     {
-                        // Rever
-                        Global.listaEncaixes.Remove(_slot.name);
-                        Global.propriedadePecas.Remove(_slot.name);
+                        Global.listaEncaixes.Remove(peca.name);
+                        Global.propriedadePecas.Remove(peca.name);
+                        Destroy(peca.gameObject);
+
+                        GameObject objGameLightIluminacao = GameObject.Find(Consts.LIGHT_OBJECTS_ILUMINACAO + numFormaSlot);
+                        if (objGameLightIluminacao != null)
+                        {
+                            Destroy(objGameLightIluminacao);
+                        }
                     }
+
+                    Destroy(child.gameObject);
                 }
-                Destroy(child.gameObject);
             }
             else if (child.name.Contains(Consts.SLOT_OBJ_GRAFICO + numFormaSlot))
             {
@@ -358,18 +378,24 @@ public class LixeiraScript : MonoBehaviour
             }
             else if (child.name.Contains(Consts.SLOT_ILUMINACAO + numFormaSlot))
             {
-                slot = child.transform.GetChild(0);
+                Transform peca = child.transform.GetChild(0).transform.Find(Consts.ILUMINACAO + numFormaSlot);
 
-                foreach (Transform _slot in slot.transform)
+                if (peca)
                 {
-                    if (_slot.name.Contains(Consts.ILUMINACAO))
+                    Global.listaEncaixes.Remove(peca.name);
+                    Global.propriedadePecas.Remove(peca.name);
+                    Destroy(peca.gameObject);
+
+                    GameObject objGameLightIluminacao = GameObject.Find(Consts.LIGHT_OBJECTS_ILUMINACAO + numFormaSlot);
+                    if (objGameLightIluminacao != null)
                     {
-                        // Rever
-                        Global.listaEncaixes.Remove(_slot.name);
-                        Global.propriedadePecas.Remove(_slot.name);
-                        //Destroy(_slot.gameObject);
+                        Destroy(objGameLightIluminacao);
                     }
                 }
+
+                Rigidbody rigiBody = child.transform.GetChild(0).gameObject.AddComponent<Rigidbody>();
+                rigiBody.useGravity = false;
+                rigiBody.constraints = RigidbodyConstraints.FreezeAll;
             }
         }
 
