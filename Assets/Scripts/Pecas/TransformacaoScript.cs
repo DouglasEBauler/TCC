@@ -136,20 +136,17 @@ public class TransformacaoScript : MonoBehaviour
 
                 yield return null;
             }
-
-            transform.parent = slot.transform;
-            gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
+
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
-    public void AddTransformacao(TransformacaoPropriedadePeca propPeca = null, bool tutorial = false)
+    public void AddTransformacao(TransformacaoPropriedadePeca propPeca = null)
     {
         Encaixa();
 
-        if (!tutorialScript.EstaExecutandoTutorial)
-        {
-            AddGameObjectTree(tutorial);
-        }
+        AddGameObjectTree();
 
         InstantiateNextSlot();
         CreatePropPeca(propPeca);
@@ -170,7 +167,7 @@ public class TransformacaoScript : MonoBehaviour
         else return string.Empty;
     }
 
-    void AddGameObjectTree(bool tutorial = false)
+    void AddGameObjectTree()
     {
         string numFormaSlot = Util_VisEdu.GetNumSlot(slot.name);
         GameObject transformacaoAmbVis, pecaAmbVis;
@@ -229,6 +226,18 @@ public class TransformacaoScript : MonoBehaviour
                     pecaAmbVis.transform.parent = transformacaoAmbVis.transform;
                 }
             }
+        }
+
+        RemoveGameObjectsNull();
+    }
+
+    void RemoveGameObjectsNull()
+    {
+        GameObject gameObj = GameObject.Find("New Game Object");
+        while (gameObj != null)
+        {
+            DestroyImmediate(gameObj);
+            gameObj = GameObject.Find("New Game Object");
         }
     }
 
@@ -300,7 +309,7 @@ public class TransformacaoScript : MonoBehaviour
 
     public bool PodeEncaixar()
     {
-        if ((slot != null) 
+        if ((slot != null)
             && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
             && ExisteFormaEncaixado()
             && !EstaEncaixado())
@@ -312,7 +321,7 @@ public class TransformacaoScript : MonoBehaviour
 
             Destroy(slot.GetComponent<Rigidbody>());
             gameObject.name += numSlotGraf + "_" + (++Global.countTransformacoes).ToString();
-            slot.name += "_" + numSlotGraf;
+            slot.name += "_" + Global.countTransformacoes.ToString();
             slot.transform.parent.name += "_" + Global.countTransformacoes.ToString();
             GameObject.Find(Consts.ITERACAO_SLOT).name += numSlotGraf + "_" + Global.countTransformacoes.ToString();
 

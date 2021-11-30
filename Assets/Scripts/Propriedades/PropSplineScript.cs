@@ -39,9 +39,13 @@ public class PropSplineScript : MonoBehaviour
     [SerializeField]
     InputField p5Z;
     [SerializeField]
+    InputField quantidadePontos;
+    [SerializeField]
     FlexibleColorPicker corSelecionado;
     [SerializeField]
     GameObject seletorCor;
+    [SerializeField]
+    PropCameraScript propCamera;
     [SerializeField]
     Toggle ativo;
     [SerializeField]
@@ -74,11 +78,37 @@ public class PropSplineScript : MonoBehaviour
     Toggle lockP5PosY;
     [SerializeField]
     Toggle lockP5PosZ;
+    [SerializeField]
+    Toggle lockQuantidadePontos;
 
     SplinePropriedadePeca prPeca;
+    Dictionary<Property, InputField> propList;
+    Dictionary<Property, Toggle> lockList;
     Spline splineAmb;
     Spline splineVis;
     bool podeAtualizar;
+
+    void FixedUpdate()
+    {
+        if (this.prPeca != null)
+        {
+            UpdateColor();
+            FocusSplineVis();
+        }
+    }
+
+    void FocusSplineVis()
+    {
+        if (splineVis != null && Global.cameraAtiva && this.prPeca.Ativo)
+        {
+            propCamera.EnabledPecasVis(this.prPeca.NomePeca, false);
+            splineVis.transform.GetChild(0).Find("segment 1 mesh").GetComponent<MeshRenderer>().enabled = true;
+        }
+        else
+        {
+            splineVis.transform.GetChild(0).Find("segment 1 mesh").GetComponent<MeshRenderer>().enabled = false;
+        }
+    }
 
     public void Inicializa(SplinePropriedadePeca propPeca)
     {
@@ -113,6 +143,7 @@ public class PropSplineScript : MonoBehaviour
                 p5X.text = prPeca.P5.X.ToString();
                 p5Y.text = prPeca.P5.Y.ToString();
                 p5Z.text = prPeca.P5.Z.ToString();
+                quantidadePontos.text = prPeca.QuantidadePontos.ToString();
                 corSelecionado.color = prPeca.Cor;
 
                 splineAmb = GameObject.Find(prPeca.SplineAmb).GetComponent<Spline>();
@@ -125,6 +156,50 @@ public class PropSplineScript : MonoBehaviour
             }
         }
     }
+
+    void InicializaListas()
+    {
+        propList = new Dictionary<Property, InputField>()
+        {
+            { Property.P1PosX, p1X },
+            { Property.P1PosY, p1Y },
+            { Property.P1PosZ, p1Z },
+            { Property.P2PosX, p2X },
+            { Property.P2PosY, p2Y },
+            { Property.P2PosZ, p2Z },
+            { Property.P3PosX, p3X },
+            { Property.P3PosY, p3Y },
+            { Property.P3PosZ, p3Z },
+            { Property.P4PosX, p4X },
+            { Property.P4PosY, p4Y },
+            { Property.P4PosZ, p4Z },
+            { Property.P5PosX, p5X },
+            { Property.P5PosY, p5Y },
+            { Property.P5PosZ, p5Z },
+            { Property.QuantidadePontos, quantidadePontos }
+        };
+
+        lockList = new Dictionary<Property, Toggle>()
+        {
+            { Property.P1PosX, lockP1PosX },
+            { Property.P1PosY, lockP1PosY },
+            { Property.P1PosZ, lockP1PosZ },
+            { Property.P2PosX, lockP2PosX },
+            { Property.P2PosY, lockP2PosY },
+            { Property.P2PosZ, lockP2PosZ },
+            { Property.P3PosX, lockP3PosX },
+            { Property.P3PosY, lockP3PosY },
+            { Property.P3PosZ, lockP3PosZ },
+            { Property.P4PosX, lockP4PosX },
+            { Property.P4PosY, lockP4PosY },
+            { Property.P4PosZ, lockP4PosZ },
+            { Property.P5PosX, lockP5PosX },
+            { Property.P5PosY, lockP5PosY },
+            { Property.P5PosZ, lockP5PosZ },
+            { Property.QuantidadePontos, lockQuantidadePontos }
+        };
+    }
+
 
     public void UpdateProp()
     {
@@ -149,42 +224,66 @@ public class PropSplineScript : MonoBehaviour
                 prPeca.P5.X = Util_VisEdu.ConvertField(p5X.text);
                 prPeca.P5.Y = Util_VisEdu.ConvertField(p5Y.text);
                 prPeca.P5.Z = Util_VisEdu.ConvertField(p5Z.text);
+                prPeca.QuantidadePontos = Util_VisEdu.ConvertField(quantidadePontos.text);
                 prPeca.Ativo = ativo.isOn;
 
-                if (prPeca.Ativo)
+                if (splineAmb != null)
                 {
-                    if (splineAmb != null)
-                    {
-                        splineAmb.nodes[0].Position =
-                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P1.X, splineAmb.nodes[0].Position.y + prPeca.P1.Y, splineAmb.nodes[0].Position.z + prPeca.P1.Z);
-                        splineAmb.nodes[1].Position =
-                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P2.X, splineAmb.nodes[0].Position.y + prPeca.P2.Y, splineAmb.nodes[0].Position.z + prPeca.P2.Z);
-                        splineAmb.nodes[2].Position =
-                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P3.X, splineAmb.nodes[0].Position.y + prPeca.P3.Y, splineAmb.nodes[0].Position.z + prPeca.P3.Z);
-                        splineAmb.nodes[3].Position =
-                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P4.X, splineAmb.nodes[0].Position.y + prPeca.P4.Y, splineAmb.nodes[0].Position.z + prPeca.P4.Z);
-                        splineAmb.nodes[4].Position =
-                            new Vector3(splineAmb.nodes[0].Position.x + prPeca.P5.X, splineAmb.nodes[0].Position.y + prPeca.P5.Y, splineAmb.nodes[0].Position.z + prPeca.P5.Z);
-                    }
+                    splineAmb.nodes[0].Position =
+                        new Vector3(splineAmb.nodes[0].Position.x + prPeca.P1.X, splineAmb.nodes[0].Position.y + prPeca.P1.Y, splineAmb.nodes[0].Position.z + prPeca.P1.Z);
+                    splineAmb.nodes[1].Position =
+                        new Vector3(splineAmb.nodes[1].Position.x + prPeca.P2.X, splineAmb.nodes[1].Position.y + prPeca.P2.Y, splineAmb.nodes[1].Position.z + prPeca.P2.Z);
+                    splineAmb.nodes[2].Position =
+                        new Vector3(splineAmb.nodes[2].Position.x + prPeca.P3.X, splineAmb.nodes[2].Position.y + prPeca.P3.Y, splineAmb.nodes[2].Position.z + prPeca.P3.Z);
+                    splineAmb.nodes[3].Position =
+                        new Vector3(splineAmb.nodes[3].Position.x + prPeca.P4.X, splineAmb.nodes[3].Position.y + prPeca.P4.Y, splineAmb.nodes[3].Position.z + prPeca.P4.Z);
+                    splineAmb.nodes[4].Position =
+                        new Vector3(splineAmb.nodes[4].Position.x + prPeca.P5.X, splineAmb.nodes[4].Position.y + prPeca.P5.Y, splineAmb.nodes[4].Position.z + prPeca.P5.Z);
+                    splineAmb.transform.GetChild(0).Find("segment 1 mesh").GetComponent<MeshRenderer>().enabled = prPeca.Ativo;
 
-                    if (splineVis != null)
+                    if ((Util_VisEdu.ConvertField(quantidadePontos.text) / 100f) < 100)
                     {
-                        splineVis.nodes[0].Position =
-                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P1.X, splineVis.nodes[0].Position.y + prPeca.P1.Y, splineVis.nodes[0].Position.z + prPeca.P1.Z);
-                        splineVis.nodes[1].Position =
-                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P2.X, splineVis.nodes[0].Position.y + prPeca.P2.Y, splineVis.nodes[0].Position.z + prPeca.P2.Z);
-                        splineVis.nodes[2].Position =
-                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P3.X, splineVis.nodes[0].Position.y + prPeca.P3.Y, splineVis.nodes[0].Position.z + prPeca.P3.Z);
-                        splineVis.nodes[3].Position =
-                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P4.X, splineVis.nodes[0].Position.y + prPeca.P4.Y, splineVis.nodes[0].Position.z + prPeca.P4.Z);
-                        splineVis.nodes[4].Position =
-                            new Vector3(splineVis.nodes[0].Position.x + prPeca.P5.X, splineVis.nodes[0].Position.y + prPeca.P5.Y, splineVis.nodes[0].Position.z + prPeca.P5.Z);
+                        splineAmb.GetComponent<SplineSmoother>().curvature = Util_VisEdu.ConvertField(quantidadePontos.text) / 100f;
                     }
-
-                    UpdateLockFields();
-                    UpdateColor();
-                    AtualizaListaProp();
+                    else
+                    {
+                        splineAmb.GetComponent<SplineSmoother>().curvature += 99 / 100f;
+                        prPeca.QuantidadePontos = 99;
+                        quantidadePontos.text = (prPeca.QuantidadePontos / 100f).ToString();
+                    }
                 }
+
+                if (splineVis != null)
+                {
+                    splineVis.nodes[0].Position =
+                        new Vector3(splineVis.nodes[0].Position.x + prPeca.P1.X, splineVis.nodes[0].Position.y + prPeca.P1.Y, splineVis.nodes[0].Position.z + prPeca.P1.Z);
+                    splineVis.nodes[1].Position =
+                        new Vector3(splineVis.nodes[1].Position.x + prPeca.P2.X, splineVis.nodes[1].Position.y + prPeca.P2.Y, splineVis.nodes[1].Position.z + prPeca.P2.Z);
+                    splineVis.nodes[2].Position =
+                        new Vector3(splineVis.nodes[2].Position.x + prPeca.P3.X, splineVis.nodes[2].Position.y + prPeca.P3.Y, splineVis.nodes[2].Position.z + prPeca.P3.Z);
+                    splineVis.nodes[3].Position =
+                        new Vector3(splineVis.nodes[3].Position.x + prPeca.P4.X, splineVis.nodes[3].Position.y + prPeca.P4.Y, splineVis.nodes[3].Position.z + prPeca.P4.Z);
+                    splineVis.nodes[4].Position =
+                        new Vector3(splineVis.nodes[4].Position.x + prPeca.P5.X, splineVis.nodes[4].Position.y + prPeca.P5.Y, splineVis.nodes[4].Position.z + prPeca.P5.Z);
+                    splineVis.transform.GetChild(0).Find("segment 1 mesh").GetComponent<MeshRenderer>().enabled = prPeca.Ativo && Global.cameraAtiva;
+
+                    if ((Util_VisEdu.ConvertField(quantidadePontos.text) / 100f) < 100)
+                    {
+                        splineVis.GetComponent<SplineSmoother>().curvature = Util_VisEdu.ConvertField(quantidadePontos.text) / 100f;
+                    }
+                    else
+                    {
+                        splineVis.GetComponent<SplineSmoother>().curvature = 99 / 100f;
+                        prPeca.QuantidadePontos = 99;
+                        quantidadePontos.text = (prPeca.QuantidadePontos / 100f).ToString();
+                    }
+
+                    FocusSplineVis();
+                }
+
+                UpdateAllLockFields();
+                UpdateColor();
+                AtualizaListaProp();
             }
             finally
             {
@@ -206,294 +305,48 @@ public class PropSplineScript : MonoBehaviour
         corSelecionado.gameObject.SetActive(!corSelecionado.gameObject.activeSelf);
     }
 
-    public void UpdateLockFields()
+    void UpdateAllLockFields()
     {
-        if (podeAtualizar)
+        if (lockList == null || propList == null)
         {
-            if (!lockP1PosX.isOn)
+            InicializaListas();
+        }
+
+        foreach (var lockItem in lockList)
+        {
+            UpdateLockFields((lockItem.Key));
+        }
+    }
+
+    public void UpdateLockFields(int typeProperty)
+    {
+        UpdateLockFields((Property)typeProperty);
+    }
+
+    void UpdateLockFields(Property typeProperty)
+    {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
+        if (!lockList[typeProperty].isOn)
+        {
+            prPeca.ListPropLocks.Remove(typeProperty);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+        }
+        else
+        {
+            if (prPeca.ListPropLocks.ContainsKey(typeProperty))
             {
-                prPeca.ListPropLocks.Remove("P1PosX");
-                lockP1PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+                prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
             }
             else
             {
-                if (prPeca.ListPropLocks.ContainsKey("P1PosX"))
-                {
-                    prPeca.ListPropLocks["P1PosX"] = Util_VisEdu.ConvertField(p1X.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P1PosX", Util_VisEdu.ConvertField(p1X.text).ToString());
-                }
-
-                lockP1PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+                prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
             }
 
-            if (!lockP1PosY.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P1PosY");
-                lockP1PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P1PosY"))
-                {
-                    prPeca.ListPropLocks["P1PosY"] = Util_VisEdu.ConvertField(p1Y.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P1PosY", Util_VisEdu.ConvertField(p1Y.text).ToString());
-                }
-
-                lockP1PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP1PosZ.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P1PosZ");
-                lockP1PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P1PosZ"))
-                {
-                    prPeca.ListPropLocks["P1PosZ"] = Util_VisEdu.ConvertField(p1Z.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P1PosZ", Util_VisEdu.ConvertField(p1Z.text).ToString());
-                }
-
-                lockP1PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP2PosX.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P2PosX");
-                lockP2PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P2PosX"))
-                {
-                    prPeca.ListPropLocks["P2PosX"] = Util_VisEdu.ConvertField(p2X.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P2PosX", Util_VisEdu.ConvertField(p2X.text).ToString());
-                }
-
-                lockP2PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP2PosY.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P2PosY");
-                lockP2PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P2PosY"))
-                {
-                    prPeca.ListPropLocks["P2PosY"] = Util_VisEdu.ConvertField(p2Y.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P2PosY", Util_VisEdu.ConvertField(p2Y.text).ToString());
-                }
-
-                lockP2PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP2PosZ.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P2PosZ");
-                lockP2PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P2PosZ"))
-                {
-                    prPeca.ListPropLocks["P2PosZ"] = Util_VisEdu.ConvertField(p2Z.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P2PosZ", Util_VisEdu.ConvertField(p2Z.text).ToString());
-                }
-
-                lockP2PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP3PosX.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P3PosX");
-                lockP3PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P3PosX"))
-                {
-                    prPeca.ListPropLocks["P3PosX"] = Util_VisEdu.ConvertField(p3X.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P3PosX", Util_VisEdu.ConvertField(p3X.text).ToString());
-                }
-
-                lockP3PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP3PosY.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P3PosY");
-                lockP3PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P3PosY"))
-                {
-                    prPeca.ListPropLocks["P3PosY"] = Util_VisEdu.ConvertField(p3Y.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P3PosY", Util_VisEdu.ConvertField(p3Y.text).ToString());
-                }
-
-                lockP3PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP3PosZ.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P3PosZ");
-                lockP3PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P3PosZ"))
-                {
-                    prPeca.ListPropLocks["P3PosZ"] = Util_VisEdu.ConvertField(p3Z.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P3PosZ", Util_VisEdu.ConvertField(p3Z.text).ToString());
-                }
-
-                lockP3PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP4PosX.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P4PosX");
-                lockP4PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P4PosX"))
-                {
-                    prPeca.ListPropLocks["P4PosX"] = Util_VisEdu.ConvertField(p4X.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P4PosX", Util_VisEdu.ConvertField(p4X.text).ToString());
-                }
-
-                lockP4PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP4PosY.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P4PosY");
-                lockP4PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P4PosY"))
-                {
-                    prPeca.ListPropLocks["P4PosY"] = Util_VisEdu.ConvertField(p4Y.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P4PosY", Util_VisEdu.ConvertField(p4Y.text).ToString());
-                }
-
-                lockP4PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP4PosZ.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P4PosZ");
-                lockP4PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P4PosZ"))
-                {
-                    prPeca.ListPropLocks["P4PosZ"] = Util_VisEdu.ConvertField(p4Z.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P4PosZ", Util_VisEdu.ConvertField(p4Z.text).ToString());
-                }
-
-                lockP4PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP5PosX.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P5PosX");
-                lockP5PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P5PosX"))
-                {
-                    prPeca.ListPropLocks["P5PosX"] = Util_VisEdu.ConvertField(p4X.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P5PosX", Util_VisEdu.ConvertField(p4X.text).ToString());
-                }
-
-                lockP5PosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP5PosY.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P5PosY");
-                lockP5PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P5PosY"))
-                {
-                    prPeca.ListPropLocks["P5PosY"] = Util_VisEdu.ConvertField(p4Y.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P5PosY", Util_VisEdu.ConvertField(p4Y.text).ToString());
-                }
-
-                lockP5PosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
-
-            if (!lockP5PosZ.isOn)
-            {
-                prPeca.ListPropLocks.Remove("P5PosZ");
-                lockP5PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-            }
-            else
-            {
-                if (prPeca.ListPropLocks.ContainsKey("P5PosZ"))
-                {
-                    prPeca.ListPropLocks["P5PosZ"] = Util_VisEdu.ConvertField(p4Z.text).ToString();
-                }
-                else
-                {
-                    prPeca.ListPropLocks.Add("P5PosZ", Util_VisEdu.ConvertField(p4Z.text).ToString());
-                }
-
-                lockP5PosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-            }
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 

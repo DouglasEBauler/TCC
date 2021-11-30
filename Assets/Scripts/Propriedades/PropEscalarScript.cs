@@ -1,11 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PropEscalarScript : MonoBehaviour
 {
-    const float SCALE_X = 1000f;
-    const float SCALE_Y = 1000f;
-    const float SCALE_Z = 1000f;
+    const float ESCALA_PADRAO = 1f;
 
     [SerializeField]
     GameObject label;
@@ -27,6 +26,8 @@ public class PropEscalarScript : MonoBehaviour
     Toggle lockPosZ;
 
     TransformacaoPropriedadePeca prPeca;
+    Dictionary<Property, InputField> propList;
+    Dictionary<Property, Toggle> lockList;
     bool podeAtualizar;
 
     public void Inicializa(TransformacaoPropriedadePeca propTransformacao)
@@ -59,6 +60,23 @@ public class PropEscalarScript : MonoBehaviour
         }
     }
 
+    void InicializaListas()
+    {
+        propList = new Dictionary<Property, InputField>()
+        {
+            { Property.TamX, tamX },
+            { Property.TamY, tamY },
+            { Property.TamZ, tamZ }
+        };
+
+        lockList = new Dictionary<Property, Toggle>()
+        {
+            { Property.TamX, lockPosX },
+            { Property.TamY, lockPosY },
+            { Property.TamZ, lockPosZ }
+        };
+    }
+
     public void UpdateProp(bool isIteration = false)
     {
         if (isIteration || (podeAtualizar && Global.propriedadePecas.ContainsKey(this.prPeca.NomePeca)))
@@ -74,21 +92,31 @@ public class PropEscalarScript : MonoBehaviour
                     prPeca.Ativo = ativo.isOn;
                 }
 
+                float x, y, z;
                 if (prPeca.Ativo)
                 {
-                    GameObject goTransformacaoAmb = GameObject.Find(prPeca.NomePecaAmb);
-                    if (goTransformacaoAmb != null)
-                    {
-                        goTransformacaoAmb.transform.localScale = new Vector3(prPeca.Pos.X + SCALE_X, prPeca.Pos.Y + SCALE_Y, prPeca.Pos.Z + SCALE_Z);
-                    }
-
-                    GameObject goTransformacaoVis = GameObject.Find(prPeca.NomePecaVis);
-                    if (goTransformacaoVis != null)
-                    {
-                        goTransformacaoVis.transform.localScale = new Vector3(prPeca.Pos.X + SCALE_X, prPeca.Pos.Y + SCALE_Y, prPeca.Pos.Z + SCALE_Z);
-                    }
+                    x = prPeca.Pos.X + ESCALA_PADRAO;
+                    y = prPeca.Pos.Y + ESCALA_PADRAO;
+                    z = prPeca.Pos.Z + ESCALA_PADRAO;
+                }
+                else
+                {
+                    x = y = z = ESCALA_PADRAO;
                 }
 
+                GameObject goTransformacao = GameObject.Find(prPeca.NomePecaAmb);
+                if (goTransformacao != null)
+                {
+                    goTransformacao.transform.localScale = new Vector3(x, y, z);
+                }
+
+                goTransformacao = GameObject.Find(prPeca.NomePecaVis);
+                if (goTransformacao != null)
+                {
+                    goTransformacao.transform.localScale = new Vector3(x, y, z);
+                }
+
+                UpdateAllLockFields();
                 AtualizaListaProp();
             }
             finally
@@ -106,63 +134,48 @@ public class PropEscalarScript : MonoBehaviour
         }
     }
 
-    public void UpdateLockFields()
+    void UpdateAllLockFields()
     {
-        if (!lockPosX.isOn)
+        if (lockList == null || propList == null)
         {
-            prPeca.ListPropLocks.Remove("PosX");
-            lockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            InicializaListas();
+        }
+
+        foreach (var lockItem in lockList)
+        {
+            UpdateLockFields((lockItem.Key));
+        }
+    }
+
+    public void UpdateLockFields(int typeProperty)
+    {
+        UpdateLockFields((Property)typeProperty);
+    }
+
+    void UpdateLockFields(Property typeProperty)
+    {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
+        if (!lockList[typeProperty].isOn)
+        {
+            prPeca.ListPropLocks.Remove(typeProperty);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
         }
         else
         {
-            if (prPeca.ListPropLocks.ContainsKey("PosX"))
+            if (prPeca.ListPropLocks.ContainsKey(typeProperty))
             {
-                prPeca.ListPropLocks["PosX"] = Util_VisEdu.ConvertField(tamX.text).ToString();
+                prPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
             }
             else
             {
-                prPeca.ListPropLocks.Add("PosX", Util_VisEdu.ConvertField(tamX.text).ToString());
+                prPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
             }
 
-            lockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockPosY.isOn)
-        {
-            prPeca.ListPropLocks.Remove("PosY");
-            lockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (prPeca.ListPropLocks.ContainsKey("PosY"))
-            {
-                prPeca.ListPropLocks.Remove("PosY");
-            }
-            else
-            {
-                prPeca.ListPropLocks.Add("PosY", Util_VisEdu.ConvertField(tamY.text).ToString());
-            }
-
-            lockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockPosZ.isOn)
-        {
-            prPeca.ListPropLocks.Remove("PosZ");
-            lockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (prPeca.ListPropLocks.ContainsKey("PosZ"))
-            {
-                prPeca.ListPropLocks.Remove("PosZ");
-            }
-            else
-            {
-                prPeca.ListPropLocks.Add("PosZ", Util_VisEdu.ConvertField(tamZ.text).ToString());
-            }
-
-            lockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 }

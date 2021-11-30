@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class IteracaoScript : MonoBehaviour
 {
-    const float TIMER = 580f;
-
     [SerializeField]
     Camera cam;
     [SerializeField]
@@ -32,16 +29,15 @@ public class IteracaoScript : MonoBehaviour
     public GameObject slot;
 
     Vector3 offset, scanPos, startPos;
-    float timer;
     IteracaoPropriedadePeca propIteracao;
+    bool beingHandled = false;
 
     void Start()
     {
         scanPos = startPos = gameObject.transform.position;
-        timer = TIMER;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         scanPos = gameObject.transform.position;
 
@@ -54,15 +50,15 @@ public class IteracaoScript : MonoBehaviour
         {
             string numSlot = Util_VisEdu.GetNumSlot(slot.name, true);
 
-            if (Global.propriedadePecas.ContainsKey(Consts.ROTACIONAR + numSlot))
+            if (Global.propriedadePecas.ContainsKey(Consts.ROTACIONAR + numSlot) && !beingHandled)
             {
                 StartCoroutine(IteracaoRotacionar());
             }
-            else if (Global.propriedadePecas.ContainsKey(Consts.TRANSLADAR + numSlot))
+            else if (Global.propriedadePecas.ContainsKey(Consts.TRANSLADAR + numSlot) && !beingHandled)
             {
                 StartCoroutine(IteracaoTransladar());
             }
-            else if (Global.propriedadePecas.ContainsKey(Consts.ESCALAR + numSlot))
+            else if (Global.propriedadePecas.ContainsKey(Consts.ESCALAR + numSlot) && !beingHandled)
             {
                 StartCoroutine(IteracaoEscalar());
             }
@@ -76,11 +72,8 @@ public class IteracaoScript : MonoBehaviour
             TransformacaoPropriedadePeca transformacao = Global.propriedadePecas[this.propIteracao.NomeTransformacao] as TransformacaoPropriedadePeca;
             if (transformacao != null)
             {
-                while (timer > 0)
-                {
-                    timer--;
-                    yield return new WaitForSeconds(1f);
-                }
+                beingHandled = true;
+                yield return new WaitForSeconds(1f);
 
                 if (this.propIteracao.AtivoX && (this.propIteracao.Intervalo.X + transformacao.Pos.X) < this.propIteracao.Max.X)
                 {
@@ -133,9 +126,7 @@ public class IteracaoScript : MonoBehaviour
                 Global.propriedadePecas[transformacao.NomePeca] = transformacao;
                 propriedadeRotacionar.Inicializa(transformacao);
                 propriedadeRotacionar.UpdateProp(true);
-                timer = TIMER;
-
-                //yield return new WaitForSeconds(1f);
+                beingHandled = false;
             }
         }
     }
@@ -147,11 +138,8 @@ public class IteracaoScript : MonoBehaviour
             TransformacaoPropriedadePeca transformacao = Global.propriedadePecas[this.propIteracao.NomeTransformacao] as TransformacaoPropriedadePeca;
             if (transformacao != null)
             {
-                while (timer > 0)
-                {
-                    timer--;
-                    yield return new WaitForSeconds(1f);
-                }
+                beingHandled = true;
+                yield return new WaitForSeconds(1f);
 
                 if (this.propIteracao.AtivoX && (this.propIteracao.Intervalo.X + transformacao.Pos.X) < this.propIteracao.Max.X)
                 {
@@ -204,7 +192,7 @@ public class IteracaoScript : MonoBehaviour
                 Global.propriedadePecas[transformacao.NomePeca] = transformacao;
                 propriedadeTransladar.Inicializa(transformacao);
                 propriedadeTransladar.UpdateProp(true);
-                timer = TIMER;
+                beingHandled = false;
             }
         }
     }
@@ -215,11 +203,8 @@ public class IteracaoScript : MonoBehaviour
             TransformacaoPropriedadePeca transformacao = Global.propriedadePecas[this.propIteracao.NomeTransformacao] as TransformacaoPropriedadePeca;
             if (transformacao != null)
             {
-                while (timer > 0)
-                {
-                    timer--;
-                    yield return new WaitForSeconds(1f);
-                }
+                beingHandled = true;
+                yield return new WaitForSeconds(1f);
 
                 if (this.propIteracao.AtivoX && (this.propIteracao.Intervalo.X + transformacao.Pos.X) < this.propIteracao.Max.X)
                 {
@@ -272,7 +257,7 @@ public class IteracaoScript : MonoBehaviour
                 Global.propriedadePecas[transformacao.NomePeca] = transformacao;
                 propriedadeEscalar.Inicializa(transformacao);
                 propriedadeEscalar.UpdateProp(true);
-                timer = TIMER;
+                beingHandled = false;
             }
         }
     }
@@ -410,6 +395,7 @@ public class IteracaoScript : MonoBehaviour
             {
                 this.propIteracao = propPeca;
             }
+            this.propIteracao.Nome = Consts.ITERACAO;
             this.propIteracao.NomePeca = gameObject.name;
 
             Global.propriedadePecas.Add(this.propIteracao.NomePeca, this.propIteracao);

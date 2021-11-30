@@ -84,17 +84,17 @@ public enum PecasSlot { Camera, ObjGrafico, Formas, Traformacoes, Iluminacao };
 
 public enum Slots { CameraSlot, ObjGrafSlot, FormasSlot, TransformacoesSlot, IluminacaoSlot };
 
-public enum Property 
-{ 
-    PosX, PosY, PosZ, 
-    TamX, TamY, TamZ, 
-    ToggleActive, 
-    Intensidade, 
-    Distancia, 
-    Angulo, 
-    Expoente, 
-    FOV, 
-    Pontos, 
+public enum Property
+{
+    None,
+    PosX, PosY, PosZ,
+    TamX, TamY, TamZ,
+    Intensidade,
+    Distancia,
+    Angulo,
+    Expoente,
+    FOV,
+    Pontos,
     P1PosX, P1PosY, P1PosZ,
     P2PosX, P2PosY, P2PosZ,
     P3PosX, P3PosY, P3PosZ,
@@ -104,7 +104,7 @@ public enum Property
     MinX, MinY, MinZ,
     MaxX, MaxY, MaxZ,
     ValorX, ValorY, ValorZ,
-    Empty
+    QuantidadePontos
 };
 
 public enum TipoIluminacao { Ambiente, Directional, Point, Spot };

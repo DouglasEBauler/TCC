@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PoligonoAmbScript : MonoBehaviour
@@ -18,6 +19,7 @@ public class PoligonoAmbScript : MonoBehaviour
 
     Mesh mesh;
     LineRenderer lineRender;
+    Vector2[] vertices;
 
     void Start()
     {
@@ -29,12 +31,15 @@ public class PoligonoAmbScript : MonoBehaviour
 
     void DefineMesh()
     {
-        var vertices = new Vector2[]
+        if (vertices == null)
         {
-            new Vector2(-width, -height)
-            , new Vector2(-width, height)
-            , new Vector2(width, height)
-        };
+            vertices  = new Vector2[]
+            {
+                new Vector2(-width, -height)
+                , new Vector2(-width, height)
+                , new Vector2(width, height)
+            };
+        }
 
         Triangulator triangulator = new Triangulator(vertices);
 
@@ -63,6 +68,29 @@ public class PoligonoAmbScript : MonoBehaviour
                 case TipoPrimitiva.Cheio: DefinePrimitivaCheio(); break;
             }
         }
+    }
+
+    public void ConfiguratePoints(int qtdPontos)
+    {
+        if (qtdPontos > 3)
+        {
+            List<Vector2> verticesNew = new List<Vector2>()
+            {
+                new Vector2(-width, -height)
+                , new Vector2(-width, height)
+                , new Vector2(width, height)
+            };
+
+            int i = 3;
+            while (i < qtdPontos)
+            {
+                verticesNew.Add(new Vector2(width/2, -height/2));
+                i++;
+            }
+
+            vertices = verticesNew.ToArray();
+        }
+        DefineMesh();
     }
 
     void DefinePrimitivaCheio()

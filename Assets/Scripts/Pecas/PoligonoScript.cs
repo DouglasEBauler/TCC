@@ -133,10 +133,10 @@ public class PoligonoScript : MonoBehaviour
 
                 yield return null;
             }
-
-            transform.parent = slot.transform;
-            gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
+
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
     public void AddPoligono(PoligonoPropriedadePeca propPeca = null)
@@ -145,9 +145,6 @@ public class PoligonoScript : MonoBehaviour
 
         if (!tutorialScript.EstaExecutandoTutorial)
         {
-            //if (Global.cameraAtiva && new PropIluminacaoPadrao().existeIluminacao())
-            //    GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
-
             ConfigPoligonoAmb();
             ConfigPoligonoVis();
         }

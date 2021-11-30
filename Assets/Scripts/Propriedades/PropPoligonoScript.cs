@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,8 @@ public class PropPoligonoScript : MonoBehaviour
     [SerializeField]
     FlexibleColorPicker corSelecionada;
     [SerializeField]
+    PropCameraScript propCamera;
+    [SerializeField]
     Toggle lockQtdPontos;
     [SerializeField]
     Toggle lockPosX;
@@ -32,9 +35,38 @@ public class PropPoligonoScript : MonoBehaviour
     Toggle ativo;
 
     PoligonoPropriedadePeca propPeca;
+    Dictionary<Property, InputField> propList;
+    Dictionary<Property, Toggle> lockList;
     GameObject pecaAmb;
     GameObject pecaVis;
     bool podeAtualizar;
+
+    void FixedUpdate()
+    {
+        if (this.propPeca != null)
+        {
+            FocusPoligonoVis();
+            UpdateColor();
+        }
+
+        if (pecaAmb != null)
+        {
+            pecaAmb.GetComponent<MeshRenderer>().enabled = true;
+        }
+    }
+
+    void FocusPoligonoVis()
+    {
+        if (pecaVis != null && Global.cameraAtiva && this.propPeca.Ativo)
+        {
+            propCamera.EnabledPecasVis(this.propPeca.NomePeca, false);
+            pecaVis.GetComponent<MeshRenderer>().enabled = true;
+        }
+        else
+        {
+            pecaVis.GetComponent<MeshRenderer>().enabled = false;
+        }
+    }
 
     public void Inicializa(PoligonoPropriedadePeca prPeca)
     {
@@ -62,16 +94,7 @@ public class PropPoligonoScript : MonoBehaviour
 
                 corSeletor.GetComponent<Image>().material.color = propPeca.Cor;
                 pecaAmb = GameObject.Find(propPeca.PoligonoAmb);
-                if (pecaAmb != null)
-                {
-                    pecaAmb.GetComponent<PoligonoAmbScript>().PropPeca = propPeca;
-                }
-
                 pecaVis = GameObject.Find(propPeca.PoligonoVis);
-                if (pecaAmb != null)
-                {
-                    pecaAmb.GetComponent<PoligonoAmbScript>().PropPeca = propPeca;
-                }
             }
             finally
             {
@@ -79,6 +102,25 @@ public class PropPoligonoScript : MonoBehaviour
                 UpdateProp();
             }
         }
+    }
+
+    void InicializaListas()
+    {
+        propList = new Dictionary<Property, InputField>()
+        {
+            { Property.Pontos, pontos },
+            { Property.PosX, posX },
+            { Property.PosY, posY },
+            { Property.PosZ, posZ }
+        };
+
+        lockList = new Dictionary<Property, Toggle>()
+        {
+            { Property.Pontos, lockQtdPontos },
+            { Property.PosX, lockPosX },
+            { Property.PosY, lockPosY },
+            { Property.PosZ, lockPosZ }
+        };
     }
 
     public void UpdateProp()
@@ -97,7 +139,20 @@ public class PropPoligonoScript : MonoBehaviour
                 propPeca.Primitiva = (TipoPrimitiva)primitiva.value;
                 propPeca.Ativo = ativo.isOn;
 
-                UpdateLockFields();
+                if (pecaAmb != null)
+                {
+                    pecaAmb.GetComponent<PoligonoAmbScript>().PropPeca = propPeca;
+                    pecaAmb.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
+                }
+
+                if (pecaVis != null)
+                {
+                    pecaVis.GetComponent<PoligonoAmbScript>().PropPeca = propPeca;
+                    pecaVis.GetComponent<MeshRenderer>().enabled = propPeca.Ativo && Global.cameraAtiva;
+                    FocusPoligonoVis();
+                }
+
+                UpdateAllLockFields();
                 UpdatePoligonoAmbiente();
                 AtualizaListaProp();
             }
@@ -117,6 +172,7 @@ public class PropPoligonoScript : MonoBehaviour
             pecaAmb.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
             if (propPeca.Ativo)
             {
+                pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoints(propPeca.Pontos);
                 pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
             }
         }
@@ -152,82 +208,48 @@ public class PropPoligonoScript : MonoBehaviour
         }
     }
 
-    public void UpdateLockFields()
+    void UpdateAllLockFields()
     {
-        if (!lockQtdPontos.isOn)
+        if (lockList == null || propList == null)
         {
-            propPeca.ListPropLocks.Remove("Pontos");
-            lockQtdPontos.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
+            InicializaListas();
+        }
+
+        foreach (var lockItem in lockList)
+        {
+            UpdateLockFields((lockItem.Key));
+        }
+    }
+
+    public void UpdateLockFields(int typeProperty)
+    {
+        UpdateLockFields((Property)typeProperty);
+    }
+
+    void UpdateLockFields(Property typeProperty)
+    {
+        if (lockList == null || propList == null)
+        {
+            InicializaListas();
+        }
+
+        if (!lockList[typeProperty].isOn)
+        {
+            propPeca.ListPropLocks.Remove(typeProperty);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
         }
         else
         {
-            if (propPeca.ListPropLocks.ContainsKey("Pontos"))
+            if (propPeca.ListPropLocks.ContainsKey(typeProperty))
             {
-                propPeca.ListPropLocks["Pontos"] = Util_VisEdu.ConvertField(posX.text).ToString();
+                propPeca.ListPropLocks[typeProperty] = Util_VisEdu.ConvertField(propList[typeProperty].text).ToString();
             }
             else
             {
-                propPeca.ListPropLocks.Add("Pontos", Util_VisEdu.ConvertField(posX.text).ToString());
+                propPeca.ListPropLocks.Add(typeProperty, Util_VisEdu.ConvertField(propList[typeProperty].text).ToString());
             }
 
-            lockQtdPontos.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockPosX.isOn)
-        {
-            propPeca.ListPropLocks.Remove("PosX");
-            lockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("PosX"))
-            {
-                propPeca.ListPropLocks["PosX"] = Util_VisEdu.ConvertField(posX.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("PosX", Util_VisEdu.ConvertField(posX.text).ToString());
-            }
-
-            lockPosX.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockPosY.isOn)
-        {
-            propPeca.ListPropLocks.Remove("PosY");
-            lockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("PosY"))
-            {
-                propPeca.ListPropLocks["PosY"] = Util_VisEdu.ConvertField(posY.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("PosY", Util_VisEdu.ConvertField(posY.text).ToString());
-            }
-
-            lockPosY.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
-        }
-
-        if (!lockPosZ.isOn)
-        {
-            propPeca.ListPropLocks.Remove("PosZ");
-            lockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_UNLOCK);
-        }
-        else
-        {
-            if (propPeca.ListPropLocks.ContainsKey("PosZ"))
-            {
-                propPeca.ListPropLocks["PosZ"] = Util_VisEdu.ConvertField(posZ.text).ToString();
-            }
-            else
-            {
-                propPeca.ListPropLocks.Add("PosZ", Util_VisEdu.ConvertField(posZ.text).ToString());
-            }
-
-            lockPosZ.GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
+            lockList[typeProperty].GetComponent<RawImage>().texture = Resources.Load<Texture2D>(Consts.PATH_IMG_LOCK);
         }
     }
 }

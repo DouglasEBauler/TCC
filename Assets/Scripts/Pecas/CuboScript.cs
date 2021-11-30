@@ -128,28 +128,22 @@ public class CuboScript : MonoBehaviour
 
                 yield return null;
             }
-
-            transform.parent = slot.transform;
-            gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
+
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
     public void AddCubo(CuboPropriedadePeca propPeca = null)
     {
+        if (tutorialScript.EstaExecutandoTutorial)
+        {
+            PodeEncaixar();
+        }
+
         Encaixa();
-
-        if (!tutorialScript.EstaExecutandoTutorial)
-        {
-            //if (Global.cameraAtiva && new PropIluminacaoPadrao().existeIluminacao())
-            //    GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
-
-            ConfigCuboAmb();
-            ConfigCuboVis();
-        }
-        else
-        {
-            GameObject.Find(Consts.CUBO_AMB + Util_VisEdu.GetNumSlot(slot.name)).GetComponent<MeshRenderer>().enabled = true;
-        }
+        ConfigCuboAmb();
+        ConfigCuboVis();
 
         CreatePropPeca(propPeca);
     }
@@ -201,8 +195,6 @@ public class CuboScript : MonoBehaviour
     {
         if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
         {
-            CuboPropriedadePeca prPeca;
-
             if (propPeca == null)
             {
                 this.propPeca = new CuboPropriedadePeca();
@@ -227,10 +219,15 @@ public class CuboScript : MonoBehaviour
 
     public bool PodeEncaixar()
     {
-        if ((slot != null)
-            && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
-            && !EstaEncaixado())
+        if ((tutorialScript.EstaExecutandoTutorial)
+            || ((slot != null)
+                && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
+                && !EstaEncaixado()))
         {
+            if (tutorialScript.EstaExecutandoTutorial)
+            {
+                slot = GameObject.Find(Consts.FORMA_SLOT + "1");
+            }
             Destroy(slot.GetComponent<Rigidbody>());
             gameObject.name += Util_VisEdu.GetNumSlot(slot.name);
 

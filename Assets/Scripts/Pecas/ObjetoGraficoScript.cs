@@ -137,16 +137,21 @@ public class ObjetoGraficoScript : MonoBehaviour
 
                 yield return null;
             }
-
-            transform.parent = slot.transform;
-            gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
+
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
-    public void AddObjGrafico(PropriedadePeca propPeca = null, bool tutorial = false)
+    public void AddObjGrafico(PropriedadePeca propPeca = null)
     {
+        if (tutorialScript.EstaExecutandoTutorial)
+        {
+            PodeEncaixar();
+        }
+
         Encaixa();
-        SetActivatedSlots(tutorial);
+        SetActivatedSlots();
         InstantiateNextSlot();
         CreatePropPeca(propPeca);
     }
@@ -160,7 +165,7 @@ public class ObjetoGraficoScript : MonoBehaviour
         GameObject slots = GameObject.Find(Consts.SLOT_FORMA + Global.countObjetosGraficos.ToString());
         if (slots != null)
         {
-            slotNext = Instantiate(slots, slots.transform.position, slots.transform.rotation, render.transform);
+            slotNext = Instantiate(slots, render.transform, false);
             slotNext.name = Consts.SLOT_FORMA;
             slotNext.gameObject.SetActive(false);
 
@@ -171,7 +176,7 @@ public class ObjetoGraficoScript : MonoBehaviour
         slots = GameObject.Find(Consts.SLOT_TRANSF + Global.countObjetosGraficos.ToString());
         if (slots != null)
         {
-            slotNext = Instantiate(slots, slots.transform.position, slots.transform.rotation, render.transform);
+            slotNext = Instantiate(slots, render.transform, false);
             slotNext.name = Consts.SLOT_TRANSF;
             slotNext.gameObject.SetActive(false);
 
@@ -182,7 +187,7 @@ public class ObjetoGraficoScript : MonoBehaviour
         slots = GameObject.Find(Consts.SLOT_ILUMINACAO + Global.countObjetosGraficos.ToString());
         if (slots != null)
         {
-            slotNext = Instantiate(slots, slots.transform.position, slots.transform.rotation, render.transform);
+            slotNext = Instantiate(slots, render.transform, false);
             slotNext.name = Consts.SLOT_ILUMINACAO;
             slotNext.gameObject.SetActive(false);
 
@@ -191,36 +196,36 @@ public class ObjetoGraficoScript : MonoBehaviour
         }
     }
 
-    void SetActivatedSlots(bool tutorial = false)
+    void SetActivatedSlots()
     {
         GameObject slot = FindSlot(Consts.SLOT_FORMA);
         if (slot != null)
         {
             slot.gameObject.SetActive(true);
-            slot.name += ((!tutorial) ? Global.countObjetosGraficos.ToString() : Consts.TUTORIAL);
+            slot.name += Global.countObjetosGraficos.ToString();
 
             slot = FindSlot(Consts.FORMA_SLOT, slot);
-            slot.name += ((!tutorial) ? Global.countObjetosGraficos.ToString() : Consts.TUTORIAL);
+            slot.name += Global.countObjetosGraficos.ToString();
         }
 
         slot = FindSlot(Consts.SLOT_TRANSF);
         if (slot != null)
         {
             slot.gameObject.SetActive(true);
-            slot.name += ((!tutorial) ? Global.countObjetosGraficos.ToString() : Consts.TUTORIAL);
+            slot.name += Global.countObjetosGraficos.ToString();
 
             slot = FindSlot(Consts.TRANSF_SLOT, slot);
-            slot.name += ((!tutorial) ? Global.countObjetosGraficos.ToString() : Consts.TUTORIAL);
+            slot.name += Global.countObjetosGraficos.ToString();
         }
 
         slot = FindSlot(Consts.SLOT_ILUMINACAO);
         if (slot != null)
         {
             slot.gameObject.SetActive(true);
-            slot.name += ((!tutorial) ? Global.countObjetosGraficos.ToString() : Consts.TUTORIAL);
+            slot.name += Global.countObjetosGraficos.ToString();
 
             slot = FindSlot(Consts.ILUMINACAO_SLOT, slot);
-            slot.name += ((!tutorial) ? Global.countObjetosGraficos.ToString() : Consts.TUTORIAL);
+            slot.name += Global.countObjetosGraficos.ToString();
         }
     }
 
@@ -283,11 +288,17 @@ public class ObjetoGraficoScript : MonoBehaviour
 
     public bool PodeEncaixar()
     {
-        if ((slot != null)
-            && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
-            && !EstaEncaixado())
+        if (tutorialScript.EstaExecutandoTutorial
+            || ((slot != null)
+                && (Vector3.Distance(slot.transform.position, gameObject.transform.position) < 4)
+                && !EstaEncaixado()))
         {
-            slotObjGrafNext = Instantiate(slot.transform.parent.gameObject, render.transform);
+            if (tutorialScript.EstaExecutandoTutorial)
+            {
+                slot = GameObject.Find(Consts.OBJ_GRAFICO_SLOT);
+            }
+
+            slotObjGrafNext = Instantiate(slot.transform.parent.gameObject, render.transform, false);
             slotObjGrafNext.name = Consts.SLOT_OBJ_GRAFICO;
 
             Destroy(slot.GetComponent<Rigidbody>());

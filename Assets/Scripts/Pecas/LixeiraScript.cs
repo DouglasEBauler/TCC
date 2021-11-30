@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LixeiraScript : MonoBehaviour
 {
@@ -18,7 +17,8 @@ public class LixeiraScript : MonoBehaviour
     [SerializeField]
     GameObject posicaoVis;
 
-    GameObject objDrop;
+    [HideInInspector]
+    public GameObject objDrop;
 
     void FixedUpdate()
     {
@@ -34,7 +34,7 @@ public class LixeiraScript : MonoBehaviour
         objDrop = other.gameObject;
     }
 
-    void RemovePeca()
+    public void RemovePeca()
     {
         EnabledColliderPecas(false);
         try
@@ -78,6 +78,7 @@ public class LixeiraScript : MonoBehaviour
         propCamera.DemosntraCamera(false);
         Global.propriedadePecas.Remove(objDrop.name);
         Global.listaEncaixes.Remove(objDrop.name);
+        Destroy(objDrop);
     }
 
     void RemoveIluminacao()
@@ -93,14 +94,25 @@ public class LixeiraScript : MonoBehaviour
 
                 if (slot != null)
                 {
-                    peca = slot.transform.Find(Consts.PECA_ILUMINACAO + numFormaSlot);
+                    peca = slot.transform.Find(Consts.ILUMINACAO + numFormaSlot);
 
                     if (peca)
                     {
                         Global.listaEncaixes.Remove(peca.name);
                         Global.propriedadePecas.Remove(peca.name);
                         Destroy(peca.gameObject);
+
+                        GameObject objGameLightIluminacao = GameObject.Find(Consts.LIGHT_OBJECTS_ILUMINACAO + numFormaSlot);
+                        if (objGameLightIluminacao != null)
+                        {
+                            Destroy(objGameLightIluminacao);
+                        }
                     }
+
+                    Rigidbody rigiBody = slot.gameObject.AddComponent<Rigidbody>();
+                    rigiBody.useGravity = false;
+                    rigiBody.constraints = RigidbodyConstraints.FreezeAll;
+                    break;
                 }
             }
         }
@@ -127,7 +139,9 @@ public class LixeiraScript : MonoBehaviour
                         Destroy(peca.gameObject);
                     }
 
-                    _child.gameObject.AddComponent<Rigidbody>();
+                    Rigidbody rigiBody = _child.gameObject.AddComponent<Rigidbody>();
+                    rigiBody.useGravity = false;
+                    rigiBody.constraints = RigidbodyConstraints.FreezeAll;
                 }
             }
         }
@@ -205,16 +219,25 @@ public class LixeiraScript : MonoBehaviour
             {
                 slot = child.transform.GetChild(0);
 
-                foreach (Transform _slot in slot.transform)
+                if (slot != null)
                 {
-                    if (_slot.name.Contains(Consts.ILUMINACAO))
+                    Transform peca = slot.transform.Find(Consts.ILUMINACAO + numFormaSlot);
+
+                    if (peca)
                     {
-                        // Rever
-                        Global.listaEncaixes.Remove(_slot.name);
-                        Global.propriedadePecas.Remove(_slot.name);
+                        Global.listaEncaixes.Remove(peca.name);
+                        Global.propriedadePecas.Remove(peca.name);
+                        Destroy(peca.gameObject);
+
+                        GameObject objGameLightIluminacao = GameObject.Find(Consts.LIGHT_OBJECTS_ILUMINACAO + numFormaSlot);
+                        if (objGameLightIluminacao != null)
+                        {
+                            Destroy(objGameLightIluminacao);
+                        }
                     }
+
+                    Destroy(child.gameObject);
                 }
-                Destroy(child.gameObject);
             }
             else if (child.name.Contains(Consts.SLOT_OBJ_GRAFICO + numFormaSlot))
             {
@@ -236,99 +259,45 @@ public class LixeiraScript : MonoBehaviour
     void RemoveTransformacao()
     {
         string numTransfSlot = Util_VisEdu.GetNumSlot(objDrop.transform.parent.name, true);
-        Transform slot;
+        Transform slot, child;
 
-        foreach (Transform child in posicaoAmb.transform)
+        child = posicaoAmb.transform.GetChild(0);
+        while (child != null)
         {
-            if (child.childCount > 0)
+            if (child.GetChild(0).name.Contains(objDrop.name))
             {
-                if (child.GetChild(0).name.Contains(objDrop.name))
+                if (child.GetChild(0).childCount > 0)
                 {
-                    if (child.GetChild(0).childCount > 0)
-                    {
-                        child.GetChild(0).GetChild(0).parent = child.GetChild(0).parent;
-                    }
-                    Destroy(child.GetChild(0).gameObject);
-                    break;
+                    child.GetChild(0).GetChild(0).parent = child.GetChild(0).parent;
                 }
-                else
-                {
-                    if (child.GetChild(0).childCount > 0)
-                    {
-                        if (child.GetChild(0).GetChild(0).name.Contains(objDrop.name))
-                        {
-                            if (child.GetChild(0).GetChild(0).childCount > 0)
-                            {
-                                child.GetChild(0).GetChild(0).GetChild(0).parent = child.GetChild(0).GetChild(0).parent;
-                            }
-                            Destroy(child.GetChild(0).GetChild(0).gameObject);
-                            break;
-                        }
-                        else
-                        {
-                            if (child.GetChild(0).GetChild(0).childCount > 0 && child.GetChild(0).GetChild(0).GetChild(0).name.Contains(objDrop.name))
-                            {
-                                if (child.GetChild(0).GetChild(0).GetChild(0).childCount > 0)
-                                {
-                                    child.GetChild(0).GetChild(0).GetChild(0).GetChild(0).parent = child.GetChild(0).GetChild(0).GetChild(0).parent;
-                                }
-                                Destroy(child.GetChild(0).GetChild(0).GetChild(0).gameObject);
-                                break;
-                            }
-                        }
-                    }
-                }
+                Destroy(child.GetChild(0).gameObject);
+                break;
             }
+
+            child = child.GetChild(0);
         }
 
-        foreach (Transform child in posicaoVis.transform)
+        child = posicaoVis.transform.GetChild(0);
+        while (child != null)
         {
-            if (child.childCount > 0)
+            if (child.GetChild(0).name.Contains(objDrop.name))
             {
-                if (child.GetChild(0).name.Contains(objDrop.name))
+                if (child.GetChild(0).childCount > 0)
                 {
-                    if (child.GetChild(0).childCount > 0)
-                    {
-                        child.GetChild(0).GetChild(0).parent = child.GetChild(0).parent;
-                    }
-                    Destroy(child.GetChild(0).gameObject);
-                    break;
+                    child.GetChild(0).GetChild(0).parent = child.GetChild(0).parent;
                 }
-                else
-                {
-                    if (child.GetChild(0).childCount > 0)
-                    {
-                        if (child.GetChild(0).GetChild(0).name.Contains(objDrop.name))
-                        {
-                            if (child.GetChild(0).GetChild(0).childCount > 0)
-                            {
-                                child.GetChild(0).GetChild(0).GetChild(0).parent = child.GetChild(0).GetChild(0).parent;
-                            }
-                            Destroy(child.GetChild(0).GetChild(0).gameObject);
-                            break;
-                        }
-                        else
-                        {
-                            if (child.GetChild(0).GetChild(0).childCount > 0 && child.GetChild(0).GetChild(0).GetChild(0).name.Contains(objDrop.name))
-                            {
-                                if (child.GetChild(0).GetChild(0).GetChild(0).childCount > 0)
-                                {
-                                    child.GetChild(0).GetChild(0).GetChild(0).GetChild(0).parent = child.GetChild(0).GetChild(0).GetChild(0).parent;
-                                }
-                                Destroy(child.GetChild(0).GetChild(0).GetChild(0).gameObject);
-                                break;
-                            }
-                        }
-                    }
-                }
+                Destroy(child.GetChild(0).gameObject);
+                break;
             }
+
+            child = child.GetChild(0);
         }
 
-        foreach (Transform child in render.transform)
+        foreach (Transform _child in render.transform)
         {
-            if (child.name.Contains(Consts.SLOT_TRANSF + numTransfSlot))
+            if (_child.name.Contains(Consts.SLOT_TRANSF + numTransfSlot))
             {
-                slot = child.transform.GetChild(0);
+                slot = _child.transform.GetChild(0);
 
                 foreach (Transform _slot in slot.transform)
                 {
@@ -339,7 +308,7 @@ public class LixeiraScript : MonoBehaviour
                         break;
                     }
                 }
-                Destroy(child.gameObject);
+                Destroy(_child.gameObject);
                 break;
             }
         }
@@ -364,9 +333,9 @@ public class LixeiraScript : MonoBehaviour
 
         foreach (Transform child in posicaoVis.transform)
         {
-            if (child.name.Contains(Consts.CUBO_AMB_OBJ + numFormaSlot)
-                || child.name.Contains(Consts.POLIGONO_AMB_OBJ + numFormaSlot)
-                || child.name.Contains(Consts.SPLINE_AMB_OBJ + numFormaSlot))
+            if (child.name.Contains(Consts.CUBO_VIS_OBJ + numFormaSlot)
+                || child.name.Contains(Consts.POLIGONO_VIS_OBJ + numFormaSlot)
+                || child.name.Contains(Consts.SPLINE_VIS_OBJ + numFormaSlot))
             {
                 Destroy(child.gameObject);
                 break;
@@ -409,18 +378,24 @@ public class LixeiraScript : MonoBehaviour
             }
             else if (child.name.Contains(Consts.SLOT_ILUMINACAO + numFormaSlot))
             {
-                slot = child.transform.GetChild(0);
+                Transform peca = child.transform.GetChild(0).transform.Find(Consts.ILUMINACAO + numFormaSlot);
 
-                foreach (Transform _slot in slot.transform)
+                if (peca)
                 {
-                    if (_slot.name.Contains(Consts.ILUMINACAO))
+                    Global.listaEncaixes.Remove(peca.name);
+                    Global.propriedadePecas.Remove(peca.name);
+                    Destroy(peca.gameObject);
+
+                    GameObject objGameLightIluminacao = GameObject.Find(Consts.LIGHT_OBJECTS_ILUMINACAO + numFormaSlot);
+                    if (objGameLightIluminacao != null)
                     {
-                        // Rever
-                        Global.listaEncaixes.Remove(_slot.name);
-                        Global.propriedadePecas.Remove(_slot.name);
-                        //Destroy(_slot.gameObject);
+                        Destroy(objGameLightIluminacao);
                     }
                 }
+
+                Rigidbody rigiBody = child.transform.GetChild(0).gameObject.AddComponent<Rigidbody>();
+                rigiBody.useGravity = false;
+                rigiBody.constraints = RigidbodyConstraints.FreezeAll;
             }
         }
 
@@ -456,25 +431,6 @@ public class LixeiraScript : MonoBehaviour
 
         return null;
     }
-
-    //void DestroyIluminacao(string key)
-    //{
-    //    PropIluminacaoPadrao luz = new PropIluminacaoPadrao();
-
-    //    if (key.Contains(Consts.ILUMINACAO))
-    //    {
-    //        //Global.propriedadeIluminacao.Remove(key);
-
-    //        if (key.Length > "Iluminacao".Length)
-    //        {
-    //            Destroy(GameObject.Find("LightObjects" + key));
-    //        }
-    //        else if (Global.propriedadePecas.ContainsKey(key))
-    //        {
-    //            //luz.AtivaIluminacao(luz.GetTipoLuzPorExtenso(Global.propriedadePecas[key].TipoLuz) + key, false);
-    //        }
-    //    }
-    //}
 
     void ReactiveColliderPeca()
     {

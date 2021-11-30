@@ -22,6 +22,7 @@ public class Util_VisEdu : MonoBehaviour
             return _fabricaPecas;
         }
     }
+
     static GameObject go_visualizador
     {
         get
@@ -82,12 +83,12 @@ public class Util_VisEdu : MonoBehaviour
 
     public static float ConvertField(string input, bool isTamInput = false)
     {
-        return float.Parse(ValidaVazio(input, isTamInput), CultureInfo.InvariantCulture.NumberFormat);
+        return float.Parse(ValidaVazio(input, isTamInput).Trim(), CultureInfo.InvariantCulture.NumberFormat);
     }
 
     public static int ConvertField(string input)
     {
-        return int.Parse(ValidaVazio(input), CultureInfo.InvariantCulture.NumberFormat);
+        return int.Parse(ValidaVazio(input).Trim(), CultureInfo.InvariantCulture.NumberFormat);
     }
 
     public static string ValidaVazio(string valor, bool isTamInput = false)

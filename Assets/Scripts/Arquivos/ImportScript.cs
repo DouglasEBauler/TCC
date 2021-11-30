@@ -360,7 +360,8 @@ public class ImportScript : MonoBehaviour
                 X = DecodeField(propriedades.P5.X),
                 Y = DecodeField(propriedades.P5.Y),
                 Z = DecodeField(propriedades.P5.Z)
-            }
+            },
+            QuantidadePontos = DecodeFieldInt(propriedades.QuantidadePontos)
         };
     }
 
@@ -410,5 +411,11 @@ public class ImportScript : MonoBehaviour
     {
         float value;
         return float.TryParse(valueField, out value) ? Util_VisEdu.ConvertField(valueField) : Util_VisEdu.ConvertField(Util_VisEdu.Base64Decode(valueField));
+    }
+    
+    int DecodeFieldInt(string valueField)
+    {
+        int value;
+        return int.TryParse(valueField, out value) ? Util_VisEdu.ConvertField(valueField) : Util_VisEdu.ConvertField(Util_VisEdu.Base64Decode(valueField));
     }
 }

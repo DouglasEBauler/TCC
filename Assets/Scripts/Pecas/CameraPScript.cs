@@ -24,7 +24,6 @@ public class CameraPScript : MonoBehaviour
 
     Vector3 offset, scanPos, startPos;
     Tutorial tutorialScript;
-    PropriedadeCamera propCamera;
 
     void Start()
     {
@@ -65,7 +64,7 @@ public class CameraPScript : MonoBehaviour
         if (other.gameObject.name.Contains(Consts.CAMERA_SLOT) && !EstaEncaixado())
         {
             slot = other.gameObject;
-        }   
+        }
     }
 
     bool PodeGerarCopiaPeca()
@@ -128,26 +127,22 @@ public class CameraPScript : MonoBehaviour
 
                 yield return null;
             }
-
-            transform.parent = slot.transform;
-            gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
         }
+
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
 
     public void AddCamera(PropriedadeCamera proCam = null)
     {
+        if (tutorialScript.EstaExecutandoTutorial)
+        {
+            PodeEncaixar();
+        }
         Encaixa();
-
+        CreatePropPeca();
         propriedades.GetComponent<PropCameraScript>().DemosntraCamera(true);
-
-        //if (lightProperty.existeIluminacao())
-        //    GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Formas");
-
-        // Verifica se existem cubos e iluminações mas a câmera ainda não foi colocada.
-        Global.propCameraGlobal.ExisteCamera = true;
-
-        CreatePropPeca(proCam);
     }
 
     public void ConfiguraPropriedadePeca()
@@ -159,49 +154,53 @@ public class CameraPScript : MonoBehaviour
     {
         if (EstaEncaixado())
         {
-            CreatePropPeca();
-
             if (camProp != null)
             {
                 Global.propCameraGlobal = camProp;
             }
-            propriedades.GetComponent<PropCameraScript>().PreencheCampos();
-            propriedades.GetComponent<PropCameraScript>().UpdateProp();
-            propriedades.GetComponent<PropCameraScript>().DemosntraCamera(true);
+            CreatePropPeca();
 
+            propriedades.GetComponent<PropCameraScript>().PreencheCampos();
             menuControl.GetComponent<MenuScript>().EnablePanelProp(propriedades.name);
         }
     }
 
     public void CreatePropPeca(PropriedadeCamera propPeca = null)
     {
-        if (!EstaEncaixado())
+        if (EstaEncaixado() && !Global.propriedadePecas.ContainsKey(gameObject.name))
         {
             if (propPeca != null)
             {
-                this.propCamera = propPeca;
+                Global.propCameraGlobal = propPeca;
             }
             else
             {
-                this.propCamera = new PropriedadeCamera();
+                Global.propCameraGlobal = new PropriedadeCamera();
             }
-            this.propCamera.NomePeca = gameObject.name;
+            Global.propCameraGlobal.Nome = gameObject.name;
+            Global.propCameraGlobal.NomePeca = gameObject.name;
 
-            Global.propriedadePecas.Add(gameObject.name, this.propCamera);
+            Global.propriedadePecas.Add(Global.propCameraGlobal.NomePeca, Global.propCameraGlobal);
         }
     }
 
     bool EstaEncaixado()
     {
-        return Global.listaEncaixes.ContainsKey(gameObject.name);
+        return Global.listaEncaixes.ContainsKey(Consts.CAMERA + "1");
     }
 
     public bool PodeEncaixar()
     {
-        if ((slot != null) 
-            && (Vector3.Distance(transform.position, slot.transform.position) < 4) 
-            && !EstaEncaixado())
+        if ((tutorialScript.EstaExecutandoTutorial)
+            || ((slot != null)
+                && (Vector3.Distance(transform.position, slot.transform.position) < 4)
+                && !EstaEncaixado()))
         {
+            if (tutorialScript.EstaExecutandoTutorial)
+            {
+                slot = GameObject.Find(Consts.CAMERA_SLOT);
+            }
+
             slot.name += "1";
             slot.transform.parent.name += "1";
             gameObject.name += "1";

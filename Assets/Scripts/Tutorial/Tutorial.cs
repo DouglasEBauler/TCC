@@ -24,7 +24,7 @@ public class Tutorial : MonoBehaviour
     public bool AbriuMessageBox;
 
     [SerializeField]
-    GameObject CursorMouse;
+    GameObject cursorMouse;
     [SerializeField]
     GameObject cameraP;
     [SerializeField]
@@ -77,6 +77,8 @@ public class Tutorial : MonoBehaviour
     GameObject go_fabricaPecas;
     [SerializeField]
     GameObject fabricaPecas;
+    [SerializeField]
+    LixeiraScript lixeiraScript;
 
     GameObject GOTutorial;
 
@@ -95,17 +97,11 @@ public class Tutorial : MonoBehaviour
 
                         if (distance > 0)
                         {
-                            GOTutorial.transform.position = Vector3.Lerp(
-                                GOTutorial.transform.position,
-                                new Vector3(objGraficoSlot.transform.position.x + 4.55f, objGraficoSlot.transform.position.y + 0.2f, objGraficoSlot.transform.position.z - 2),
-                                Time.deltaTime * SPEED_DESLOC / distance
-                            );
+                            GOTutorial.transform.position = 
+                                Vector3.Lerp(GOTutorial.transform.position, objGraficoSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance);
 
-                            CursorMouse.transform.position = Vector3.Lerp(
-                                CursorMouse.transform.position,
-                                new Vector3(objGraficoSlot.transform.position.x + 6f, objGraficoSlot.transform.position.y + 0.2f, objGraficoSlot.transform.position.z - 2),
-                                Time.deltaTime * SPEED_DESLOC / distance
-                            );
+                            cursorMouse.transform.position = 
+                                Vector3.Lerp(cursorMouse.transform.position, objGraficoSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance);
                         }
                         else
                         {
@@ -124,21 +120,16 @@ public class Tutorial : MonoBehaviour
                     {
                         float distance = GetDistance();
 
+                        MessageBoxVisEdu("PainelMsg02", false);
                         SetMessageImage(true);
 
                         if (distance > 0)
                         {
-                            GOTutorial.transform.position = Vector3.Lerp(
-                                GOTutorial.transform.position,
-                                new Vector3(formasSlot.transform.position.x + 3.1f, formasSlot.transform.position.y + 0.2f, formasSlot.transform.position.z - 3),
-                                Time.deltaTime * SPEED_DESLOC / distance
-                             );
+                            GOTutorial.transform.position = 
+                                Vector3.Lerp(GOTutorial.transform.position, formasSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance);
 
-                            CursorMouse.transform.position = Vector3.Lerp(
-                                CursorMouse.transform.position,
-                                new Vector3(formasSlot.transform.position.x + 3.1f, formasSlot.transform.position.y + 0.2f, formasSlot.transform.position.z - 3),
-                                Time.deltaTime * SPEED_DESLOC / distance
-                            );
+                            cursorMouse.transform.position = 
+                                Vector3.Lerp(cursorMouse.transform.position, formasSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance);
                         }
                         else
                         {
@@ -156,6 +147,7 @@ public class Tutorial : MonoBehaviour
                 case Passo.TerceiroPasso:
                     if (AnswerMsg != 0 && PassoExecutando.Equals(Passo.TerceiroPasso))
                     {
+                        MessageBoxVisEdu("PainelMsg03", false);
                         SetMessageImage(true);
 
                         cubo.GetComponent<CuboScript>().ConfiguraPropriedadePeca();
@@ -163,20 +155,18 @@ public class Tutorial : MonoBehaviour
                         float distance = GetDistance();
                         if (distance > 0)
                         {
-                            CursorMouse.transform.position = Vector3.Lerp(
-                                CursorMouse.transform.position,
-                                new Vector3(inputPosicaoXCubo.transform.position.x, inputPosicaoXCubo.transform.position.y, inputPosicaoXCubo.transform.position.z),
-                                Time.deltaTime * SPEED_DESLOC / distance);
+                            cursorMouse.transform.position = 
+                                Vector3.Lerp(cursorMouse.transform.position, inputPosicaoXCubo.transform.position, Time.deltaTime * SPEED_DESLOC / distance);
                         }
                         else
                         {
                             inputTamanhoXCubo.text = "2";
                             cuboAmbiente.transform.localScale = new Vector3(2, 1, 1);
+                            SetMessageImage(false);
 
                             PassoExecutando = Passo.QuartoPasso;
                             PassoTutorial = Passo.QuartoPasso;
 
-                            SetMessageImage(false);
                             MensagemTutorial();
                         }
                     }
@@ -185,15 +175,14 @@ public class Tutorial : MonoBehaviour
                 case Passo.QuartoPasso:
                     if (AnswerMsg != 0 && PassoExecutando.Equals(Passo.QuartoPasso))
                     {
+                        MessageBoxVisEdu("PainelMsg04", false);
                         SetMessageImage(true);
 
                         float distance = GetDistance("4.1");
                         if (distance > 0 && "4.1".Equals(Nivel))
                         {
-                            CursorMouse.transform.position = Vector3.Lerp(
-                                CursorMouse.transform.position,
-                                new Vector3(btnFabPecas.transform.position.x, btnFabPecas.transform.position.y, btnFabPecas.transform.position.z),
-                                Time.deltaTime * SPEED_DESLOC / distance);
+                            cursorMouse.transform.position = 
+                                Vector3.Lerp(cursorMouse.transform.position, btnFabPecas.transform.position, Time.deltaTime * SPEED_DESLOC / distance);
                         }
                         else
                         {
@@ -205,11 +194,8 @@ public class Tutorial : MonoBehaviour
                             float distance1 = GetDistance("4.2");
                             if (distance1 > 0 && "4.2".Equals(Nivel))
                             {
-                                CursorMouse.transform.position = Vector3.Lerp(
-                                    CursorMouse.transform.position,
-                                    new Vector3(cameraP.transform.position.x, cameraP.transform.position.y, cameraP.transform.position.z - 1),
-                                    Time.deltaTime * SPEED_DESLOC / distance1
-                                );
+                                cursorMouse.transform.position = 
+                                    Vector3.Lerp(cursorMouse.transform.position, cameraP.transform.position, Time.deltaTime * SPEED_DESLOC / distance1);
                             }
                             else
                             {
@@ -218,17 +204,11 @@ public class Tutorial : MonoBehaviour
                                 float distance2 = GetDistance("4.3");
                                 if (distance2 > 0)
                                 {
-                                    CursorMouse.transform.position = Vector3.Lerp(
-                                        CursorMouse.transform.position,
-                                        new Vector3(cameraSlot.transform.position.x + 3, cameraSlot.transform.position.y, cameraSlot.transform.position.z - 1),
-                                        Time.deltaTime * SPEED_DESLOC / distance2
-                                    );
+                                    cursorMouse.transform.position = 
+                                        Vector3.Lerp(cursorMouse.transform.position, cameraSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance2);
 
-                                    GOTutorial.transform.position = Vector3.Lerp(
-                                        GOTutorial.transform.position,
-                                        new Vector3(cameraSlot.transform.position.x + 3.4f, cameraSlot.transform.position.y + 0.1f, cameraSlot.transform.position.z - 1f),
-                                        Time.deltaTime * SPEED_DESLOC / distance2
-                                    );
+                                    GOTutorial.transform.position = 
+                                        Vector3.Lerp(GOTutorial.transform.position, cameraSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance2);
                                 }
                                 else
                                 {
@@ -248,30 +228,25 @@ public class Tutorial : MonoBehaviour
                 case Passo.QuintoPasso:
                     if (AnswerMsg != 0 && PassoExecutando.Equals(Passo.QuintoPasso))
                     {
+                        MessageBoxVisEdu("PainelMsg05", false);
                         SetMessageImage(true);
                         float distance = GetDistance("4.1");
 
                         if (distance > 0 && "4.1".Equals(Nivel))
                         {
-                            CursorMouse.transform.position = Vector3.Lerp(
-                                CursorMouse.transform.position,
-                                new Vector3(rotacionar.transform.position.x, rotacionar.transform.position.y, rotacionar.transform.position.z),
-                                Time.deltaTime * SPEED_DESLOC / distance);
+                            cursorMouse.transform.position = 
+                                Vector3.Lerp(cursorMouse.transform.position, rotacionar.transform.position, Time.deltaTime * SPEED_DESLOC / distance);
                         }
                         else
                         {
                             float distance1 = GetDistance("4.2");
                             if ((distance1 > 0) && ("4.1".Equals(Nivel) || "4.2".Equals(Nivel)))
                             {
-                                CursorMouse.transform.position = Vector3.Lerp(
-                                    CursorMouse.transform.position,
-                                    new Vector3(transformacoesSlot.transform.position.x + 3.8f, transformacoesSlot.transform.position.y, transformacoesSlot.transform.position.z - 2),
-                                    Time.deltaTime * SPEED_DESLOC / distance1);
+                                cursorMouse.transform.position = 
+                                    Vector3.Lerp(cursorMouse.transform.position, transformacoesSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance1);
 
-                                GOTutorial.transform.position = Vector3.Lerp(
-                                    GOTutorial.transform.position,
-                                    new Vector3(transformacoesSlot.transform.position.x + 3.8f, transformacoesSlot.transform.position.y, transformacoesSlot.transform.position.z),
-                                    Time.deltaTime * SPEED_DESLOC / distance1);
+                                GOTutorial.transform.position = 
+                                    Vector3.Lerp(GOTutorial.transform.position, transformacoesSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance1);
 
                                 Nivel = "4.2";
                             }
@@ -290,10 +265,8 @@ public class Tutorial : MonoBehaviour
                                 float distance2 = GetDistance("4.3");
                                 if (distance2 > 0)
                                 {
-                                    CursorMouse.transform.position = Vector3.Lerp(
-                                        CursorMouse.transform.position,
-                                        new Vector3(inputYRotacionar.transform.position.x, inputYRotacionar.transform.position.y, inputYRotacionar.transform.position.z),
-                                        Time.deltaTime * SPEED_DESLOC / distance2);
+                                    cursorMouse.transform.position = 
+                                        Vector3.Lerp(cursorMouse.transform.position, inputYRotacionar.transform.position, Time.deltaTime * SPEED_DESLOC / distance2);
                                 }
                                 else
                                 {
@@ -302,11 +275,11 @@ public class Tutorial : MonoBehaviour
                                     cuboAmbiente.transform.localScale = new Vector3(2, 1, 1);
                                     cuboAmbiente.transform.localRotation = Quaternion.Euler(cuboAmbiente.transform.localRotation.x, 45, cuboAmbiente.transform.localRotation.z);
 
-                                    ++Global.countTransformacoes;
+                                    SetMessageImage(false);
+
                                     PassoExecutando = Passo.SextoPasso;
                                     PassoTutorial = Passo.SextoPasso;
 
-                                    SetMessageImage(false);
                                     MensagemTutorial();
                                 }
                             }
@@ -317,36 +290,31 @@ public class Tutorial : MonoBehaviour
                 case Passo.SextoPasso:
                     if (AnswerMsg != 0 && PassoExecutando.Equals(Passo.SextoPasso))
                     {
+                        MessageBoxVisEdu("PainelMsg06", false);
                         SetMessageImage(true);
 
                         float distance = GetDistance("4.1");
                         if (distance > 0 && "4.1".Equals(Nivel))
                         {
-                            CursorMouse.transform.position = Vector3.Lerp(
-                                CursorMouse.transform.position,
-                                new Vector3(btnFabPecas.transform.position.x, btnFabPecas.transform.position.y, btnFabPecas.transform.position.z),
-                                Time.deltaTime * SPEED_DESLOC / distance);
+                            cursorMouse.transform.position = 
+                                Vector3.Lerp(cursorMouse.transform.position, btnFabPecas.transform.position, Time.deltaTime * SPEED_DESLOC / distance);
                         }
                         else
                         {
                             if ("4.1".Equals(Nivel))
                             {
                                 menuControl.GetComponent<MenuScript>().EnablePanelFabPecas();
-                                CursorMouse.transform.position = new Vector3(iluminacao.transform.position.x, iluminacao.transform.position.y, iluminacao.transform.position.z);
+                                cursorMouse.transform.position = new Vector3(iluminacao.transform.position.x, iluminacao.transform.position.y, iluminacao.transform.position.z);
                             }
 
                             float distance1 = GetDistance("4.2");
                             if (distance1 > 0 && "4.2".Equals(Nivel))
                             {
-                                GOTutorial.transform.position = Vector3.Lerp(
-                                    GOTutorial.transform.position,
-                                    new Vector3(iluminacaoSlot.transform.position.x + 5.1f, iluminacaoSlot.transform.position.y + 0.9f, iluminacaoSlot.transform.position.z - 4),
-                                    Time.deltaTime * SPEED_DESLOC / distance1);
+                                GOTutorial.transform.position = 
+                                    Vector3.Lerp(GOTutorial.transform.position, iluminacaoSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance1);
 
-                                CursorMouse.transform.position = Vector3.Lerp(
-                                    CursorMouse.transform.position,
-                                    new Vector3(iluminacaoSlot.transform.position.x + 3.1f, iluminacaoSlot.transform.position.y + 0.2f, iluminacaoSlot.transform.position.z - 5),
-                                    Time.deltaTime * SPEED_DESLOC / distance1);
+                                cursorMouse.transform.position = 
+                                    Vector3.Lerp(cursorMouse.transform.position, iluminacaoSlot.transform.position, Time.deltaTime * SPEED_DESLOC / distance1);
                             }
                             else
                             {
@@ -382,7 +350,7 @@ public class Tutorial : MonoBehaviour
                 case Passo.SegundoPasso: cubo.GetComponent<CuboScript>().AddCubo(); break;
                 case Passo.QuartoPasso: cameraP.GetComponent<CameraPScript>().AddCamera(); break;
                 case Passo.QuintoPasso: rotacionar.GetComponent<TransformacaoScript>().AddTransformacao(); break;
-                case Passo.SextoPasso: iluminacao.GetComponent<TransformacaoScript>().AddTransformacao(); break;
+                case Passo.SextoPasso: iluminacao.GetComponent<IluminacaoScript>().AddIluminacao(); break;
             }
         }
     }
@@ -408,28 +376,29 @@ public class Tutorial : MonoBehaviour
 
             case Passo.SegundoPasso:
                 if (!AbriuMessageBox)
+                {
                     MessageBoxVisEdu("PainelMsg02", true);
+                }
 
                 AnswerMsg = 0;
 
                 if (AnswerMsg == 2)
                 {
                     PulouTutorial();
-                    PassoTutorial = Passo.PulouTutorial;
                 }
                 else
                 {
-                    CursorMouse.transform.position = new Vector3(cubo.transform.position.x + 2.5f, cubo.transform.position.y - 1, cubo.transform.position.z - 6);
-
-                    GOTutorial = Instantiate(cubo, cubo.transform.position, cubo.transform.rotation, cubo.transform.parent);
-                    GOTutorial.name = "CuboTutorial";
-                    GOTutorial.transform.position = new Vector3(cubo.transform.position.x, cubo.transform.position.y, cubo.transform.position.z);
+                    cursorMouse.transform.position = new Vector3(cubo.transform.position.x, cubo.transform.position.y, cubo.transform.position.z);
+                    cubo.GetComponent<CuboScript>().CopiaPeca();
+                    GOTutorial = cubo;
                 }
                 break;
 
             case Passo.TerceiroPasso:
                 if (!AbriuMessageBox)
+                {
                     MessageBoxVisEdu("PainelMsg03", true);
+                }
 
                 AnswerMsg = 0;
                 break;
@@ -438,26 +407,29 @@ public class Tutorial : MonoBehaviour
                 Nivel = "4.1";
 
                 if (!AbriuMessageBox)
+                {
                     MessageBoxVisEdu("PainelMsg04", true);
+                }
 
                 AnswerMsg = 0;
 
-                GOTutorial = Instantiate(cameraP, cameraP.transform.position, cameraP.transform.rotation, cameraP.transform.parent);
-                GOTutorial.name = "CameraTutorial";
-                GOTutorial.transform.position = new Vector3(cameraP.transform.position.x, cameraP.transform.position.y, cameraP.transform.position.z);
+                cameraP.GetComponent<CameraPScript>().CopiaPeca();
+                GOTutorial = cameraP;
                 break;
 
             case Passo.QuintoPasso:
                 Nivel = "4.1";
 
                 if (!AbriuMessageBox)
+                {
                     MessageBoxVisEdu("PainelMsg05", true);
+                }
 
                 AnswerMsg = 0;
 
-                GOTutorial = Instantiate(rotacionar, rotacionar.transform.position, rotacionar.transform.rotation, rotacionar.transform.parent);
-                GOTutorial.name = "RotacionarTutorial";
-                GOTutorial.transform.position = new Vector3(rotacionar.transform.position.x, rotacionar.transform.position.y, rotacionar.transform.position.z);
+                rotacionar.GetComponent<TransformacaoScript>().CopiaPeca();
+                GOTutorial = rotacionar;
+
                 break;
 
             case Passo.SextoPasso:
@@ -468,25 +440,28 @@ public class Tutorial : MonoBehaviour
 
                 AnswerMsg = 0;
 
-                GOTutorial = Instantiate(iluminacao, iluminacao.transform.position, iluminacao.transform.rotation, iluminacao.transform.parent);
-                GOTutorial.name = "IluminacaoTutorial";
-                GOTutorial.transform.position = new Vector3(iluminacao.transform.position.x, iluminacao.transform.position.y, iluminacao.transform.position.z);
+                iluminacao.GetComponent<IluminacaoScript>().CopiaPeca();
+                GOTutorial = iluminacao;
                 break;
 
             case Passo.SetimoPasso:
                 Nivel = "4.1";
 
                 if (!AbriuMessageBox)
+                {
                     MessageBoxVisEdu("PainelMsg07", true);
+                }
 
                 AnswerMsg = 0;
 
-                GOTutorial = GameObject.Find("ObjetoGraficoPTutorial");
+                GOTutorial = GameObject.Find(Consts.OBJETOGRAFICO+"1");
                 break;
 
             case Passo.UltimoPasso:
                 if (!AbriuMessageBox)
+                {
                     MessageBoxVisEdu("PainelMsg07", true);
+                }
 
                 AnswerMsg = 0;
                 break;
@@ -495,30 +470,23 @@ public class Tutorial : MonoBehaviour
                 if (GameObject.Find("PainelConfirmacao") != null)
                 {
                     if (!AbriuMessageBox)
+                    {
                         MessageBoxVisEdu("PainelConfirmacao", true);
-
-                    CursorMouse = GameObject.Find("CursorMouse");
+                    }
 
                     if (AnswerMsg != 0)
                     {
                         if (AnswerMsg == 1)
                         {
-                            CursorMouse.GetComponent<RawImage>().enabled = true;
-
-                            GOTutorial = Instantiate(objGraficoP, objGraficoP.transform.position, objGraficoP.transform.rotation, objGraficoP.transform.parent);
-                            GOTutorial.name = "ObjetoGraficoPTutorial";
-                            GOTutorial.transform.position = new Vector3(objGraficoP.transform.position.x, objGraficoP.transform.position.y, objGraficoP.transform.position.z);
-
+                            cursorMouse.GetComponent<RawImage>().enabled = true;
+                            objGraficoP.GetComponent<ObjetoGraficoScript>().CopiaPeca();
+                            GOTutorial = objGraficoP;
                             PassoTutorial = Passo.PrimeiroPasso;
-
                             MessageBoxVisEdu("PainelConfirmacao", false);
                         }
                         else
                         {
-                            PassoTutorial = Passo.PulouTutorial;
-                            EstaExecutandoTutorial = false;
-                            MessageBoxVisEdu("PainelConfirmacao", false);
-                            AnswerMsg = 0;
+                            PulouTutorial();
                         }
                     }
                 }
@@ -529,79 +497,21 @@ public class Tutorial : MonoBehaviour
     public void PulouTutorial()
     {
         EstaExecutandoTutorial = false;
-        CursorMouse.GetComponent<RawImage>().enabled = false;
+        cursorMouse.GetComponent<RawImage>().enabled = false;
         PassoTutorial = Passo.PulouTutorial;
 
-        Destroy(GameObject.Find("ObjetoGraficoPTutorial"));
-        Destroy(GameObject.Find("CuboTutorial"));
-        Destroy(GameObject.Find("CameraTutorial"));
-        Destroy(GameObject.Find("RotacionarTutorial"));
-        Destroy(GameObject.Find("IluminacaoTutorial"));
-        Destroy(GameObject.Find("ObjGraficoSlotTutorial"));
-        Destroy(GameObject.Find("CuboVisObjectMain(Clone)"));
-        Destroy(GameObject.Find("CuboVisObjectMainTutorial"));
-
-        GameObject gameObj = GameObject.Find("FormasSlotTutorial");
-        if (gameObj != null)
+        var objDrop = GameObject.Find(Consts.OBJETOGRAFICO + "1");
+        if (objDrop != null)
         {
-            gameObj.name = "FormasSlot";
-            gameObj.SetActive(false);
+            lixeiraScript.objDrop = objDrop;
+            lixeiraScript.RemovePeca();
+            objDrop = GameObject.Find(Consts.CAMERA + "1");
+            if (objDrop != null)
+            {
+                lixeiraScript.objDrop = objDrop;
+                lixeiraScript.RemovePeca();
+            }
         }
-
-        gameObj = GameObject.Find("TransformacoesSlotTutorial");
-        if (gameObj != null)
-        {
-            gameObj.name = "TransformacoesSlot";
-            gameObj.SetActive(false);
-        }
-
-        gameObj = GameObject.Find("IluminacaoSlotTutorial");
-        if (gameObj != null)
-        {
-            gameObj.name = "IluminacaoSlot";
-            gameObj.SetActive(false);
-        }
-
-        gameObj = GameObject.Find("BaseRenderLateralGOTutorial");
-        if (gameObj != null)
-        {
-            gameObj.name = "BaseRenderLateralGO";
-        }
-
-        gameObj = GameObject.Find("BaseRenderLateralTutorial");
-        if (gameObj != null)
-        {
-            gameObj.name = "BaseRenderLateral";
-            gameObj.SetActive(false);
-        }
-
-        gameObj = GameObject.Find("BaseObjetoGraficoGOTutorial");
-        if (gameObj != null)
-        {
-            gameObj.name = "BaseObjetoGraficoGO";
-        }
-
-        gameObj = GameObject.Find("BaseObjetoGraficoTutorial");
-        if (gameObj != null)
-        {
-            gameObj.name = "BaseObjetoGrafico";
-            gameObj.SetActive(false);
-        }
-
-        GameObject.Find("CameraVisInferior").GetComponent<Camera>().cullingMask = 1 << LayerMask.NameToLayer("Nothing");
-        propCamera.GetComponent<PropCameraScript>().DemosntraCamera(false);
-
-        GameObject cuboAmb = GameObject.Find("CuboAmbiente");
-        if (cuboAmb != null)
-        {
-            cuboAmb.transform.localScale = new Vector3(1, 1, 1);
-            cuboAmb.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            cuboAmb.GetComponent<MeshRenderer>().enabled = false;
-        }
-
-        //var btnFabPecas = GameObject.Find("BtnFabPecas");
-        //btnFabPecas.SendMessage("OnMouseDown");dsadasdasdfjklhaiouawrguioawrgioulaerhjrbviounadfbvuiornegiluernguilarhgiluher
-
 
         GameObject.Find("PainelBase").SetActive(false);
     }
@@ -611,37 +521,37 @@ public class Tutorial : MonoBehaviour
         switch (PassoTutorial)
         {
             case Passo.PrimeiroPasso:
-                return Vector3.Distance(GOTutorial.transform.position, new Vector3(objGraficoSlot.transform.position.x + 4.55f, objGraficoSlot.transform.position.y + 0.2f, objGraficoSlot.transform.position.z - 2));
+                return Vector3.Distance(GOTutorial.transform.position, objGraficoSlot.transform.position);
 
             case Passo.SegundoPasso:
-                return Vector3.Distance(GOTutorial.transform.position, new Vector3(formasSlot.transform.position.x + 3.1f, formasSlot.transform.position.y + 0.2f, formasSlot.transform.position.z - 3));
+                return Vector3.Distance(GOTutorial.transform.position, formasSlot.transform.position);
 
             case Passo.TerceiroPasso:
-                return Vector3.Distance(CursorMouse.transform.position, inputPosicaoXCubo.transform.position);
+                return Vector3.Distance(cursorMouse.transform.position, inputPosicaoXCubo.transform.position);
 
             case Passo.QuartoPasso:
                 switch (nivel)
                 {
-                    case "4.1": return Vector3.Distance(CursorMouse.transform.position, btnFabPecas.transform.position);
-                    case "4.2": return Vector3.Distance(CursorMouse.transform.position, new Vector3(cameraP.GetComponent<CameraPScript>().transform.position.x, cameraP.transform.position.y, cameraP.transform.position.z - 1));
-                    case "4.3": return Vector3.Distance(CursorMouse.transform.position, new Vector3(cameraSlot.transform.position.x + 3, cameraSlot.transform.position.y, cameraSlot.transform.position.z - 1));
+                    case "4.1": return Vector3.Distance(cursorMouse.transform.position, btnFabPecas.transform.position);
+                    case "4.2": return Vector3.Distance(cursorMouse.transform.position, cameraP.transform.position);
+                    case "4.3": return Vector3.Distance(cursorMouse.transform.position, cameraSlot.transform.position);
                     default: return 0;
                 }
 
             case Passo.QuintoPasso:
                 switch (nivel)
                 {
-                    case "4.1": return Vector3.Distance(CursorMouse.transform.position, rotacionar.transform.position);
-                    case "4.2": return Vector3.Distance(CursorMouse.transform.position, new Vector3(transformacoesSlot.transform.position.x + 3.8f, transformacoesSlot.transform.position.y, transformacoesSlot.transform.position.z - 2));
-                    case "4.3": return Vector3.Distance(CursorMouse.transform.position, new Vector3(inputYRotacionar.transform.position.x, inputYRotacionar.transform.position.y, inputYRotacionar.transform.position.z));
+                    case "4.1": return Vector3.Distance(cursorMouse.transform.position, rotacionar.transform.position);
+                    case "4.2": return Vector3.Distance(cursorMouse.transform.position, transformacoesSlot.transform.position);
+                    case "4.3": return Vector3.Distance(cursorMouse.transform.position, inputYRotacionar.transform.position);
                     default: return 0;
                 }
 
             case Passo.SextoPasso:
                 switch (nivel)
                 {
-                    case "4.1": return Vector3.Distance(CursorMouse.transform.position, btnFabPecas.transform.position);
-                    case "4.2": return Vector3.Distance(GOTutorial.transform.position, new Vector3(iluminacaoSlot.transform.position.x + 5.1f, iluminacaoSlot.transform.position.y + 0.9f, iluminacaoSlot.transform.position.z - 4));
+                    case "4.1": return Vector3.Distance(cursorMouse.transform.position, btnFabPecas.transform.position);
+                    case "4.2": return Vector3.Distance(GOTutorial.transform.position, iluminacaoSlot.transform.position);
                     default: return 0;
                 }
 
@@ -665,7 +575,9 @@ public class Tutorial : MonoBehaviour
         }
 
         if (msg != string.Empty)
+        {
             GameObject.Find(msg).GetComponent<RawImage>().enabled = status;
+        }
     }
 
     public void MessageBoxVisEdu(string painel, bool active)
@@ -681,13 +593,28 @@ public class Tutorial : MonoBehaviour
                 painelActive.transform.GetChild(0).gameObject.SetActive(active);
 
                 if (painelActive.transform.childCount > 1)
+                {
                     painelActive.transform.GetChild(1).gameObject.SetActive(active);
-
-                painelActive.transform.parent.GetComponent<BoxCollider>().enabled = active;
+                }
 
                 AbriuMessageBox = active;
             }
         }
+    }
+
+    public void SetAnswerMsg(GameObject button)
+    {
+        if ("Pular".Equals(button.name))
+        {
+            PassoTutorial = Passo.PulouTutorial;
+            PulouTutorial();
+        }
+        else
+        {
+            AnswerMsg = 1;
+        }
+
+        MessageBoxVisEdu("PainelConfirmacao", false);
     }
 }
 

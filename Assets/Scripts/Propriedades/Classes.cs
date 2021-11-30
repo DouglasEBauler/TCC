@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,12 +33,15 @@ public class PropriedadePeca
     public string NomePeca;
     public Color Cor;
     [NonSerialized]
-    public Dictionary<string, string> ListPropLocks;
+    public Dictionary<Property, string> ListPropLocks;
     public bool Ativo;
 
     public PropriedadePeca()
     {
-        ListPropLocks = new Dictionary<string, string>();
+        Nome = string.Empty;
+        NomePeca = string.Empty;
+        Cor = Color.white;
+        ListPropLocks = new Dictionary<Property, string>();
     }
 }
 
@@ -129,6 +133,7 @@ public class SplinePropriedadePeca : PropriedadePeca
     public Posicao P3;
     public Posicao P4;
     public Posicao P5;
+    public int QuantidadePontos;
     [NonSerialized]
     public string SplineAmb;
     [NonSerialized]
@@ -140,6 +145,8 @@ public class SplinePropriedadePeca : PropriedadePeca
         P2 = new Posicao();
         P3 = new Posicao();
         P4 = new Posicao();
+        P5 = new Posicao();
+        QuantidadePontos = 30;
         SplineAmb = string.Empty;
         SplineVis = string.Empty;
     }
@@ -180,11 +187,11 @@ public class PropriedadeCamera : PropriedadePeca
     public bool ExisteCamera;
     public PropriedadeCameraInicial PropInicial;
     [NonSerialized]
-    public Dictionary<string, string> ListPropCamLocks;
+    public Dictionary<Property, string> ListPropCamLocks;
 
     public PropriedadeCamera() 
     {
-        this.ListPropCamLocks = new Dictionary<string, string>();
+        this.ListPropCamLocks = new Dictionary<Property, string>();
     }
 }
 
