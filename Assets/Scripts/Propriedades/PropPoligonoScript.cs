@@ -48,6 +48,11 @@ public class PropPoligonoScript : MonoBehaviour
             FocusPoligonoVis();
             UpdateColor();
         }
+
+        if (pecaAmb != null)
+        {
+            pecaAmb.GetComponent<MeshRenderer>().enabled = true;
+        }
     }
 
     void FocusPoligonoVis()
@@ -167,6 +172,7 @@ public class PropPoligonoScript : MonoBehaviour
             pecaAmb.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
             if (propPeca.Ativo)
             {
+                pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoints(propPeca.Pontos);
                 pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
             }
         }

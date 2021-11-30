@@ -227,6 +227,18 @@ public class TransformacaoScript : MonoBehaviour
                 }
             }
         }
+
+        RemoveGameObjectsNull();
+    }
+
+    void RemoveGameObjectsNull()
+    {
+        GameObject gameObj = GameObject.Find("New Game Object");
+        while (gameObj != null)
+        {
+            DestroyImmediate(gameObj);
+            gameObj = GameObject.Find("New Game Object");
+        }
     }
 
     public void ConfiguraPropriedadePeca(TransformacaoPropriedadePeca propPeca = null)
