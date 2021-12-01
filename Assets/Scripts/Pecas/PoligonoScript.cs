@@ -94,7 +94,7 @@ public class PoligonoScript : MonoBehaviour
         }
     }
 
-    public IEnumerator RemovePeca()
+    IEnumerator RemovePeca()
     {
         while ((transform.position.y != startPos.y && transform.position.x != startPos.x))
         {
