@@ -258,6 +258,7 @@ public class LixeiraScript : MonoBehaviour
 
     void RemoveTransformacao()
     {
+        string numSlot = Util_VisEdu.GetNumSlot(objDrop.transform.parent.name);
         string numTransfSlot = Util_VisEdu.GetNumSlot(objDrop.transform.parent.name, true);
         Transform slot, child;
 
@@ -266,10 +267,23 @@ public class LixeiraScript : MonoBehaviour
         {
             if (child.GetChild(0).name.Contains(objDrop.name))
             {
+                if (child.GetChild(0).gameObject.name.Contains(Consts.ROTACIONAR))
+                {
+                    child.GetChild(0).localEulerAngles = new Vector3(0, ((GameObject.Find(Consts.POLIGONO + numSlot) != null) ? 180 : 0), 0);
+                }
+                else if (child.GetChild(0).gameObject.name.Contains(Consts.TRANSLADAR))
+                {
+                    child.GetChild(0).localPosition = new Vector3(0, 0, 0);
+                }
+                else if (child.GetChild(0).gameObject.name.Contains(Consts.ESCALAR))
+                {
+                    child.GetChild(0).localScale = new Vector3(1, 1, 1);
+                }
+
                 if (child.GetChild(0).childCount > 0)
                 {
                     child.GetChild(0).GetChild(0).parent = child.GetChild(0).parent;
-                }
+                }                
                 Destroy(child.GetChild(0).gameObject);
                 break;
             }
@@ -282,6 +296,19 @@ public class LixeiraScript : MonoBehaviour
         {
             if (child.GetChild(0).name.Contains(objDrop.name))
             {
+                if (child.GetChild(0).gameObject.name.Contains(Consts.ROTACIONAR))
+                {
+                    child.GetChild(0).localEulerAngles = new Vector3(0, ((GameObject.Find(Consts.POLIGONO + numSlot) != null) ? 180 : 0), 0);
+                }
+                else if (child.GetChild(0).gameObject.name.Contains(Consts.TRANSLADAR))
+                {
+                    child.GetChild(0).localPosition = new Vector3(0, 0, 0);
+                }
+                else if (child.GetChild(0).gameObject.name.Contains(Consts.ESCALAR))
+                {
+                    child.GetChild(0).localScale = new Vector3(1, 1, 1);
+                }
+
                 if (child.GetChild(0).childCount > 0)
                 {
                     child.GetChild(0).GetChild(0).parent = child.GetChild(0).parent;

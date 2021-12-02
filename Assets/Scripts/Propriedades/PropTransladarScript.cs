@@ -92,7 +92,7 @@ public class PropTransladarScript : MonoBehaviour
                 float x, y, z;
                 if (prPeca.Ativo)
                 {
-                    x = prPeca.Pos.X;
+                    x = -prPeca.Pos.X;
                     y = prPeca.Pos.Y;
                     z = prPeca.Pos.Z;
                 }
