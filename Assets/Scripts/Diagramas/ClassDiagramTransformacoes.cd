@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="TransformacaoScript">
+    <Position X="0.5" Y="0.5" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>kASABAAAQCIAFEAkIAAQEAABFQAAABQYYECCABBSAAs=</HashCode>
+      <FileName>Assets\Scripts\Pecas\TransformacaoScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IteracaoScript">
+    <Position X="6.25" Y="0.5" Width="7.25" />
+    <TypeIdentifier>
+      <HashCode>kASABAACQCIAlEAgAAAQEAEBAVBAAAQQYAACAIBCAAM=</HashCode>
+      <FileName>Assets\Scripts\Pecas\IteracaoScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

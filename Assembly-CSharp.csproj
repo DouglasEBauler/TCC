@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{7A882426-787D-DCA5-5B08-6331B10C6A19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -53,7 +54,8 @@
     <UnityVersion>2021.1.15f1</UnityVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
@@ -130,10 +132,17 @@
     <Compile Include="Assets\FlexibleColorPicker\ExampleScene\FCP_ExampleScript.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Scripts\Diagramas\ClassDiagramArquivos.cd" />
+    <None Include="Assets\Scripts\Diagramas\ClassDiagramClasses.cd" />
+    <None Include="Assets\Scripts\Diagramas\ClassDiagramPropFormas.cd" />
+    <None Include="Assets\Scripts\Diagramas\ClassDiagramPropPecas.cd" />
+    <None Include="Assets\Scripts\Diagramas\ClassDiagramFormas.cd" />
+    <None Include="Assets\Scripts\Diagramas\ClassDiagramPropTransformacoes.cd" />
+    <None Include="Assets\Scripts\Diagramas\ClassDiagramTransformacoes.cd" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\Scripts\ClassDiagram1.cd" />
+    <None Include="Assets\Scripts\Diagramas\ClassDiagramPecas.cd" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
