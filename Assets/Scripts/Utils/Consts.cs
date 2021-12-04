@@ -111,6 +111,6 @@ public enum TipoIluminacao { Ambiente, Directional, Point, Spot };
 
 public enum TipoPrimitiva { Vertices, Aberto, Fechado, Cheio };
 
-public enum TypeTransform { Escalar, Rotacionar, Transladar }
+public enum TypeTransform { Escalar, Rotacionar, Transladar };
 
 public enum InputSelectedIluminacao { ValorX, ValorY, ValorZ, None }

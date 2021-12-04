@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ExportScript">
+    <Position X="1.75" Y="1" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAgAMFIAAAAACkAAACEEAgAEAgQEAAAgYAAAGAAQCCA=</HashCode>
+      <FileName>Assets\Scripts\Arquivos\ExportScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImportScript">
+    <Position X="5.75" Y="1" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>BAEEAAAIAABAwAIAACAAABAAgAAECCAAIBAAgSCAAAI=</HashCode>
+      <FileName>Assets\Scripts\Arquivos\ImportScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Valores">
+    <Position X="13.75" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAE=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tamanho">
+    <Position X="12" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Posicao">
+    <Position X="13.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ValorIluminacao">
+    <Position X="16.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PropriedadePeca">
+    <Position X="16" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAABEAAAAAAAEAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IluminacaoPropriedadePeca">
+    <Position X="9.5" Y="9.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAQAAAAAAAAABEACAIEAQAABAAAAQAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TransformacaoPropriedadePeca">
+    <Position X="14.75" Y="9.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAIAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CuboPropriedadePeca">
+    <Position X="20.5" Y="9.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAgAAAAAAAAAAAAAACAAAAAACAAAAAIAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PoligonoPropriedadePeca">
+    <Position X="7" Y="9.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAACAAAEAAAAAAIAAAIA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SplinePropriedadePeca">
+    <Position X="12.25" Y="9.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAgAAAAACBAAAAAAAQAAAACAAAAAIABAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IteracaoPropriedadePeca">
+    <Position X="17.75" Y="9.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAEIEAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PropriedadeCamera">
+    <Position X="23" Y="9.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIECAAAAAAAAAwAIAAAAAAIAAAAAAIAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="PropriedadeCameraInicial" Collapsed="true">
+    <Position X="25.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAwAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

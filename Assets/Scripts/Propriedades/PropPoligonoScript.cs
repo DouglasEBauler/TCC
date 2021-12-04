@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class PropPoligonoScript : MonoBehaviour
 {
+    const float POS_INIT_X = 5;
+    const float POS_INIT_Y = 1;
+    const float POS_INIT_Z = -17;
+
     [SerializeField]
     InputField nome;
     [SerializeField]
@@ -93,6 +97,7 @@ public class PropPoligonoScript : MonoBehaviour
                 ativo.isOn = propPeca.Ativo;
 
                 corSeletor.GetComponent<Image>().material.color = propPeca.Cor;
+
                 pecaAmb = GameObject.Find(propPeca.PoligonoAmb);
                 pecaVis = GameObject.Find(propPeca.PoligonoVis);
             }
@@ -132,7 +137,7 @@ public class PropPoligonoScript : MonoBehaviour
             {
                 propPeca.Nome = nome.text;
                 propPeca.Pontos = Util_VisEdu.ConvertField(pontos.text);
-                propPeca.Pos.X = Util_VisEdu.ConvertField(posX.text);
+                propPeca.Pos.X = Util_VisEdu.ConvertField(posX.text) * -1;
                 propPeca.Pos.Y = Util_VisEdu.ConvertField(posY.text);
                 propPeca.Pos.Z = Util_VisEdu.ConvertField(posZ.text);
                 propPeca.Cor = corSelecionada.color;
@@ -148,7 +153,6 @@ public class PropPoligonoScript : MonoBehaviour
                 if (pecaVis != null)
                 {
                     pecaVis.GetComponent<PoligonoAmbScript>().PropPeca = propPeca;
-                    pecaVis.GetComponent<MeshRenderer>().enabled = propPeca.Ativo && Global.cameraAtiva;
                     FocusPoligonoVis();
                 }
 
@@ -165,16 +169,20 @@ public class PropPoligonoScript : MonoBehaviour
 
     void UpdatePoligonoAmbiente()
     {
-        if (pecaAmb != null)
+        if (pecaAmb != null && pecaVis != null)
         {
-            pecaAmb.transform.localPosition = new Vector3(propPeca.Pos.X, propPeca.Pos.Y, propPeca.Pos.Z);
             UpdateColor();
             pecaAmb.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
+            pecaVis.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
             if (propPeca.Ativo)
             {
                 pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoints(propPeca.Pontos);
                 pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
+                pecaVis.GetComponent<PoligonoAmbScript>().ConfiguratePoints(propPeca.Pontos);
+                pecaVis.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
             }
+            pecaAmb.transform.localPosition = new Vector3(propPeca.Pos.X, propPeca.Pos.Y, propPeca.Pos.Z);
+            pecaVis.transform.localPosition = new Vector3(POS_INIT_X + propPeca.Pos.X, POS_INIT_Y + propPeca.Pos.Y, POS_INIT_Z + propPeca.Pos.Z);
         }
     }
 

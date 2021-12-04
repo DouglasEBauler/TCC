@@ -107,11 +107,11 @@ public class LixeiraScript : MonoBehaviour
                         {
                             Destroy(objGameLightIluminacao);
                         }
-                    }
 
-                    Rigidbody rigiBody = slot.gameObject.AddComponent<Rigidbody>();
-                    rigiBody.useGravity = false;
-                    rigiBody.constraints = RigidbodyConstraints.FreezeAll;
+                        Rigidbody rigiBody = slot.gameObject.AddComponent<Rigidbody>();
+                        rigiBody.useGravity = false;
+                        rigiBody.constraints = RigidbodyConstraints.FreezeAll;
+                    }
                     break;
                 }
             }
@@ -418,11 +418,11 @@ public class LixeiraScript : MonoBehaviour
                     {
                         Destroy(objGameLightIluminacao);
                     }
-                }
 
-                Rigidbody rigiBody = child.transform.GetChild(0).gameObject.AddComponent<Rigidbody>();
-                rigiBody.useGravity = false;
-                rigiBody.constraints = RigidbodyConstraints.FreezeAll;
+                    Rigidbody rigiBody = child.transform.GetChild(0).gameObject.AddComponent<Rigidbody>();
+                    rigiBody.useGravity = false;
+                    rigiBody.constraints = RigidbodyConstraints.FreezeAll;
+                }
             }
         }
 

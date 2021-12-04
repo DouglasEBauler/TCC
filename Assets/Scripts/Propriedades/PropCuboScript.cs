@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class PropCuboScript : MonoBehaviour
 {
+    const float POS_INIT_X = 5;
+    const float POS_INIT_Y = 1;
+    const float POS_INIT_Z = -17;
+
     [SerializeField]
     GameObject tamZCubo;
     [SerializeField]
@@ -155,7 +159,7 @@ public class PropCuboScript : MonoBehaviour
                 prPeca.Tam.X = Util_VisEdu.ConvertField(tamX.text, true);
                 prPeca.Tam.Y = Util_VisEdu.ConvertField(tamY.text, true);
                 prPeca.Tam.Z = Util_VisEdu.ConvertField(tamZ.text, true);
-                prPeca.Pos.X = Util_VisEdu.ConvertField(posX.text);
+                prPeca.Pos.X = Util_VisEdu.ConvertField(posX.text) * -1;
                 prPeca.Pos.Y = Util_VisEdu.ConvertField(posY.text);
                 prPeca.Pos.Z = Util_VisEdu.ConvertField(posZ.text);
                 prPeca.Ativo = ativo.isOn;
@@ -169,8 +173,7 @@ public class PropCuboScript : MonoBehaviour
 
                 if (pecaVis != null)
                 {
-                    pecaVis.transform.localPosition =
-                        new Vector3(pecaVis.transform.localPosition.x + prPeca.Pos.X, pecaVis.transform.localPosition.y + prPeca.Pos.Y, pecaVis.transform.localPosition.z + prPeca.Pos.Z);
+                    pecaVis.transform.localPosition = new Vector3(POS_INIT_X + prPeca.Pos.X, POS_INIT_Y + prPeca.Pos.Y, POS_INIT_Z + prPeca.Pos.Z);
                     pecaVis.transform.localScale = new Vector3(prPeca.Tam.X, prPeca.Tam.Y, prPeca.Tam.Z);
                     FocusCuboVis();
                 }

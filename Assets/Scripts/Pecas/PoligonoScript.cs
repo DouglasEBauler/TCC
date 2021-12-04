@@ -215,7 +215,7 @@ public class PoligonoScript : MonoBehaviour
             this.propPeca.Nome = Consts.POLIGONO;
             this.propPeca.NomePeca = gameObject.name;
             this.propPeca.PoligonoAmb = Consts.POLIGONO_AMB + numSlot;
-            this.propPeca.PoligonoVis = Consts.POLIGONO_AMB + numSlot;
+            this.propPeca.PoligonoVis = Consts.POLIGONO_VIS + numSlot;
 
             Global.propriedadePecas.Add(this.propPeca.NomePeca, this.propPeca);
         }

@@ -209,19 +209,19 @@ public class PropSplineScript : MonoBehaviour
             try
             {
                 prPeca.Nome = nomePeca.text;
-                prPeca.P1.X = Util_VisEdu.ConvertField(p1X.text);
+                prPeca.P1.X = Util_VisEdu.ConvertField(p1X.text) * -1;
                 prPeca.P1.Y = Util_VisEdu.ConvertField(p1Y.text);
                 prPeca.P1.Z = Util_VisEdu.ConvertField(p1Z.text);
-                prPeca.P2.X = Util_VisEdu.ConvertField(p2X.text);
+                prPeca.P2.X = Util_VisEdu.ConvertField(p2X.text) * -1;
                 prPeca.P2.Y = Util_VisEdu.ConvertField(p2Y.text);
                 prPeca.P2.Z = Util_VisEdu.ConvertField(p2Z.text);
-                prPeca.P3.X = Util_VisEdu.ConvertField(p3X.text);
+                prPeca.P3.X = Util_VisEdu.ConvertField(p3X.text) * -1;
                 prPeca.P3.Y = Util_VisEdu.ConvertField(p3Y.text);
                 prPeca.P3.Z = Util_VisEdu.ConvertField(p3Z.text);
-                prPeca.P4.X = Util_VisEdu.ConvertField(p4X.text);
+                prPeca.P4.X = Util_VisEdu.ConvertField(p4X.text) * -1;
                 prPeca.P4.Y = Util_VisEdu.ConvertField(p4Y.text);
                 prPeca.P4.Z = Util_VisEdu.ConvertField(p4Z.text);
-                prPeca.P5.X = Util_VisEdu.ConvertField(p5X.text);
+                prPeca.P5.X = Util_VisEdu.ConvertField(p5X.text) * -1;
                 prPeca.P5.Y = Util_VisEdu.ConvertField(p5Y.text);
                 prPeca.P5.Z = Util_VisEdu.ConvertField(p5Z.text);
                 prPeca.QuantidadePontos = Util_VisEdu.ConvertField(quantidadePontos.text);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -192,6 +191,7 @@ public class PropriedadeCamera : PropriedadePeca
     public PropriedadeCamera() 
     {
         this.ListPropCamLocks = new Dictionary<Property, string>();
+        this.FOV = 45f;
     }
 }
 
