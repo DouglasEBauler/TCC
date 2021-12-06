@@ -61,13 +61,13 @@ sysinfo.txt
 *.unitypackage
 /_deploy-Unity/
 *.DS_Store
-
-# Crashlytics generated file
-crashlytics-build.properties
-
-# Packed Addressables
-/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
-
-# Temporary auto-generated Android Assets
-/[Aa]ssets/[Ss]treamingAssets/aa.meta
-/[Aa]ssets/[Ss]treamingAssets/aa/*
+*.vs
+*.vsconfig
+Library/
+Logs/
+Temp/
+UserSettings/
+obj/
+*~$Artigo.docx
+Artigo/~WRL1422.tmp
+Artigo/~WRL2814.tmp
