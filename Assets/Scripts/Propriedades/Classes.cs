@@ -118,7 +118,7 @@ public class PoligonoPropriedadePeca : PropriedadePeca
     {
         this.Pos = new Posicao();
         this.Pontos = 3;
-        this.Primitiva = TipoPrimitiva.Cheio;
+        this.Primitiva = TipoPrimitiva.Preenchido;
         this.PoligonoAmb = string.Empty;
         this.PoligonoVis = string.Empty;
     }

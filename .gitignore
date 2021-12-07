@@ -7,5 +7,4 @@ Temp/
 UserSettings/
 obj/
 *~$Artigo.docx
-Artigo/~WRL1422.tmp
-Artigo/~WRL2814.tmp
+*.tmp

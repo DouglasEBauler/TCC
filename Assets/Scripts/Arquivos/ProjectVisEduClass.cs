@@ -216,7 +216,7 @@ public class PoligonoPropriedadePecaProject : PropriedadePecaProject
         this.PoligonoVis = string.Empty;
         this.Pos = new PosicaoProject();
         this.Pontos = string.Empty;
-        this.Primitiva = TipoPrimitiva.Cheio;
+        this.Primitiva = TipoPrimitiva.Preenchido;
     }
 }
 

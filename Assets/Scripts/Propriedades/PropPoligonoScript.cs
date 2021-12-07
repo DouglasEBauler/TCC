@@ -93,7 +93,7 @@ public class PropPoligonoScript : MonoBehaviour
                 posY.text = propPeca.Pos.Y.ToString();
                 posZ.text = propPeca.Pos.Z.ToString();
                 pontos.text = propPeca.Pontos.ToString();
-                primitiva.value = (int)TipoPrimitiva.Cheio;
+                primitiva.value = (int)TipoPrimitiva.Preenchido;
                 ativo.isOn = propPeca.Ativo;
 
                 corSeletor.GetComponent<Image>().material.color = propPeca.Cor;
