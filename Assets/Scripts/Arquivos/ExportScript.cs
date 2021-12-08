@@ -2,11 +2,22 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using SimpleFileBrowser;
+using SFB;
+using System.Runtime.InteropServices;
+using UnityEngine.EventSystems;
+using System.Text;
+using UnityEngine.UI;
 
 public class ExportScript : MonoBehaviour
 {
     [SerializeField]
     GameObject contentRender;
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    // WebGL
+    [DllImport("__Internal")]
+    private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
+#endif
 
     void OnMouseDown()
     {
@@ -15,8 +26,12 @@ public class ExportScript : MonoBehaviour
         Util_VisEdu.EnableGOVisualizador(false);
         try
         {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        var bytes = Encoding.UTF8.GetBytes(GenerateProject());
+        DownloadFile(gameObject.name, string.Empty, Consts.INITIAL_FILE_PROJECT, bytes, bytes.Length);
+#else
             FileBrowser.AllFilesFilterText = "*.json";
-            FileBrowser.ShowLoadDialog(
+            FileBrowser.ShowSaveDialog(
                 onSuccess: (path) => { GenerateProject(); },
                 onCancel: null,
                 pickMode: FileBrowser.PickMode.Files,
@@ -24,8 +39,9 @@ public class ExportScript : MonoBehaviour
                 initialPath: null,
                 initialFilename: Consts.INITIAL_FILE_PROJECT,
                 title: Consts.TITLE_SELECT_EXPORT_DIRECTORY,
-                loadButtonText: Consts.BTN_SELECT_PROJECT
+                saveButtonText: Consts.BTN_SELECT_PROJECT
             );
+#endif
         }
         finally
         {
@@ -35,7 +51,11 @@ public class ExportScript : MonoBehaviour
         }
     }
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+    string GenerateProject()
+#else
     void GenerateProject()
+#endif
     {
         var project = new ProjectVisEduClass();
 
@@ -55,11 +75,14 @@ public class ExportScript : MonoBehaviour
                 }
             }
         }
-
-        using (var streamWriter = new StreamWriter(FileBrowser.Result[0].ToString()))
+#if UNITY_WEBGL && !UNITY_EDITOR
+    return JsonUtility.ToJson(project, true);
+#else
+        using (var streamWriter = new StreamWriter(new FileStream(FileBrowser.Result[0].ToString(), FileMode.OpenOrCreate)))
         {
             streamWriter.Write(JsonUtility.ToJson(project, true));
         }
+#endif
     }
 
     ObjetoGraficoProject CreateObjGraf(ProjectVisEduClass project, Transform obgGrafSlot)
@@ -443,7 +466,7 @@ public class ExportScript : MonoBehaviour
             case Property.MinX: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.X.ToString();
             case Property.MinY: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Y.ToString();
             case Property.MinZ: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Z.ToString();
-                                                                                                                                        
+
             case Property.MaxX: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.X.ToString();
             case Property.MaxY: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Y.ToString();
             case Property.MaxZ: return (propPeca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propPeca.ListPropLocks[propType]) : propPeca.Intervalo.Z.ToString();
@@ -543,19 +566,19 @@ public class ExportScript : MonoBehaviour
             case Property.P1PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P1.X.ToString();
             case Property.P1PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P1.Y.ToString();
             case Property.P1PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P1.Z.ToString();
-                                                                                                                          
+
             case Property.P2PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P2.X.ToString();
             case Property.P2PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P2.Y.ToString();
             case Property.P2PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P2.Z.ToString();
-                                                                                                                          
+
             case Property.P3PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P3.X.ToString();
             case Property.P3PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P3.Y.ToString();
             case Property.P3PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P3.Z.ToString();
-                                                                                                                          
+
             case Property.P4PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P4.X.ToString();
             case Property.P4PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P4.Y.ToString();
             case Property.P4PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P4.Z.ToString();
-                                                                                                                          
+
             case Property.P5PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P5.X.ToString();
             case Property.P5PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P5.Y.ToString();
             case Property.P5PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P5.Z.ToString();

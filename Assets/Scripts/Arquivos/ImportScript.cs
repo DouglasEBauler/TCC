@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using SimpleFileBrowser;
+using System.Collections;
+using System.Runtime.InteropServices;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using SFB;
 
 public class ImportScript : MonoBehaviour
 {
@@ -27,6 +32,12 @@ public class ImportScript : MonoBehaviour
     [SerializeField]
     IluminacaoScript iluminacaoScript;
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+    // WebGL
+    [DllImport("__Internal")]
+    private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiple);
+#endif
+
     void OnMouseDown()
     {
         Util_VisEdu.EnableColliderFabricaPecas(false, false);
@@ -34,6 +45,9 @@ public class ImportScript : MonoBehaviour
         Util_VisEdu.EnableGOVisualizador(false);
         try
         {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            UploadFile(gameObject.name, "OnFileUpload", ".json", false);
+#else
             FileBrowser.AllFilesFilterText = "*.json";
             FileBrowser.ShowLoadDialog(
                 onSuccess: (path) => { ImportProject(path[0].ToString()); },
@@ -44,6 +58,7 @@ public class ImportScript : MonoBehaviour
                 title: Consts.TITLE_SELECT_IMPORT_DIRECTORY,
                 loadButtonText: Consts.BTN_SELECT_PROJECT
             );
+#endif
         }
         finally
         {
@@ -53,15 +68,25 @@ public class ImportScript : MonoBehaviour
         }
     }
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+    public void OnFileUpload(string url)
+    {
+        StartCoroutine(OutputRoutine(url));
+    }
+#endif
+
     void ImportProject(string path)
     {
         string projectJson = string.Empty;
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+        projectJson = path;
+#else
         using (var streamReader = new StreamReader(path))
         {
             projectJson = streamReader.ReadToEnd();
         }
-
+#endif
         if (!string.Empty.Equals(projectJson))
         {
             ProjectVisEduClass project = JsonUtility.FromJson<ProjectVisEduClass>(projectJson);
@@ -418,4 +443,15 @@ public class ImportScript : MonoBehaviour
         int value;
         return int.TryParse(valueField, out value) ? Util_VisEdu.ConvertField(valueField) : Util_VisEdu.ConvertField(Util_VisEdu.Base64Decode(valueField));
     }
+
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    private IEnumerator OutputRoutine(string url)
+    {
+        var loader = new WWW(url);
+        yield return loader;
+
+        ImportProject(loader.text);
+    }
+#endif
 }
