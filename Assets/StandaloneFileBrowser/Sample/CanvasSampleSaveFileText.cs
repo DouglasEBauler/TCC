@@ -14,9 +14,7 @@ public class CanvasSampleSaveFileText : MonoBehaviour, IPointerDownHandler {
     private string _data = "Example text created by StandaloneFileBrowser";
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-    //
     // WebGL
-    //
     [DllImport("__Internal")]
     private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
 

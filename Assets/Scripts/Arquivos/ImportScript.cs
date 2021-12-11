@@ -140,9 +140,9 @@ public class ImportScript : MonoBehaviour
                                     ImportTransformacoes(obj.Cubo.Transformacoes);
                                 }
 
-                                if (obj.Cubo.Iluminacao != null)
+                                if (obj.Cubo.Iluminacao != null && obj.Cubo.Iluminacao.Propriedades.Nome.Contains(Consts.ILUMINACAO))
                                 {
-                                    iluminacaoScript.AddIluminacao();
+                                    iluminacaoScript.AddIluminacao(true);
                                     iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
                                     iluminacaoScript.ConfiguraPropriedadePeca(CreatePecaIluminacao(obj.Cubo.Iluminacao.Propriedades));
                                 }
@@ -169,7 +169,7 @@ public class ImportScript : MonoBehaviour
                                     ImportTransformacoes(obj.Poligono.Transformacoes);
                                 }
 
-                                if (obj.Poligono.Iluminacao != null)
+                                if (obj.Poligono.Iluminacao != null && obj.Poligono.Iluminacao.Propriedades.Nome.Contains(Consts.ILUMINACAO))
                                 {
                                     iluminacaoScript.AddIluminacao();
                                     iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
@@ -198,7 +198,7 @@ public class ImportScript : MonoBehaviour
                                     ImportTransformacoes(obj.Spline.Transformacoes);
                                 }
 
-                                if (obj.Spline.Iluminacao != null)
+                                if (obj.Spline.Iluminacao != null && obj.Spline.Iluminacao.Propriedades.Nome.Contains(Consts.ILUMINACAO))
                                 {
                                     iluminacaoScript.AddIluminacao();
                                     iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;

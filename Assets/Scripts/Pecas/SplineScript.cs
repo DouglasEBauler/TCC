@@ -77,7 +77,7 @@ public class SplineScript : MonoBehaviour
 
     public void AddSpline(SplinePropriedadePeca propPeca = null)
     {
-        Encaixa();
+        Encaixa(propPeca != null);
 
         if (!tutorialScript.EstaExecutandoTutorial)
         {
@@ -178,9 +178,23 @@ public class SplineScript : MonoBehaviour
         return panelArquivo.activeSelf || panelAjuda.activeSelf;
     }
 
-    public void Encaixa()
+    public void Encaixa(bool isImport = false)
     {
-        StartCoroutine(EncaixaPecaAoSlot());
+        if (!isImport)
+        {
+            StartCoroutine(EncaixaPecaAoSlot());
+        }
+        else
+        {
+            EncaixaPecaImportada();
+        }
+    }
+
+    void EncaixaPecaImportada()
+    {
+        transform.position = slot.transform.position;
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
     IEnumerator EncaixaPecaAoSlot()

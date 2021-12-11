@@ -112,9 +112,23 @@ public class IluminacaoScript : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void Encaixa()
+    public void Encaixa(bool isImport = false)
     {
-        StartCoroutine(EncaixaPecaAoSlot());
+        if (!isImport)
+        {
+            StartCoroutine(EncaixaPecaAoSlot());
+        }
+        else
+        {
+            EncaixaPecaImportada();
+        }
+    }
+
+    void EncaixaPecaImportada()
+    {
+        transform.position = slot.transform.position;
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
     IEnumerator EncaixaPecaAoSlot()
@@ -134,9 +148,9 @@ public class IluminacaoScript : MonoBehaviour
         gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
-    public void AddIluminacao()
+    public void AddIluminacao(bool isImport = false)
     {
-        Encaixa();
+        Encaixa(isImport);
         CreatePropPeca();
         CriaLightObject();
     }

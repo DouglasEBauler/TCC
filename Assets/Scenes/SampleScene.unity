@@ -4811,7 +4811,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 54ffac2f2c0612f459d15570cabf87c7, type: 2}
+  - {fileID: -3963241562183589234, guid: df96a1e3691bd7d4696711619468e2dd, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6197,7 +6197,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: NaN, y: NaN, z: NaN, w: -1.316573e+11}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -20211,11 +20211,11 @@ MonoBehaviour:
   posX: {fileID: 1697279886}
   posY: {fileID: 1304313926}
   posZ: {fileID: 7556984}
-  fieldFOV: {fileID: 1352930822}
+  fieldFOV: {fileID: 42711320}
   camObjMain: {fileID: 91668746}
   camVisInferior: {fileID: 2058175008}
-  render: {fileID: 0}
-  posicaVis: {fileID: 0}
+  render: {fileID: 1647939627}
+  posicaVis: {fileID: 204193473}
   lockPosX: {fileID: 1785050091}
   lockPosY: {fileID: 1868114070}
   lockPosZ: {fileID: 1835484256}
