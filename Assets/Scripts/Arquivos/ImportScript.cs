@@ -12,25 +12,7 @@ using SFB;
 public class ImportScript : MonoBehaviour
 {
     [SerializeField]
-    CameraPScript cameraPScript;
-    [SerializeField]
-    ObjetoGraficoScript objetoGraficoPScript;
-    [SerializeField]
-    CuboScript cuboScript;
-    [SerializeField]
-    PoligonoScript poligonoScript;
-    [SerializeField]
-    SplineScript splineScript;
-    [SerializeField]
-    TransformacaoScript rotacionarScript;
-    [SerializeField]
-    TransformacaoScript transladarScript;
-    [SerializeField]
-    TransformacaoScript escalarScript;
-    [SerializeField]
-    IteracaoScript iteracaoScript;
-    [SerializeField]
-    IluminacaoScript iluminacaoScript;
+    GameObject fabricaPecas;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     // WebGL
@@ -93,135 +75,224 @@ public class ImportScript : MonoBehaviour
 
             if (project.Camera != null)
             {
-                cameraPScript.gameObject.GetComponent<BoxCollider>().enabled = false;
+                ImportCamera(project.Camera);
+            }
+
+            if (project.ObjetosGraficos?.Count > 0)
+            {
+                ImportObjetosGraficos(project.ObjetosGraficos);
+            }
+        }
+    }
+
+    void ImportCamera(CameraPecaProject camPeca)
+    {
+        GameObject cameraP = FindPeca(Consts.CAMERA);
+        
+        if (cameraP)
+        {
+            CameraPScript cameraPScript = cameraP.GetComponent<CameraPScript>();
+
+            if (cameraPScript != null)
+            {
+                cameraPScript.GetComponent<BoxCollider>().enabled = false;
                 try
                 {
                     cameraPScript.CopiaPeca();
                     cameraPScript.slot = GameObject.Find(Consts.CAMERA_SLOT);
+                    if (cameraPScript.slot == null)
+                    {
+                        cameraPScript.slot = GameObject.Find(Consts.CAMERA_SLOT + "1");
+                    }
                     cameraPScript.transform.position =
                         new Vector3(cameraPScript.slot.transform.position.x, cameraPScript.slot.transform.position.y, cameraPScript.slot.transform.position.z);
                     cameraPScript.PodeEncaixar();
-                    cameraPScript.AddCamera(CreateCameraProp(project.Camera.Propriedades));
+                    cameraPScript.AddCamera(CreateCameraProp(camPeca.Propriedades));
                 }
                 finally
                 {
                     cameraPScript.gameObject.GetComponent<BoxCollider>().enabled = true;
                 }
             }
+        }
+    }
 
-            if (project.ObjetosGraficos?.Count > 0)
+    void ImportObjetosGraficos(List<ObjetoGraficoProject> objGraficoProject)
+    {
+        GameObject objetoGraficoP = FindPeca(Consts.OBJETOGRAFICO);
+
+        if (objetoGraficoP != null)
+        {
+            ObjetoGraficoScript objGraficoPScript = objetoGraficoP.GetComponent<ObjetoGraficoScript>();
+
+            if (objGraficoPScript != null)
             {
-                foreach (var obj in project.ObjetosGraficos)
+                foreach (var obj in objGraficoProject)
                 {
-                    objetoGraficoPScript.GetComponent<BoxCollider>().enabled = false;
+                    objGraficoPScript.GetComponent<BoxCollider>().enabled = false;
                     try
                     {
-                        objetoGraficoPScript.CopiaPeca();
-                        objetoGraficoPScript.slot = GameObject.Find(Consts.OBJ_GRAFICO_SLOT);
-                        objetoGraficoPScript.transform.position =
-                            new Vector3(objetoGraficoPScript.slot.transform.position.x, objetoGraficoPScript.slot.transform.position.y, objetoGraficoPScript.slot.transform.position.z);
-                        objetoGraficoPScript.PodeEncaixar();
-                        objetoGraficoPScript.AddObjGrafico(obj.Propriedades);
+                        objGraficoPScript.CopiaPeca();
+                        objGraficoPScript.slot = GameObject.Find(Consts.OBJ_GRAFICO_SLOT);
+                        objGraficoPScript.transform.position =
+                            new Vector3(objGraficoPScript.slot.transform.position.x, objGraficoPScript.slot.transform.position.y, objGraficoPScript.slot.transform.position.z);
+                        objGraficoPScript.PodeEncaixar();
+                        objGraficoPScript.AddObjGrafico(obj.Propriedades);
 
                         if (obj.Cubo != null && !obj.Cubo.Propriedades.Nome.Equals(string.Empty))
                         {
-                            cuboScript.gameObject.GetComponent<BoxCollider>().enabled = false;
-                            try
-                            {
-                                cuboScript.CopiaPeca();
-                                cuboScript.slot = GameObject.Find(Consts.FORMA_SLOT + Util_VisEdu.GetNumSlot(objetoGraficoPScript.slot.name));
-                                cuboScript.transform.position =
-                                    new Vector3(cuboScript.slot.transform.position.x, cuboScript.slot.transform.position.y, cuboScript.slot.transform.position.z);
-                                cuboScript.PodeEncaixar();
-                                cuboScript.AddCubo(CreateCubo(obj.Cubo.Propriedades));
-
-                                if (obj.Cubo.Transformacoes != null)
-                                {
-                                    ImportTransformacoes(obj.Cubo.Transformacoes);
-                                }
-
-                                if (obj.Cubo.Iluminacao != null && obj.Cubo.Iluminacao.Propriedades.Nome.Contains(Consts.ILUMINACAO))
-                                {
-                                    iluminacaoScript.AddIluminacao(true);
-                                    iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                                    iluminacaoScript.ConfiguraPropriedadePeca(CreatePecaIluminacao(obj.Cubo.Iluminacao.Propriedades));
-                                }
-                            }
-                            finally
-                            {
-                                cuboScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                            }
+                            ImportCubo(obj.Cubo, Util_VisEdu.GetNumSlot(objGraficoPScript.slot.name));
                         }
                         else if (obj.Poligono != null && !obj.Poligono.Propriedades.Nome.Equals(string.Empty))
                         {
-                            poligonoScript.gameObject.GetComponent<BoxCollider>().enabled = false;
-                            try
-                            {
-                                poligonoScript.CopiaPeca();
-                                poligonoScript.slot = GameObject.Find(Consts.FORMA_SLOT + Util_VisEdu.GetNumSlot(objetoGraficoPScript.slot.name));
-                                poligonoScript.transform.position =
-                                    new Vector3(poligonoScript.slot.transform.position.x, poligonoScript.slot.transform.position.y, poligonoScript.slot.transform.position.z);
-                                poligonoScript.PodeEncaixar();
-                                poligonoScript.AddPoligono(CreatePoligono(obj.Poligono.Propriedades));
-
-                                if (obj.Poligono.Transformacoes != null)
-                                {
-                                    ImportTransformacoes(obj.Poligono.Transformacoes);
-                                }
-
-                                if (obj.Poligono.Iluminacao != null && obj.Poligono.Iluminacao.Propriedades.Nome.Contains(Consts.ILUMINACAO))
-                                {
-                                    iluminacaoScript.AddIluminacao();
-                                    iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                                    iluminacaoScript.ConfiguraPropriedadePeca(CreatePecaIluminacao(obj.Poligono.Iluminacao.Propriedades));
-                                }
-                            }
-                            finally
-                            {
-                                poligonoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                            }
+                            ImportPoligono(obj.Poligono, Util_VisEdu.GetNumSlot(objGraficoPScript.slot.name));
                         }
                         else if (obj.Spline != null && !obj.Spline.Propriedades.Nome.Equals(string.Empty))
                         {
-                            splineScript.gameObject.GetComponent<BoxCollider>().enabled = false;
-                            try
-                            {
-                                splineScript.CopiaPeca();
-                                splineScript.slot = GameObject.Find(Consts.FORMA_SLOT + Util_VisEdu.GetNumSlot(objetoGraficoPScript.slot.name));
-                                splineScript.transform.position =
-                                    new Vector3(splineScript.slot.transform.position.x, splineScript.slot.transform.position.y, splineScript.slot.transform.position.z);
-                                splineScript.PodeEncaixar();
-                                splineScript.AddSpline(CreateSpline(obj.Spline.Propriedades));
-
-                                if (obj.Spline.Transformacoes != null)
-                                {
-                                    ImportTransformacoes(obj.Spline.Transformacoes);
-                                }
-
-                                if (obj.Spline.Iluminacao != null && obj.Spline.Iluminacao.Propriedades.Nome.Contains(Consts.ILUMINACAO))
-                                {
-                                    iluminacaoScript.AddIluminacao();
-                                    iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                                    iluminacaoScript.ConfiguraPropriedadePeca(CreatePecaIluminacao(obj.Spline.Iluminacao.Propriedades));
-                                }
-                            }
-                            finally
-                            {
-                                splineScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                            }
+                            ImportSpline(obj.Spline, Util_VisEdu.GetNumSlot(objGraficoPScript.slot.name));
                         }
-
                     }
                     finally
                     {
-                        objetoGraficoPScript.GetComponent<BoxCollider>().enabled = true;
+                        objGraficoPScript.GetComponent<BoxCollider>().enabled = true;
                     }
                 }
             }
         }
     }
 
-    void ImportTransformacoes(List<TransformacaoProject> transformacoes)
+    void ImportCubo(CuboProject cuboProject, string numSlot)
+    {
+        GameObject cubo = FindPeca(Consts.CUBO);
+
+        if (cubo != null)
+        {
+            CuboScript cuboScript = cubo.GetComponent<CuboScript>();
+
+            if (cuboScript != null)
+            {
+                cuboScript.gameObject.GetComponent<BoxCollider>().enabled = false;
+                try
+                {
+                    cuboScript.CopiaPeca();
+                    cuboScript.slot = GameObject.Find(Consts.FORMA_SLOT + numSlot);
+                    cuboScript.transform.position =
+                        new Vector3(cuboScript.slot.transform.position.x, cuboScript.slot.transform.position.y, cuboScript.slot.transform.position.z);
+                    cuboScript.PodeEncaixar();
+                    cuboScript.AddCubo(CreateCubo(cuboProject.Propriedades));
+
+                    if (cuboProject.Transformacoes != null)
+                    {
+                        ImportTransformacoes(cuboProject.Transformacoes, numSlot);
+                    }
+
+                    if (cuboProject.Iluminacao != null && cuboProject.Iluminacao.Propriedades.Nome.Contains(Consts.ILUMINACAO))
+                    {
+                        ImportIluminacao(cuboProject.Iluminacao);
+                    }
+                }
+                finally
+                {
+                    cuboScript.gameObject.GetComponent<BoxCollider>().enabled = true;
+                }
+            }
+        }
+    }
+
+    void ImportPoligono(PoligonoProject poligonoProject, string numSlot)
+    {
+        GameObject poligono = FindPeca(Consts.POLIGONO);
+
+        if (poligono != null)
+        {
+            PoligonoScript poligonoScript = poligono.GetComponent<PoligonoScript>();
+
+            if (poligonoScript != null)
+            {
+                poligonoScript.gameObject.GetComponent<BoxCollider>().enabled = false;
+                try
+                {
+                    poligonoScript.CopiaPeca();
+                    poligonoScript.slot = GameObject.Find(Consts.FORMA_SLOT + numSlot);
+                    poligonoScript.transform.position =
+                        new Vector3(poligonoScript.slot.transform.position.x, poligonoScript.slot.transform.position.y, poligonoScript.slot.transform.position.z);
+                    poligonoScript.PodeEncaixar();
+                    poligonoScript.AddPoligono(CreatePoligono(poligonoProject.Propriedades));
+
+                    if (poligonoProject.Transformacoes != null)
+                    {
+                        ImportTransformacoes(poligonoProject.Transformacoes, numSlot);
+                    }
+
+                    if (poligonoProject.Iluminacao != null && poligonoProject.Iluminacao.Propriedades.Nome.Contains(Consts.ILUMINACAO))
+                    {
+                        ImportIluminacao(poligonoProject.Iluminacao);
+                    }
+                }
+                finally
+                {
+                    poligonoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
+                }
+            }
+        }
+    }
+
+    void ImportSpline(SplineProject splineProject, string numSlot)
+    {
+        GameObject spline = FindPeca(Consts.SPLINE);
+
+        if (spline != null)
+        {
+            SplineScript splineScript = spline.GetComponent<SplineScript>();
+
+            if (splineScript != null)
+            {
+                splineScript.gameObject.GetComponent<BoxCollider>().enabled = false;
+                try
+                {
+                    splineScript.CopiaPeca();
+                    splineScript.slot = GameObject.Find(Consts.FORMA_SLOT + numSlot);
+                    splineScript.transform.position =
+                        new Vector3(splineScript.slot.transform.position.x, splineScript.slot.transform.position.y, splineScript.slot.transform.position.z);
+                    splineScript.PodeEncaixar();
+                    splineScript.AddSpline(CreateSpline(splineProject.Propriedades));
+
+                    if (splineProject.Transformacoes != null)
+                    {
+                        ImportTransformacoes(splineProject.Transformacoes, numSlot);
+                    }
+
+                    if (splineProject.Iluminacao != null && splineProject.Iluminacao.Propriedades.Nome.Contains(Consts.ILUMINACAO))
+                    {
+                        ImportIluminacao(splineProject.Iluminacao);
+                    }
+                }
+                finally
+                {
+                    splineScript.gameObject.GetComponent<BoxCollider>().enabled = true;
+                }
+            }
+        }
+    }
+
+    void ImportIluminacao(IluminacaoProject iluminacaoProject)
+    {
+        GameObject iluminacao = FindPeca(Consts.ILUMINACAO);
+
+        if (iluminacao != null)
+        {
+            IluminacaoScript iluminacaoScript = iluminacao.GetComponent<IluminacaoScript>();
+
+            if (iluminacaoScript != null)
+            {
+                iluminacaoScript.AddIluminacao(true);
+                iluminacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
+                iluminacaoScript.ConfiguraPropriedadePeca(CreatePecaIluminacao(iluminacaoProject.Propriedades));
+            }
+        }
+    }
+
+    void ImportTransformacoes(List<TransformacaoProject> transformacoes, string numSlot)
     {
         foreach (TransformacaoProject transformacao in transformacoes)
         {
@@ -229,27 +300,52 @@ public class ImportScript : MonoBehaviour
 
             if (transformacao.Propriedades.Nome.Contains(Consts.ROTACIONAR))
             {
-                transformacaoScript = rotacionarScript;
-                transformacaoScript.gameObject.name = Consts.ROTACIONAR;
+                GameObject rotacionar = FindPeca(Consts.ROTACIONAR);
+                
+                if (rotacionar != null)
+                {
+                    transformacaoScript = rotacionar.GetComponent<TransformacaoScript>();
+                }
             }
             else if (transformacao.Propriedades.Nome.Contains(Consts.ESCALAR))
             {
-                transformacaoScript = escalarScript;
-                transformacaoScript.gameObject.name = Consts.ESCALAR;
+                GameObject escalar = FindPeca(Consts.ESCALAR);
+
+                if (escalar != null)
+                {
+                    transformacaoScript = escalar.GetComponent<TransformacaoScript>();
+                }
             }
             else if (transformacao.Propriedades.Nome.Contains(Consts.TRANSLADAR))
             {
-                transformacaoScript = transladarScript;
-                transformacaoScript.gameObject.name = Consts.TRANSLADAR;
+                GameObject transladar = FindPeca(Consts.TRANSLADAR);
+
+                if (transladar != null)
+                {
+                    transformacaoScript = transladar.GetComponent<TransformacaoScript>();
+                }
             }
 
             if (transformacaoScript != null)
             {
+                if (transformacao.Propriedades.Nome.Contains(Consts.ROTACIONAR))
+                {
+                    transformacaoScript.gameObject.name = Consts.ROTACIONAR;
+                }
+                else if (transformacao.Propriedades.Nome.Contains(Consts.ESCALAR))
+                {
+                    transformacaoScript.gameObject.name = Consts.ESCALAR;
+                }
+                else if (transformacao.Propriedades.Nome.Contains(Consts.TRANSLADAR))
+                {
+                    transformacaoScript.gameObject.name = Consts.TRANSLADAR;
+                }
+
                 transformacaoScript.gameObject.GetComponent<BoxCollider>().enabled = false;
                 try
                 {
                     transformacaoScript.CopiaPeca();
-                    transformacaoScript.slot = GameObject.Find(Consts.TRANSF_SLOT + Util_VisEdu.GetNumSlot(objetoGraficoPScript.slot.name));
+                    transformacaoScript.slot = GameObject.Find(Consts.TRANSF_SLOT + numSlot);
                     transformacaoScript.transform.position =
                         new Vector3(transformacaoScript.slot.transform.position.x, transformacaoScript.slot.transform.position.y, transformacaoScript.slot.transform.position.z);
                     transformacaoScript.PodeEncaixar();
@@ -257,25 +353,40 @@ public class ImportScript : MonoBehaviour
 
                     if (transformacao.Iteracao != null)
                     {
-                        iteracaoScript.gameObject.GetComponent<BoxCollider>().enabled = false;
-                        try
-                        {
-                            iteracaoScript.CopiaPeca();
-                            iteracaoScript.slot = GameObject.Find(Consts.ITERACAO_SLOT + Util_VisEdu.GetNumSlot(transformacaoScript.slot.name, true));
-                            iteracaoScript.transform.position =
-                                new Vector3(iteracaoScript.slot.transform.position.x, iteracaoScript.slot.transform.position.y, iteracaoScript.slot.transform.position.z);
-                            iteracaoScript.PodeEncaixar();
-                            iteracaoScript.AddIteracao(CreatePropIteracao(transformacao.Iteracao.Propriedades));
-                        }
-                        finally
-                        {
-                            iteracaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
-                        }
+                        ImportIteracao(transformacao.Iteracao, Util_VisEdu.GetNumSlot(transformacaoScript.slot.name, true));
                     }
                 }
                 finally
                 {
                     transformacaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
+                }
+            }
+        }
+    }
+
+    void ImportIteracao(IteracaoProject iteracaoProject, string numTransfSlot)
+    {
+        GameObject iteracao = FindPeca(Consts.ITERACAO);
+
+        if (iteracao != null)
+        {
+            IteracaoScript iteracaoScript = iteracao.GetComponent<IteracaoScript>();
+
+            if (iteracaoScript)
+            {
+                iteracaoScript.gameObject.GetComponent<BoxCollider>().enabled = false;
+                try
+                {
+                    iteracaoScript.CopiaPeca();
+                    iteracaoScript.slot = GameObject.Find(Consts.ITERACAO_SLOT + numTransfSlot);
+                    iteracaoScript.transform.position =
+                        new Vector3(iteracaoScript.slot.transform.position.x, iteracaoScript.slot.transform.position.y, iteracaoScript.slot.transform.position.z);
+                    iteracaoScript.PodeEncaixar();
+                    iteracaoScript.AddIteracao(CreatePropIteracao(iteracaoProject.Propriedades));
+                }
+                finally
+                {
+                    iteracaoScript.gameObject.GetComponent<BoxCollider>().enabled = true;
                 }
             }
         }
@@ -395,13 +506,14 @@ public class ImportScript : MonoBehaviour
         return new PropriedadeCamera()
         {
             Nome = propProj.Nome,
-            PosX = DecodeField(propProj.PosX),
-            PosY = DecodeField(propProj.PosY),
-            PosZ = DecodeField(propProj.PosZ),
+            Pos = new Posicao()
+            {
+                X = DecodeField(propProj.Pos.X),
+                Y = DecodeField(propProj.Pos.Y),
+                Z = DecodeField(propProj.Pos.Z)
+            },
             FOV = DecodeField(propProj.FOV),
-            CameraAtiva = propProj.CameraAtiva,
-            JaIniciouValores = propProj.JaIniciouValores,
-            ExisteCamera = propProj.ExisteCamera
+            CameraAtiva = propProj.CameraAtiva
         };
     }
 
@@ -444,6 +556,18 @@ public class ImportScript : MonoBehaviour
         return int.TryParse(valueField, out value) ? Util_VisEdu.ConvertField(valueField) : Util_VisEdu.ConvertField(Util_VisEdu.Base64Decode(valueField));
     }
 
+    GameObject FindPeca(string nome)
+    {
+        foreach (Transform child in fabricaPecas.transform)
+        {
+            if (child.name.Equals(nome))
+            {
+                return child.gameObject;
+            }
+        }
+
+        return null;
+    }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     private IEnumerator OutputRoutine(string url)

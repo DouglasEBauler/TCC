@@ -67,27 +67,36 @@
     <Compile Include="Assets\Scripts\Propriedades\SelecionaTextura.cs" />
     <Compile Include="Assets\Scripts\Cameras\MovePecaObj.cs" />
     <Compile Include="Assets\Scripts\Propriedades\TexturaSelecionada.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\Sample\BasicSample.cs" />
     <Compile Include="Assets\Scripts\Cameras\CameraObjectScript.cs" />
     <Compile Include="Assets\Scripts\Arquivos\ImportScript.cs" />
     <Compile Include="Assets\Scripts\Cameras\MoveAmbienteGrafico.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserEditor.cs" />
     <Compile Include="Assets\Scripts\Utils\Triangulator.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropObjetoGraficoScript.cs" />
     <Compile Include="Assets\Scripts\Utils\Global.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserWindows.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\RopeBuilder.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropTransladarScript.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileTextMultiple.cs" />
     <Compile Include="Assets\Scripts\Pecas\ObjetoGraficoScript.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\IStandaloneFileBrowser.cs" />
     <Compile Include="Assets\Scripts\Arquivos\ExportScript.cs" />
     <Compile Include="Assets\Scripts\Propriedades\MenuCor.cs" />
     <Compile Include="Assets\Scripts\Cameras\MovePecaCamera.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileText.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleSower.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\SourceMesh.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropSplineScript.cs" />
     <Compile Include="Assets\Scripts\Pecas\IteracaoScript.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleTrack.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowser.cs" />
     <Compile Include="Assets\FlexibleColorPicker\Scripts\FlexibleColorPicker.cs" />
     <Compile Include="Assets\Scripts\Pecas\CameraPScript.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleSaveFileText.cs" />
     <Compile Include="Assets\Scripts\Guias\AjudaScript.cs" />
     <Compile Include="Assets\Scripts\Pecas\SplineScript.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserLinux.cs" />
     <Compile Include="Assets\Scripts\Cameras\CameraScript.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Utils\CameraUtility.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropCuboScript.cs" />
@@ -99,12 +108,15 @@
     <Compile Include="Assets\FlexibleColorPicker\Scripts\FCP_SpriteMeshEditor.cs" />
     <Compile Include="Assets\Scripts\Pecas\CuboScript.cs" />
     <Compile Include="Assets\Scripts\Pecas\TransformacaoScript.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleSaveFileImage.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Bezier\CurveSample.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Utils\UOUtility.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleFollowSpline.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileImage.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleTentacle.cs" />
     <Compile Include="Assets\Scripts\Propriedades\PropRenderer.cs" />
     <Compile Include="Assets\Scripts\Cameras\VisualizadorGrafScript.cs" />
+    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserMac.cs" />
     <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
     <Compile Include="Assets\Scripts\Guias\MenuScript.cs" />
     <Compile Include="Assets\Scripts\Utils\ScrollViewRenderScript.cs" />
@@ -128,18 +140,6 @@
     <Compile Include="Assets\SplineMesh\Scripts\Bezier\SplineSmoother.cs" />
     <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\ExtrusionSegment.cs" />
     <Compile Include="Assets\FlexibleColorPicker\ExampleScene\FCP_ExampleScript.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\BasicSample.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\IStandaloneFileBrowser.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileTextMultiple.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileImage.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserEditor.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserMac.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowser.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleSaveFileImage.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserWindows.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileText.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserLinux.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleSaveFileText.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
@@ -398,8 +398,14 @@
     <Reference Include="Unity.Analytics.StandardEvents">
       <HintPath>Library\PackageCache\com.unity.analytics@3.5.3\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
+    <Reference Include="Ookii.Dialogs">
+      <HintPath>Assets\StandaloneFileBrowser\Plugins\Ookii.Dialogs.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>Assets\StandaloneFileBrowser\Plugins\System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="UnityStore">
       <HintPath>Library\PackageCache\com.unity.xiaomi@1.0.3\UnityStore.dll</HintPath>
@@ -412,12 +418,6 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>Library\PackageCache\com.unity.analytics@3.5.3\Unity.Analytics.Tracker.dll</HintPath>
-    </Reference>
-    <Reference Include="Ookii.Dialogs">
-      <HintPath>Assets\StandaloneFileBrowser\Plugins\Ookii.Dialogs.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <HintPath>Assets\StandaloneFileBrowser\Plugins\System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>C:\Program Files\Unity Hub\2021.1.15f1\Editor\Data\PlaybackEngines\AppleTVSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

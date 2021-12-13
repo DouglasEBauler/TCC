@@ -95,6 +95,7 @@ public class PropIluminacaoScript : MonoBehaviour
 
         PreencheCampos();
     }
+
     void InicializaListas()
     {
         propList = new Dictionary<Property, InputField>()
@@ -140,8 +141,9 @@ public class PropIluminacaoScript : MonoBehaviour
 
     void UpdateColor()
     {
-        seletorCor.GetComponent<Image>().material.color = corSelecionado.color;
-        seletorCor.GetComponent<Image>().material.SetColor("_EmissionColor", corSelecionado.color);
+        this.prPeca.Cor = corSelecionado.color;
+        seletorCor.GetComponent<Image>().material.color = this.prPeca.Cor;
+        seletorCor.GetComponent<Image>().material.SetColor("_EmissionColor", this.prPeca.Cor);
     }
 
     public void ControlCorPanel()
@@ -233,6 +235,7 @@ public class PropIluminacaoScript : MonoBehaviour
             podeAtualizar = false;
             try
             {
+                prPeca.Nome = nome.text;
                 prPeca.Pos.X = Util_VisEdu.ConvertField(posX.text);
                 prPeca.Pos.Y = Util_VisEdu.ConvertField(posY.text);
                 prPeca.Pos.Z = Util_VisEdu.ConvertField(posZ.text);
@@ -458,31 +461,30 @@ public class PropIluminacaoScript : MonoBehaviour
         podeAtualizar = false;
         try
         {
+            nome.text = prPeca.Nome;
+            posX.text = prPeca.Pos.X.ToString();
+            posY.text = prPeca.Pos.Y.ToString();
+            posZ.text = prPeca.Pos.Z.ToString();
+            corSelecionado.color = prPeca.Cor;
+            itensidade.text = prPeca.Intensidade.ToString();
+            distancia.text = prPeca.Distancia.ToString();
+            angulo.text = prPeca.Angulo.ToString();
+            expoente.text = prPeca.Expoente.ToString();
+            valorX.text = prPeca.ValorIluminacao.X.ToString();
+            valorY.text = prPeca.ValorIluminacao.Y.ToString();
+            valorZ.text = prPeca.ValorIluminacao.Z.ToString();
+            ativo.isOn = prPeca.Ativo;
+
             switch (prPeca.TipoLuz)
             {
                 case TipoIluminacao.Ambiente:
                     tipoLuz.value = 0;
-                    posX.text = prPeca.Pos.X.ToString();
-                    posY.text = prPeca.Pos.Y.ToString();
-                    posZ.text = prPeca.Pos.Z.ToString();
-                    corSelecionado.color = prPeca.Cor;
-                    ativo.isOn = prPeca.Ativo;
-
                     AtivaCamera();
 
                     break;
 
                 case TipoIluminacao.Directional:
                     tipoLuz.value = 1;
-                    posX.text = prPeca.Pos.X.ToString();
-                    posY.text = prPeca.Pos.Y.ToString();
-                    posZ.text = prPeca.Pos.Z.ToString();
-                    corSelecionado.color = prPeca.Cor;
-                    itensidade.text = prPeca.Intensidade.ToString();
-                    valorX.text = prPeca.ValorIluminacao.X.ToString();
-                    valorY.text = prPeca.ValorIluminacao.Y.ToString();
-                    valorZ.text = prPeca.ValorIluminacao.Z.ToString();
-                    ativo.isOn = prPeca.Ativo;
 
                     // Alterações do Objeto e Iluminação "Directional".
                     lightObject = GameObject.Find("Directional" + this.prPeca.NomePeca);
@@ -490,20 +492,12 @@ public class PropIluminacaoScript : MonoBehaviour
                     lightObject.GetComponent<Light>().color = prPeca.Cor;
                     lightObject.GetComponent<Light>().intensity = prPeca.Intensidade;
 
-                    AtivaIluminacao(lightObject.name);
                     AtivaCamera();
 
                     break;
 
                 case TipoIluminacao.Point:
                     tipoLuz.value = 2;
-                    valorX.text = prPeca.Pos.X.ToString();
-                    valorY.text = prPeca.Pos.Y.ToString();
-                    valorZ.text = prPeca.Pos.Z.ToString();
-                    corSelecionado.color = prPeca.Cor;
-                    itensidade.text = prPeca.Intensidade.ToString();
-                    distancia.text = prPeca.Distancia.ToString();
-                    ativo.isOn = prPeca.Ativo;
 
                     // Alterações do Objeto e Iluminação "Point".
                     lightObject = GameObject.Find("Point" + this.prPeca.NomePeca);
@@ -518,18 +512,6 @@ public class PropIluminacaoScript : MonoBehaviour
 
                 case TipoIluminacao.Spot:
                     tipoLuz.value = 3;
-                    posX.text = prPeca.Pos.X.ToString();
-                    posY.text = prPeca.Pos.Y.ToString();
-                    posZ.text = prPeca.Pos.Z.ToString();
-                    corSelecionado.color = prPeca.Cor;
-                    itensidade.text = prPeca.Intensidade.ToString();
-                    distancia.text = prPeca.Distancia.ToString();
-                    angulo.text = prPeca.Angulo.ToString();
-                    expoente.text = prPeca.Expoente.ToString();
-                    valorX.text = prPeca.ValorIluminacao.X.ToString();
-                    valorY.text = prPeca.ValorIluminacao.Y.ToString();
-                    valorZ.text = prPeca.ValorIluminacao.Z.ToString();
-                    ativo.isOn = prPeca.Ativo;
 
                     // Alterações do Objeto e Iluminação "Spot".
                     lightObject = GameObject.Find("Spot" + this.prPeca.NomePeca);
@@ -547,6 +529,11 @@ public class PropIluminacaoScript : MonoBehaviour
                     objSpot.localPosition = Vector3.zero;
 
                     break;
+            }
+
+            if (lightObject != null)
+            {
+                AtivaIluminacao(lightObject.name);
             }
         }
         finally

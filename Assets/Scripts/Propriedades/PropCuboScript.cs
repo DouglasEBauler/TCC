@@ -261,6 +261,8 @@ public class PropCuboScript : MonoBehaviour
             pecaVis.GetComponent<MeshRenderer>().material.color = corSelecionado.color;
             pecaVis.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", corSelecionado.color);
         }
+
+        this.prPeca.Cor = corSelecionado.color;
     }
 
     void EnabledZ()

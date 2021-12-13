@@ -7,8 +7,6 @@ public class PropCameraScript : MonoBehaviour
     const float FOV_INICIAL = 45;
 
     [SerializeField]
-    Transform cuboAmb;
-    [SerializeField]
     Camera cam;
     [SerializeField]
     GameObject objFOV;
@@ -70,21 +68,25 @@ public class PropCameraScript : MonoBehaviour
             try
             {
                 InitPropCam();
-                nomeCamera.text = string.Empty.Equals(Global.propCameraGlobal.Nome) ? "Camera" : Global.propCameraGlobal.Nome;
-                posX.text = Global.propCameraGlobal.PosX.Equals(0) ? "0" : Global.propCameraGlobal.PosX.ToString();
-                posY.text = Global.propCameraGlobal.PosY.Equals(0) ? "0" : Global.propCameraGlobal.PosY.ToString();
-                posZ.text = Global.propCameraGlobal.PosZ.Equals(0) ? "0" : Global.propCameraGlobal.PosZ.ToString();
+                nomeCamera.text = Global.propCameraGlobal.Nome;
+                posX.text = Global.propCameraGlobal.Pos.X.Equals(0) ? "0" : Global.propCameraGlobal.Pos.X.ToString();
+                lockPosX.isOn = Global.propCameraGlobal.ListPropLocks.ContainsKey(Property.PosX);
+                posY.text = Global.propCameraGlobal.Pos.Y.Equals(0) ? "0" : Global.propCameraGlobal.Pos.Y.ToString();
+                lockPosY.isOn = Global.propCameraGlobal.ListPropLocks.ContainsKey(Property.PosY);
+                posZ.text = Global.propCameraGlobal.Pos.Z.Equals(0) ? "0" : Global.propCameraGlobal.Pos.Z.ToString();
+                lockPosZ.isOn = Global.propCameraGlobal.ListPropLocks.ContainsKey(Property.PosZ);
                 fieldFOV.text = Global.propCameraGlobal.FOV.Equals(0) ? "45" : Global.propCameraGlobal.FOV.ToString();
+                lockFOV.isOn = Global.propCameraGlobal.ListPropLocks.ContainsKey(Property.FOV);
 
                 camObjMain.transform.position =
-                    new Vector3(Global.propCameraGlobal.PropInicial.PosX + Global.propCameraGlobal.PosX,
-                                Global.propCameraGlobal.PropInicial.PosY + Global.propCameraGlobal.PosY,
-                                Global.propCameraGlobal.PropInicial.PosZ + Global.propCameraGlobal.PosZ);
+                    new Vector3(Global.propCameraGlobal.PropInicial.PosX + Global.propCameraGlobal.Pos.X,
+                                Global.propCameraGlobal.PropInicial.PosY + Global.propCameraGlobal.Pos.Y,
+                                Global.propCameraGlobal.PropInicial.PosZ + Global.propCameraGlobal.Pos.Z);
 
                 camVisInferior.transform.localPosition =
-                    new Vector3(camVisInferior.transform.localPosition.x + Global.propCameraGlobal.PosX,
-                                camVisInferior.transform.localPosition.y + Global.propCameraGlobal.PosY,
-                                camVisInferior.transform.localPosition.z + Global.propCameraGlobal.PosZ);
+                    new Vector3(camVisInferior.transform.localPosition.x + Global.propCameraGlobal.Pos.X,
+                                camVisInferior.transform.localPosition.y + Global.propCameraGlobal.Pos.Y,
+                                camVisInferior.transform.localPosition.z + Global.propCameraGlobal.Pos.Z);
             }
             finally
             {
@@ -120,22 +122,22 @@ public class PropCameraScript : MonoBehaviour
             podeAtualizar = false;
             try
             {
-                Global.propCameraGlobal.PosX = Util_VisEdu.ConvertField(posX.text);
-                Global.propCameraGlobal.PosY = Util_VisEdu.ConvertField(posY.text);
-                Global.propCameraGlobal.PosZ = Util_VisEdu.ConvertField(posZ.text);
+                Global.propCameraGlobal.Pos.X = Util_VisEdu.ConvertField(posX.text);
+                Global.propCameraGlobal.Pos.Y = Util_VisEdu.ConvertField(posY.text);
+                Global.propCameraGlobal.Pos.Z = Util_VisEdu.ConvertField(posZ.text);
                 Global.propCameraGlobal.FOV = Util_VisEdu.ConvertField(string.Empty.Equals(fieldFOV.text) ? "45" : fieldFOV.text);
 
                 //Atualiza posição da camera
                 camObjMain.transform.position =
-                        new Vector3(Global.propCameraGlobal.PropInicial.PosX + Global.propCameraGlobal.PosX,
-                            Global.propCameraGlobal.PropInicial.PosY + Global.propCameraGlobal.PosY,
-                            Global.propCameraGlobal.PropInicial.PosZ + Global.propCameraGlobal.PosZ);
+                        new Vector3(Global.propCameraGlobal.PropInicial.PosX + Global.propCameraGlobal.Pos.X,
+                            Global.propCameraGlobal.PropInicial.PosY + Global.propCameraGlobal.Pos.Y,
+                            Global.propCameraGlobal.PropInicial.PosZ + Global.propCameraGlobal.Pos.Z);
                 //Atualiza FOV da camera (Scale)
                 camObjMain.transform.localScale =
                     new Vector3(Global.propCameraGlobal.PropInicial.FOV.x * Global.propCameraGlobal.FOV, Global.propCameraGlobal.PropInicial.FOV.y * Global.propCameraGlobal.FOV, camObjMain.transform.localScale.z);
 
                 camVisInferior.transform.localPosition =
-                    new Vector3(camVisInferior.transform.localPosition.x + Global.propCameraGlobal.PosX, camVisInferior.transform.localPosition.y + Global.propCameraGlobal.PosY, camVisInferior.transform.localPosition.z);
+                    new Vector3(camVisInferior.transform.localPosition.x + Global.propCameraGlobal.Pos.X, camVisInferior.transform.localPosition.y + Global.propCameraGlobal.Pos.Y, camVisInferior.transform.localPosition.z);
 
                 //Altera FoV (Field of View)
                 camVisInferior.GetComponent<Camera>().fieldOfView = Global.propCameraGlobal.FOV;

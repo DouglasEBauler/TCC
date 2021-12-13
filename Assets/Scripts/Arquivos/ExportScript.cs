@@ -78,7 +78,7 @@ public class ExportScript : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
     return JsonUtility.ToJson(project, true);
 #else
-        using (var streamWriter = new StreamWriter(new FileStream(FileBrowser.Result[0].ToString(), FileMode.OpenOrCreate)))
+        using (var streamWriter = new StreamWriter(new FileStream(FileBrowser.Result[0].ToString(), FileMode.CreateNew)))
         {
             streamWriter.Write(JsonUtility.ToJson(project, true));
         }
@@ -386,13 +386,14 @@ public class ExportScript : MonoBehaviour
         return new PropriedadeCameraProject()
         {
             Nome = Global.propCameraGlobal.Nome,
-            PosX = EncryptPropCam(Property.PosX),
-            PosY = EncryptPropCam(Property.PosY),
-            PosZ = EncryptPropCam(Property.PosZ),
+            Pos = new PosicaoProject()
+            {
+                X = EncryptPropCam(Property.PosX),
+                Y = EncryptPropCam(Property.PosY),
+                Z = EncryptPropCam(Property.PosZ)
+            },
             FOV = EncryptPropCam(Property.FOV),
-            CameraAtiva = Global.propCameraGlobal.CameraAtiva,
-            JaIniciouValores = Global.propCameraGlobal.JaIniciouValores,
-            ExisteCamera = Global.propCameraGlobal.ExisteCamera,
+            CameraAtiva = Global.propCameraGlobal.CameraAtiva
         };
     }
 
@@ -496,17 +497,34 @@ public class ExportScript : MonoBehaviour
 
     TransformacaoPropriedadePecaProject CreateTransformacaoPropPeca(TransformacaoPropriedadePeca propPeca)
     {
-        return new TransformacaoPropriedadePecaProject()
+        if (!propPeca.NomePeca.Contains(Consts.ESCALAR))
         {
-            Nome = propPeca.Nome,
-            Pos = new PosicaoProject()
+            return new TransformacaoPropriedadePecaProject()
             {
-                X = EncryptTransformacaoPropPeca(propPeca, Property.PosX),
-                Y = EncryptTransformacaoPropPeca(propPeca, Property.PosY),
-                Z = EncryptTransformacaoPropPeca(propPeca, Property.PosZ)
-            },
-            Ativo = propPeca.Ativo
-        };
+                Nome = propPeca.Nome,
+                Pos = new PosicaoProject()
+                {
+                    X = EncryptTransformacaoPropPeca(propPeca, Property.PosX),
+                    Y = EncryptTransformacaoPropPeca(propPeca, Property.PosY),
+                    Z = EncryptTransformacaoPropPeca(propPeca, Property.PosZ)
+                },
+                Ativo = propPeca.Ativo
+            };
+        }
+        else
+        {
+            return new TransformacaoPropriedadePecaProject()
+            {
+                Nome = propPeca.Nome,
+                Pos = new PosicaoProject()
+                {
+                    X = EncryptTransformacaoPropPeca(propPeca, Property.TamX),
+                    Y = EncryptTransformacaoPropPeca(propPeca, Property.TamY),
+                    Z = EncryptTransformacaoPropPeca(propPeca, Property.TamZ)
+                },
+                Ativo = propPeca.Ativo
+            };
+        }
     }
 
     string EncryptTransformacaoPropPeca(TransformacaoPropriedadePeca propPeca, Property propType)
@@ -526,10 +544,10 @@ public class ExportScript : MonoBehaviour
 
         switch (propType)
         {
-            case Property.PosX: return (propCam.ListPropCamLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks[propType]) : propCam.PosX.ToString();
-            case Property.PosY: return (propCam.ListPropCamLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks[propType]) : propCam.PosY.ToString();
-            case Property.PosZ: return (propCam.ListPropCamLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks[propType]) : propCam.PosZ.ToString();
-            case Property.FOV: return (propCam.ListPropCamLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropCamLocks[propType]) : propCam.FOV.ToString();
+            case Property.PosX: return (propCam.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropLocks[propType]) : propCam.Pos.X.ToString();
+            case Property.PosY: return (propCam.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropLocks[propType]) : propCam.Pos.Y.ToString();
+            case Property.PosZ: return (propCam.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropLocks[propType]) : propCam.Pos.Z.ToString();
+            case Property.FOV: return (propCam.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(propCam.ListPropLocks[propType]) : propCam.FOV.ToString();
             default: return string.Empty;
         }
     }

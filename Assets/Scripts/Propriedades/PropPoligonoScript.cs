@@ -188,18 +188,19 @@ public class PropPoligonoScript : MonoBehaviour
 
     void UpdateColor()
     {
-        corSeletor.GetComponent<Image>().material.color = corSelecionada.color;
-        corSeletor.GetComponent<Image>().material.SetColor("_EmissionColor", corSelecionada.color);
+        this.propPeca.Cor = corSelecionada.color;
+        corSeletor.GetComponent<Image>().material.color = this.propPeca.Cor;
+        corSeletor.GetComponent<Image>().material.SetColor("_EmissionColor", this.propPeca.Cor);
 
         if (pecaAmb != null)
         {
-            pecaAmb.GetComponent<MeshRenderer>().material.color = corSelecionada.color;
-            pecaAmb.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", corSelecionada.color);
+            pecaAmb.GetComponent<MeshRenderer>().material.color = this.propPeca.Cor;
+            pecaAmb.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", this.propPeca.Cor);
         }
         if (pecaVis != null)
         {
-            pecaVis.GetComponent<MeshRenderer>().material.color = corSelecionada.color;
-            pecaVis.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", corSelecionada.color);
+            pecaVis.GetComponent<MeshRenderer>().material.color = this.propPeca.Cor;
+            pecaVis.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", this.propPeca.Cor);
         }
     }
 

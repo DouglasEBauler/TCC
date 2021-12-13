@@ -352,17 +352,20 @@ public class PropSplineScript : MonoBehaviour
 
     void UpdateColor()
     {
-        seletorCor.GetComponent<Image>().material.color = corSelecionado.color;
+        this.prPeca.Cor = corSelecionado.color;
+
+        seletorCor.GetComponent<Image>().material.color = this.prPeca.Cor;
+        seletorCor.GetComponent<Image>().material.SetColor("_EmissionColor", this.prPeca.Cor);
 
         if (splineAmb != null)
         {
-            splineAmb.GetComponent<SplineMeshTiling>().material.color = corSelecionado.color;
-            splineAmb.GetComponent<SplineMeshTiling>().material.SetColor("_EmissionColor", corSelecionado.color);
+            splineAmb.GetComponent<SplineMeshTiling>().material.color = this.prPeca.Cor;
+            splineAmb.GetComponent<SplineMeshTiling>().material.SetColor("_EmissionColor", this.prPeca.Cor);
         }
         if (splineVis != null)
         {
-            splineVis.GetComponent<SplineMeshTiling>().material.color = corSelecionado.color;
-            splineVis.GetComponent<SplineMeshTiling>().material.SetColor("_EmissionColor", corSelecionado.color);
+            splineVis.GetComponent<SplineMeshTiling>().material.color = this.prPeca.Cor;
+            splineVis.GetComponent<SplineMeshTiling>().material.SetColor("_EmissionColor", this.prPeca.Cor);
         }
     }
 }

@@ -269,9 +269,7 @@ public class PropriedadeIluminacaoPecaProject : PropriedadePecaProject
 public class PropriedadeCameraProject
 {
     public string Nome;
-    public string PosX;
-    public string PosY;
-    public string PosZ;
+    public PosicaoProject Pos;
     public string FOV;
     public bool CameraAtiva;
     public bool JaIniciouValores;

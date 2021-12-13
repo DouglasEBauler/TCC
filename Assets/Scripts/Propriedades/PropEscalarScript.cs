@@ -86,22 +86,22 @@ public class PropEscalarScript : MonoBehaviour
             {
                 if (!isIteration)
                 {
-                    prPeca.Pos.X = Util_VisEdu.ConvertField(tamX.text);
-                    prPeca.Pos.Y = Util_VisEdu.ConvertField(tamY.text);
-                    prPeca.Pos.Z = Util_VisEdu.ConvertField(tamZ.text);
+                    prPeca.Pos.X = Util_VisEdu.ConvertField(tamX.text, true);
+                    prPeca.Pos.Y = Util_VisEdu.ConvertField(tamY.text, true);
+                    prPeca.Pos.Z = Util_VisEdu.ConvertField(tamZ.text, true);
                     prPeca.Ativo = ativo.isOn;
                 }
 
                 float x, y, z;
-                if (prPeca.Ativo)
+                if (!prPeca.Ativo)
                 {
-                    x = prPeca.Pos.X + ESCALA_PADRAO;
-                    y = prPeca.Pos.Y + ESCALA_PADRAO;
-                    z = prPeca.Pos.Z + ESCALA_PADRAO;
+                    x = y = z = ESCALA_PADRAO;
                 }
                 else
                 {
-                    x = y = z = ESCALA_PADRAO;
+                    x = prPeca.Pos.X;
+                    y = prPeca.Pos.Y;
+                    z = prPeca.Pos.Z;
                 }
 
                 GameObject goTransformacao = GameObject.Find(prPeca.NomePecaAmb);
