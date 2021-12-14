@@ -21,17 +21,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Temp\Bin\Debug\</OutputPath>
-    <DefineConstants>UNITY_2021_1_15;UNITY_2021_1;UNITY_2021;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_INCLUDE_TESTS;USE_SEARCH_ENGINE_API;USE_QUICK_SEARCH_MODULE;SCENE_TEMPLATE_MODULE;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_ENGINE_CODE_STRIPPING;ENABLE_MONO_BDWGC;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;PLATFORM_WEBGL;UNITY_WEBGL;UNITY_WEBGL_API;UNITY_DISABLE_WEB_VERIFICATION;UNITY_GFX_USE_PLATFORM_VSYNC;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_SPATIALTRACKING;ENABLE_MONO;NET_STANDARD_2_0;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_LEGACY_INPUT_MANAGER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>0169</NoWarn>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>Temp\bin\Release\</OutputPath>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_2021_1_15;UNITY_2021_1;UNITY_2021;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_INCLUDE_TESTS;USE_SEARCH_ENGINE_API;USE_QUICK_SEARCH_MODULE;SCENE_TEMPLATE_MODULE;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_ENGINE_CODE_STRIPPING;ENABLE_MONO_BDWGC;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;PLATFORM_WEBGL;UNITY_WEBGL;UNITY_WEBGL_API;UNITY_DISABLE_WEB_VERIFICATION;UNITY_GFX_USE_PLATFORM_VSYNC;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_SPATIALTRACKING;ENABLE_MONO;NET_STANDARD_2_0;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_LEGACY_INPUT_MANAGER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
@@ -44,134 +35,6 @@
     <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
-  <PropertyGroup>
-    <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <UnityProjectGenerator>Package</UnityProjectGenerator>
-    <UnityProjectGeneratorVersion>2.0.9</UnityProjectGeneratorVersion>
-    <UnityProjectType>Game:1</UnityProjectType>
-    <UnityBuildTarget>WebGL:20</UnityBuildTarget>
-    <UnityVersion>2021.1.15f1</UnityVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <ItemGroup>
-    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\Scripts\Propriedades\Classes.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropIteracao.cs" />
-    <Compile Include="Assets\Scripts\Pecas\PoligonoScript.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\SplineExtrusion.cs" />
-    <Compile Include="Assets\Scripts\Arquivos\ProjectVisEduClass.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\SelecionaTextura.cs" />
-    <Compile Include="Assets\Scripts\Cameras\MovePecaObj.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\TexturaSelecionada.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\BasicSample.cs" />
-    <Compile Include="Assets\Scripts\Cameras\CameraObjectScript.cs" />
-    <Compile Include="Assets\Scripts\Arquivos\ImportScript.cs" />
-    <Compile Include="Assets\Scripts\Cameras\MoveAmbienteGrafico.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserEditor.cs" />
-    <Compile Include="Assets\Scripts\Utils\Triangulator.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropObjetoGraficoScript.cs" />
-    <Compile Include="Assets\Scripts\Utils\Global.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserWindows.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Example\RopeBuilder.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropTransladarScript.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileTextMultiple.cs" />
-    <Compile Include="Assets\Scripts\Pecas\ObjetoGraficoScript.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\IStandaloneFileBrowser.cs" />
-    <Compile Include="Assets\Scripts\Arquivos\ExportScript.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\MenuCor.cs" />
-    <Compile Include="Assets\Scripts\Cameras\MovePecaCamera.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileText.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleSower.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\SourceMesh.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropSplineScript.cs" />
-    <Compile Include="Assets\Scripts\Pecas\IteracaoScript.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleTrack.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowser.cs" />
-    <Compile Include="Assets\FlexibleColorPicker\Scripts\FlexibleColorPicker.cs" />
-    <Compile Include="Assets\Scripts\Pecas\CameraPScript.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleSaveFileText.cs" />
-    <Compile Include="Assets\Scripts\Guias\AjudaScript.cs" />
-    <Compile Include="Assets\Scripts\Pecas\SplineScript.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserLinux.cs" />
-    <Compile Include="Assets\Scripts\Cameras\CameraScript.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Utils\CameraUtility.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropCuboScript.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Bezier\SplineNode.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Bezier\Spline.cs" />
-    <Compile Include="Assets\Scripts\Utils\Util_VisEdu.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropCameraScript.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\MeshBender.cs" />
-    <Compile Include="Assets\FlexibleColorPicker\Scripts\FCP_SpriteMeshEditor.cs" />
-    <Compile Include="Assets\Scripts\Pecas\CuboScript.cs" />
-    <Compile Include="Assets\Scripts\Pecas\TransformacaoScript.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleSaveFileImage.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Bezier\CurveSample.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Utils\UOUtility.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleFollowSpline.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileImage.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleTentacle.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropRenderer.cs" />
-    <Compile Include="Assets\Scripts\Cameras\VisualizadorGrafScript.cs" />
-    <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserMac.cs" />
-    <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
-    <Compile Include="Assets\Scripts\Guias\MenuScript.cs" />
-    <Compile Include="Assets\Scripts\Utils\ScrollViewRenderScript.cs" />
-    <Compile Include="Assets\Scripts\Pecas\PoligonoAmbScript.cs" />
-    <Compile Include="Assets\Scripts\Cameras\mover.cs" />
-    <Compile Include="Assets\Scripts\Cameras\MoveAmbiente.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleContortAlong.cs" />
-    <Compile Include="Assets\Scripts\Utils\Consts.cs" />
-    <Compile Include="Assets\Scripts\Pecas\IluminacaoScript.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropRotacionarScript.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Utils\MeshUtility.cs" />
-    <Compile Include="Assets\Scripts\Pecas\RenderScript.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropPoligonoScript.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleGrowingRoot.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Bezier\CubicBezierCurve.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropIluminacaoScript.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\SplineMeshTiling.cs" />
-    <Compile Include="Assets\Scripts\Propriedades\PropEscalarScript.cs" />
-    <Compile Include="Assets\Scripts\Pecas\LixeiraScript.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\MeshVertex.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\Bezier\SplineSmoother.cs" />
-    <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\ExtrusionSegment.cs" />
-    <Compile Include="Assets\FlexibleColorPicker\ExampleScene\FCP_ExampleScript.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
-    <None Include="Assets\Scripts\Diagramas\ClassDiagramArquivos.cd" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\Scripts\Diagramas\ClassDiagramFormas.cd" />
-    <None Include="Assets\Scripts\Diagramas\ClassDiagramPropPecas.cd" />
-    <None Include="Assets\Scripts\Diagramas\ClassDiagramPecas.cd" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
-    <None Include="Assets\Scripts\Diagramas\ClassDiagramClasses.cd" />
-    <None Include="Assets\StandaloneFileBrowser\Plugins\Ookii.Dialogs.dll" />
-    <None Include="Assets\Scripts\Diagramas\ClassDiagramTransformacoes.cd" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
-    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
-    <None Include="Assets\Scripts\Diagramas\ClassDiagramPropFormas.cd" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
-    <None Include="Assets\Scripts\Diagramas\ClassDiagramPropTransformacoes.cd" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
-    <None Include="Assets\FlexibleColorPicker\Materials\FCP_Gradient.shader" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
-    <None Include="Assets\StandaloneFileBrowser\Plugins\System.Windows.Forms.dll" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
-    <None Include="Assets\SplineMesh\Doc.txt" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
-  </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Propriedades\Classes.cs" />
      <Compile Include="Assets\Scripts\Propriedades\PropIteracao.cs" />
@@ -181,27 +44,36 @@
      <Compile Include="Assets\Scripts\Propriedades\SelecionaTextura.cs" />
      <Compile Include="Assets\Scripts\Cameras\MovePecaObj.cs" />
      <Compile Include="Assets\Scripts\Propriedades\TexturaSelecionada.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\Sample\BasicSample.cs" />
      <Compile Include="Assets\Scripts\Cameras\CameraObjectScript.cs" />
      <Compile Include="Assets\Scripts\Arquivos\ImportScript.cs" />
      <Compile Include="Assets\Scripts\Cameras\MoveAmbienteGrafico.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserEditor.cs" />
      <Compile Include="Assets\Scripts\Utils\Triangulator.cs" />
      <Compile Include="Assets\Scripts\Propriedades\PropObjetoGraficoScript.cs" />
      <Compile Include="Assets\Scripts\Utils\Global.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserWindows.cs" />
      <Compile Include="Assets\SplineMesh\Scripts\Example\RopeBuilder.cs" />
      <Compile Include="Assets\Scripts\Propriedades\PropTransladarScript.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileTextMultiple.cs" />
      <Compile Include="Assets\Scripts\Pecas\ObjetoGraficoScript.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\IStandaloneFileBrowser.cs" />
      <Compile Include="Assets\Scripts\Arquivos\ExportScript.cs" />
      <Compile Include="Assets\Scripts\Propriedades\MenuCor.cs" />
      <Compile Include="Assets\Scripts\Cameras\MovePecaCamera.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileText.cs" />
      <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleSower.cs" />
      <Compile Include="Assets\SplineMesh\Scripts\MeshProcessing\SourceMesh.cs" />
      <Compile Include="Assets\Scripts\Propriedades\PropSplineScript.cs" />
      <Compile Include="Assets\Scripts\Pecas\IteracaoScript.cs" />
      <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleTrack.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowser.cs" />
      <Compile Include="Assets\FlexibleColorPicker\Scripts\FlexibleColorPicker.cs" />
      <Compile Include="Assets\Scripts\Pecas\CameraPScript.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleSaveFileText.cs" />
      <Compile Include="Assets\Scripts\Guias\AjudaScript.cs" />
      <Compile Include="Assets\Scripts\Pecas\SplineScript.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserLinux.cs" />
      <Compile Include="Assets\Scripts\Cameras\CameraScript.cs" />
      <Compile Include="Assets\SplineMesh\Scripts\Utils\CameraUtility.cs" />
      <Compile Include="Assets\Scripts\Propriedades\PropCuboScript.cs" />
@@ -213,12 +85,15 @@
      <Compile Include="Assets\FlexibleColorPicker\Scripts\FCP_SpriteMeshEditor.cs" />
      <Compile Include="Assets\Scripts\Pecas\CuboScript.cs" />
      <Compile Include="Assets\Scripts\Pecas\TransformacaoScript.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleSaveFileImage.cs" />
      <Compile Include="Assets\SplineMesh\Scripts\Bezier\CurveSample.cs" />
      <Compile Include="Assets\SplineMesh\Scripts\Utils\UOUtility.cs" />
      <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleFollowSpline.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileImage.cs" />
      <Compile Include="Assets\SplineMesh\Scripts\Example\ExampleTentacle.cs" />
      <Compile Include="Assets\Scripts\Propriedades\PropRenderer.cs" />
      <Compile Include="Assets\Scripts\Cameras\VisualizadorGrafScript.cs" />
+     <Compile Include="Assets\StandaloneFileBrowser\StandaloneFileBrowserMac.cs" />
      <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
      <Compile Include="Assets\Scripts\Guias\MenuScript.cs" />
      <Compile Include="Assets\Scripts\Utils\ScrollViewRenderScript.cs" />
@@ -244,14 +119,22 @@
      <Compile Include="Assets\FlexibleColorPicker\ExampleScene\FCP_ExampleScript.cs" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
+     <None Include="Assets\Scripts\Diagramas\ClassDiagramArquivos.cd" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
+     <None Include="Assets\Scripts\Diagramas\ClassDiagramFormas.cd" />
+     <None Include="Assets\Scripts\Diagramas\ClassDiagramPropPecas.cd" />
+     <None Include="Assets\Scripts\Diagramas\ClassDiagramPecas.cd" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
+     <None Include="Assets\Scripts\Diagramas\ClassDiagramClasses.cd" />
+     <None Include="Assets\Scripts\Diagramas\ClassDiagramTransformacoes.cd" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
      <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
+     <None Include="Assets\Scripts\Diagramas\ClassDiagramPropFormas.cd" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
+     <None Include="Assets\Scripts\Diagramas\ClassDiagramPropTransformacoes.cd" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
      <None Include="Assets\FlexibleColorPicker\Materials\FCP_Gradient.shader" />
@@ -265,7 +148,7 @@
         <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
-      <HintPath>C:\Program Files\Unity Hub\2021.1.15f1\Editor\Data\Managed\UnityEngine\UnityEngine.AIModule.dll</HintPath>
+        <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AccessibilityModule">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.AccessibilityModule.dll</HintPath>
@@ -283,7 +166,7 @@
         <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ClothModule">
-      <HintPath>C:\Program Files\Unity Hub\2021.1.15f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClothModule.dll</HintPath>
+        <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClothModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
@@ -439,7 +322,7 @@
         <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.VideoModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.WebGLModule">
-      <HintPath>C:\Program Files\Unity Hub\2021.1.15f1\Editor\Data\PlaybackEngines\WebGLSupport\Managed\UnityEngine.WebGLModule.dll</HintPath>
+        <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.15f1/Editor/Data/PlaybackEngines/WebGLSupport/Managed/UnityEngine.WebGLModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.WindModule">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.WindModule.dll</HintPath>
@@ -487,13 +370,13 @@
         <HintPath>D:/_GIT_D/TCC/_TCC2/tcc_DouglasEduardoBauler/Library/PackageCache/com.unity.analytics@3.5.3/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs">
-      <HintPath>Assets\StandaloneFileBrowser\Plugins\Ookii.Dialogs.dll</HintPath>
+        <HintPath>D:/_GIT_D/TCC/_TCC2/tcc_DouglasEduardoBauler/Assets/StandaloneFileBrowser/Plugins/Ookii.Dialogs.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
         <HintPath>D:/_GIT_D/TCC/_TCC2/tcc_DouglasEduardoBauler/Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms">
-      <HintPath>Assets\StandaloneFileBrowser\Plugins\System.Windows.Forms.dll</HintPath>
+        <HintPath>D:/_GIT_D/TCC/_TCC2/tcc_DouglasEduardoBauler/Assets/StandaloneFileBrowser/Plugins/System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="UnityStore">
         <HintPath>D:/_GIT_D/TCC/_TCC2/tcc_DouglasEduardoBauler/Library/PackageCache/com.unity.xiaomi@1.0.3/UnityStore.dll</HintPath>
