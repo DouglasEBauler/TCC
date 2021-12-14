@@ -120,9 +120,23 @@ public class TransformacaoScript : MonoBehaviour
         return panelArquivo.activeSelf || panelAjuda.activeSelf;
     }
 
-    public void Encaixa()
+    public void Encaixa(bool isImport = false)
     {
-        StartCoroutine(EncaixaPecaAoSlot());
+        if (!isImport)
+        {
+            StartCoroutine(EncaixaPecaAoSlot());
+        }
+        else
+        {
+            EncaixaPecaImportada();
+        }
+    }
+
+    void EncaixaPecaImportada()
+    {
+        transform.position = slot.transform.position;
+        transform.parent = slot.transform;
+        gameObject.GetComponentInChildren<RawImage>().texture = slot.GetComponentInChildren<RawImage>().texture;
     }
 
     IEnumerator EncaixaPecaAoSlot()

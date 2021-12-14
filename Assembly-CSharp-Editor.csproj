@@ -293,11 +293,17 @@
     <Reference Include="Unity.Analytics.StandardEvents">
         <HintPath>D:/_GIT_D/TCC/_TCC2/tcc_DouglasEduardoBauler/Library/PackageCache/com.unity.analytics@3.5.3/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
+    <Reference Include="Ookii.Dialogs">
+      <HintPath>Assets\StandaloneFileBrowser\Plugins\Ookii.Dialogs.dll</HintPath>
+    </Reference>
     <Reference Include="log4netPlastic">
         <HintPath>D:/_GIT_D/TCC/_TCC2/tcc_DouglasEduardoBauler/Library/PackageCache/com.unity.collab-proxy@1.5.7/Lib/Editor/PlasticSCM/log4netPlastic.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
         <HintPath>D:/_GIT_D/TCC/_TCC2/tcc_DouglasEduardoBauler/Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>Assets\StandaloneFileBrowser\Plugins\System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="UnityStore">
         <HintPath>D:/_GIT_D/TCC/_TCC2/tcc_DouglasEduardoBauler/Library/PackageCache/com.unity.xiaomi@1.0.3/UnityStore.dll</HintPath>

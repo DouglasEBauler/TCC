@@ -109,7 +109,7 @@ public enum Property
 
 public enum TipoIluminacao { Ambiente, Directional, Point, Spot };
 
-public enum TipoPrimitiva { Vertices, Aberto, Fechado, Cheio };
+public enum TipoPrimitiva { Vertices, Aberto, Fechado, Preenchido };
 
 public enum TypeTransform { Escalar, Rotacionar, Transladar };
 

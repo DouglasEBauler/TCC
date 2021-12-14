@@ -118,7 +118,7 @@ public class PoligonoPropriedadePeca : PropriedadePeca
     {
         this.Pos = new Posicao();
         this.Pontos = 3;
-        this.Primitiva = TipoPrimitiva.Cheio;
+        this.Primitiva = TipoPrimitiva.Preenchido;
         this.PoligonoAmb = string.Empty;
         this.PoligonoVis = string.Empty;
     }
@@ -177,20 +177,14 @@ public class IteracaoPropriedadePeca : PropriedadePeca
 [Serializable]
 public class PropriedadeCamera : PropriedadePeca
 {
-    public float PosX;
-    public float PosY;
-    public float PosZ;
+    public Posicao Pos;
     public float FOV;
     public bool CameraAtiva;
-    public bool JaIniciouValores;
-    public bool ExisteCamera;
     public PropriedadeCameraInicial PropInicial;
-    [NonSerialized]
-    public Dictionary<Property, string> ListPropCamLocks;
 
-    public PropriedadeCamera() 
+    public PropriedadeCamera() : base()
     {
-        this.ListPropCamLocks = new Dictionary<Property, string>();
+        this.Pos = new Posicao();
         this.FOV = 45f;
     }
 }

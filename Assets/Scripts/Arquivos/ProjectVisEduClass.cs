@@ -216,7 +216,7 @@ public class PoligonoPropriedadePecaProject : PropriedadePecaProject
         this.PoligonoVis = string.Empty;
         this.Pos = new PosicaoProject();
         this.Pontos = string.Empty;
-        this.Primitiva = TipoPrimitiva.Cheio;
+        this.Primitiva = TipoPrimitiva.Preenchido;
     }
 }
 
@@ -269,9 +269,7 @@ public class PropriedadeIluminacaoPecaProject : PropriedadePecaProject
 public class PropriedadeCameraProject
 {
     public string Nome;
-    public string PosX;
-    public string PosY;
-    public string PosZ;
+    public PosicaoProject Pos;
     public string FOV;
     public bool CameraAtiva;
     public bool JaIniciouValores;

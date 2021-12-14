@@ -65,7 +65,7 @@ public class PoligonoAmbScript : MonoBehaviour
                 case TipoPrimitiva.Vertices: DefinePrimitivaVertices(); break;
                 case TipoPrimitiva.Aberto: DefinePrimitivaAberto(); break;
                 case TipoPrimitiva.Fechado: DefinePrimitivaFechado(); break;
-                case TipoPrimitiva.Cheio: DefinePrimitivaCheio(); break;
+                case TipoPrimitiva.Preenchido: DefinePrimitivaCheio(); break;
             }
         }
     }

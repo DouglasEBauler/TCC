@@ -18,7 +18,7 @@ public class SelecionaTextura : MonoBehaviour
 
         //Texturiza os cubos
         CuboPropriedadePeca cuboProp = Global.propriedadePecas[this.NomePecaCubo] as CuboPropriedadePeca;
-        GameObject.Find(cuboProp.NomeCuboAmb).GetComponent<MeshRenderer>().materials[0].mainTexture = texturaObjeto;        
+        GameObject.Find(cuboProp.NomeCuboAmb).GetComponent<MeshRenderer>().materials[0].mainTexture = texturaObjeto;
         GameObject.Find(cuboProp.NomeCuboVis).GetComponent<MeshRenderer>().materials[0].mainTexture = texturaObjeto;
 
         //Muda seletor de textura para a textura selecionada
