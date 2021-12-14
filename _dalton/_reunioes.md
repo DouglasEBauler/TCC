@@ -110,3 +110,11 @@ E mexeu um pouco no artigo.
 
 Conversou com o Maurício e está acertando o artigo. Muarício sugeriu usar o tradicional: especificação, código e manual do usuário.  
 Tem ainda uns *bugs* no código. Vai arrumar e me enviar para testar até próxima terça (vai me avisar).  
+
+## 2021-12-14
+
+Defesa do TCC  
+[tcc_DouglasEduardoBauler_2021-12-14_defesa_video.mp4](tcc_DouglasEduardoBauler_2021-12-14_defesa_video.mp4)  
+[tcc_DouglasEduardoBauler_2021-12-14_defesa_Ata.pdf](tcc_DouglasEduardoBauler_2021-12-14_defesa_Ata.pdf)  
+[tcc_DouglasEduardoBauler_2021-12-14_defesa_Everaldo.pdf](tcc_DouglasEduardoBauler_2021-12-14_defesa_Everaldo.pdf)  
+[tcc_DouglasEduardoBauler_2021-12-14_defesa_Luciana.pdf](tcc_DouglasEduardoBauler_2021-12-14_defesa_Luciana.pdf)  
