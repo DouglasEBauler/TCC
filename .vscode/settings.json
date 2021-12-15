@@ -1,4 +1,4 @@
-﻿{
+{
     "files.exclude":
     {
         "**/.DS_Store":true,
@@ -13,7 +13,6 @@
         "**/*.unityproj":true,
         "**/*.dll":true,
         "**/*.exe":true,
-        "**/*.pdf":true,
         "**/*.mid":true,
         "**/*.midi":true,
         "**/*.wav":true,
