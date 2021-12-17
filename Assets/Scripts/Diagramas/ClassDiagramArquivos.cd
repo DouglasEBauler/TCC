@@ -1,179 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="ExportScript">
-    <Position X="0.5" Y="6.25" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAgAMFIAAAAACkAAACEEAgAEAgQEAAAgYAAAGAAQCCA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ExportScript.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="ImportScript">
-    <Position X="3.25" Y="6.25" Width="2" />
-    <TypeIdentifier>
-      <HashCode>BAEEAAAIAABAwAIAACAAABAAgAAECCAAIBAAgSCAAAI=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ImportScript.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="ProjectVisEduClass">
-    <Position X="0.5" Y="0.5" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="ValoresProject">
-    <Position X="14.25" Y="7" Width="1.5" />
+    <Position X="3" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAE=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TamanhoProject">
-    <Position X="16.25" Y="9.5" Width="1.5" />
+    <Position X="5.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PosicaoProject">
-    <Position X="12" Y="9.5" Width="1.5" />
+    <Position X="0.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ValorIluminacaoProject">
-    <Position X="14" Y="9.5" Width="2" />
+    <Position X="2.75" Y="9.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CameraPecaProject">
-    <Position X="5.75" Y="7.5" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="ObjetoGraficoProject">
-    <Position X="5.75" Y="5" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIAAAAAQAAAAAAAAAEAAAAAAAQAAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="CuboProject">
-    <Position X="10.25" Y="6.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAQQAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="PoligonoProject">
-    <Position X="7.75" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAQQAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="SplineProject">
-    <Position X="11.5" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAQQAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="TransformacaoProject">
-    <Position X="13.25" Y="4.5" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAQAAAAAAAAAEAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IteracaoProject">
-    <Position X="15.25" Y="4.75" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAQ=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="IteracaoPropriedadePecaProject">
-    <Position X="11.25" Y="1.75" Width="2.5" />
-    <InheritanceLine Type="PropriedadePecaProject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="5.75" Y="0.688" />
-        <Point X="12.5" Y="0.688" />
-        <Point X="12.5" Y="1.75" />
-      </Path>
-    </InheritanceLine>
+    <Position X="13.75" Y="3" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAABAAAAAAEIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IluminacaoProject">
-    <Position X="9.5" Y="4.5" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="PropriedadePecaProject">
-    <Position X="3.75" Y="0.5" Width="2" />
+    <Position X="9.25" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAEEAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TransformacaoPropriedadePecaProject">
-    <Position X="5.75" Y="2.5" Width="2.75" />
+    <Position X="7.25" Y="3" Width="2.75" />
     <TypeIdentifier>
       <HashCode>ABAAAAAAAAAIAAAAABAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CuboPropriedadePecaProject">
-    <Position X="8.75" Y="1.75" Width="2.25" />
+    <Position X="10.75" Y="3" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAADAAgAAAAAAAAAAAAAACAAAAAACAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PoligonoPropriedadePecaProject">
-    <Position X="14" Y="1.75" Width="2.5" />
-    <InheritanceLine Type="PropriedadePecaProject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="5.75" Y="1.25" />
-        <Point X="12.417" Y="1.25" Type="JumpStart" />
-        <Point X="12.583" Y="1.25" Type="JumpEnd" />
-        <Point X="15.312" Y="1.25" />
-        <Point X="15.312" Y="1.75" />
-      </Path>
-    </InheritanceLine>
+    <Position X="17" Y="3" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAACAAAEAAAAAAIAAAIA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SplinePropriedadePecaProject">
-    <Position X="0.5" Y="2.75" Width="2.25" />
+    <Position X="1" Y="3" Width="2.25" />
     <TypeIdentifier>
       <HashCode>CAAAAAgAAAAACBAAAAAAAQAAAACAAAAAIABAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PropriedadeIluminacaoPecaProject">
-    <Position X="3" Y="2.5" Width="2.5" />
+    <Position X="4" Y="3" Width="2.5" />
     <TypeIdentifier>
       <HashCode>ABAAAAAAAAAAAQAAAAAAAAABEACAIEAQAABAAAAQAAA=</HashCode>
-      <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="PropriedadeCameraProject">
-    <Position X="7.75" Y="7.5" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAIAAAAAAAAAAAwAIAAAAAAIAAAAAAIAEAAAA=</HashCode>
       <FileName>Assets\Scripts\Arquivos\ProjectVisEduClass.cs</FileName>
     </TypeIdentifier>
   </Class>

@@ -24,13 +24,14 @@ public class PoligonoAmbScript : MonoBehaviour
     void Start()
     {
         mesh = new Mesh();
-        lineRender = lines.GetComponent<LineRenderer>();
 
         DefineMesh();
     }
 
     void DefineMesh()
     {
+        lineRender = lines.GetComponent<LineRenderer>();
+
         if (vertices == null)
         {
             vertices  = new Vector2[]
@@ -104,7 +105,7 @@ public class PoligonoAmbScript : MonoBehaviour
     void DefinePrimitivaFechado()
     {
         EnabledVertices(false);
-        lines.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y, gameObject.transform.localPosition.z);
+        lines.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
         lineRender.enabled = true;
         lineRender.positionCount = mesh.triangles.Length + 1;
 

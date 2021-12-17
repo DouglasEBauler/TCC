@@ -55,7 +55,7 @@ public class PropPoligonoScript : MonoBehaviour
 
         if (pecaAmb != null)
         {
-            pecaAmb.GetComponent<MeshRenderer>().enabled = true;
+            pecaAmb.GetComponent<MeshRenderer>().enabled = propPeca != null ? propPeca.Ativo : true;
         }
     }
 
@@ -172,17 +172,34 @@ public class PropPoligonoScript : MonoBehaviour
         if (pecaAmb != null && pecaVis != null)
         {
             UpdateColor();
+
             pecaAmb.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
-            pecaVis.GetComponent<MeshRenderer>().enabled = propPeca.Ativo;
-            if (propPeca.Ativo)
-            {
-                pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoints(propPeca.Pontos);
-                pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
-                pecaVis.GetComponent<PoligonoAmbScript>().ConfiguratePoints(propPeca.Pontos);
-                pecaVis.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
-            }
+            pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoints(propPeca.Pontos);
+            pecaAmb.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
             pecaAmb.transform.localPosition = new Vector3(propPeca.Pos.X, propPeca.Pos.Y, propPeca.Pos.Z);
+            foreach (Transform child in pecaAmb.transform)
+            {
+                LineRenderer mesh = child.GetComponent<LineRenderer>();
+
+                if (mesh != null)
+                {
+                    mesh.enabled = propPeca.Ativo && !propPeca.Primitiva.Equals(TipoPrimitiva.Vertices);
+                }
+            }
+
+            pecaVis.GetComponent<MeshRenderer>().enabled = propPeca.Ativo && Global.cameraAtiva;
+            pecaVis.GetComponent<PoligonoAmbScript>().ConfiguratePoints(propPeca.Pontos);
+            pecaVis.GetComponent<PoligonoAmbScript>().ConfiguratePoligono();
             pecaVis.transform.localPosition = new Vector3(POS_INIT_X + propPeca.Pos.X, POS_INIT_Y + propPeca.Pos.Y, POS_INIT_Z + propPeca.Pos.Z);
+            foreach (Transform child in pecaVis.transform)
+            {
+                LineRenderer mesh = child.GetComponent<LineRenderer>();
+
+                if (mesh != null)
+                {
+                    mesh.enabled = propPeca.Ativo && Global.cameraAtiva && !propPeca.Primitiva.Equals(TipoPrimitiva.Vertices);
+                }
+            }
         }
     }
 

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using SimpleFileBrowser;
-using SFB;
+//using SFB;
 using System.Runtime.InteropServices;
 using UnityEngine.EventSystems;
 using System.Text;
@@ -220,7 +220,10 @@ public class ExportScript : MonoBehaviour
                     if (formaProj != null)
                     {
                         formaProj.Transformacoes = CreateTransformacoes(obgGrafSlot);
-                        formaProj.Iluminacao = CreateIluminacao(Global.propriedadePecas[Consts.ILUMINACAO + numSlot] as IluminacaoPropriedadePeca);
+                        if (Global.propriedadePecas.ContainsKey(Consts.ILUMINACAO + numSlot))
+                        {
+                            formaProj.Iluminacao = CreateIluminacao(Global.propriedadePecas[Consts.ILUMINACAO + numSlot] as IluminacaoPropriedadePeca);
+                        }
                         return formaProj;
                     }
                 }
@@ -249,7 +252,10 @@ public class ExportScript : MonoBehaviour
                     if (formaProj != null)
                     {
                         formaProj.Transformacoes = CreateTransformacoes(obgGrafSlot);
-                        formaProj.Iluminacao = CreateIluminacao(Global.propriedadePecas[Consts.ILUMINACAO + numSlot] as IluminacaoPropriedadePeca);
+                        if (Global.propriedadePecas.ContainsKey(Consts.ILUMINACAO + numSlot))
+                        {
+                            formaProj.Iluminacao = CreateIluminacao(Global.propriedadePecas[Consts.ILUMINACAO + numSlot] as IluminacaoPropriedadePeca);
+                        }
                         return formaProj;
                     }
                 }
@@ -600,6 +606,8 @@ public class ExportScript : MonoBehaviour
             case Property.P5PosX: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P5.X.ToString();
             case Property.P5PosY: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P5.Y.ToString();
             case Property.P5PosZ: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.P5.Z.ToString();
+
+            case Property.QuantidadePontos: return (peca.ListPropLocks.ContainsKey(propType)) ? Util_VisEdu.Base64Encode(peca.ListPropLocks[propType]) : peca.QuantidadePontos.ToString();
 
             default: return string.Empty;
         }
