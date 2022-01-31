@@ -1,0 +1,4 @@
+Os fontes ExportScript e ImportScript foram utilizados directivas de compilação
+- É preciso utilizar novos recursos de exportação e importação que funcionam tanto para versão desktop como para web;
+- Foi comentado o using SFB para compilação do projeto na versão destkop, caso seja necesario compilar para versão web basta descomentar;
+- Para inicializar o projeto, basta criar um projeto padrao no Unity e anexar os fontes existentes.

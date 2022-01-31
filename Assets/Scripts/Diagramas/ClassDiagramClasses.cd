@@ -80,16 +80,9 @@
   <Class Name="PropriedadeCamera">
     <Position X="15.5" Y="3.75" Width="3.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAIECAAAAAAAAAwAIAAAAAAIAAAAAAIAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAIEAAAAAAAAAAAAAAAACAAAAAAAAAIAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Struct Name="PropriedadeCameraInicial">
-    <Position X="15" Y="0.5" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAIAAAAAAAAAAAwAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Propriedades\Classes.cs</FileName>
-    </TypeIdentifier>
-  </Struct>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
